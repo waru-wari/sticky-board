@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<!--
+  Venio CRM — editorial home page. Style: Exaggerated Minimalism (Swiss Modernism 2.0
+  + editorial accents). Palette: white / single near-white (#F7F8FA) / dark anchor
+  (#141518) / near-black ink + ONE brand blue. Fonts: Plus Jakarta Sans (display) +
+  Inter (body), with a Gofive @font-face swap comment retained near the <head> styles.
+  Light mode, single file, responsive at 375 / 768 / 1280 / 1440.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Venio CRM — The most usable CRM for B2B sales teams</title>
+<meta name="description" content="Venio CRM by Gofive: a Thai B2B sales CRM for SME to enterprise teams. 360° customer view, AI deal scoring, mobile-native, real-time analytics." />
+
+<!-- ============================================================
+  TYPOGRAPHY
+  Display: Plus Jakarta Sans  |  Body: Inter  (Google Fonts)
+  NOTE: Gofive is the official brand font (not bundled here).
+  To swap it into the display face later, add an @font-face for
+  "Gofive" and prepend it to --font-display below, e.g.:
+    @font-face { font-family:"Gofive"; src:url('Gofive.woff2') format('woff2'); font-weight:400 700; font-display:swap; }
+    --font-display: "Gofive", "Plus Jakarta Sans", system-ui, sans-serif;
+  ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+<style>
+/* =========================================================
+   DESIGN TOKENS  — Swiss Modernism 2.0 + Editorial accents
+   ========================================================= */
+:root{
+  /* Type */
+  --font-display:"Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-body:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Type scale ~1.25 (major third), body 17px */
+  --fs-300:0.85rem;   /* 13.6 small label */
+  --fs-400:1.0625rem; /* 17   body */
+  --fs-500:1.33rem;   /* 21.3 lead */
+  --fs-600:clamp(1.5rem, 1.2rem + 1.4vw, 2rem);      /* H3 */
+  --fs-700:clamp(2rem, 1.4rem + 2.6vw, 2.9rem);      /* H2 */
+  --fs-800:clamp(2.75rem, 1.6rem + 5.4vw, 4.5rem);   /* H1 / display */
+  --fs-900:clamp(3rem, 1rem + 9vw, 7rem);            /* big-number band */
+
+  /* Color — restraint: white, one near-white, near-black text, ONE brand blue */
+  --bg:#FFFFFF;
+  --bg-alt:#F7F8FA;            /* the single near-white section bg */
+  --bg-dark:#141518;          /* dark anchor (CTA card, metric card) */
+  --ink:#1A1A1A;              /* near-black text */
+  --ink-soft:#54595F;         /* muted body / captions — 7.0:1 on white, AA pass */
+  --ink-faint:#5A5F66;        /* smallest labels — 6.3:1 on white, AA pass at small sizes */
+  --on-dark-soft:#C9CDD3;     /* muted text on dark bg */
+  --line:#E6E8EC;             /* hairlines / borders */
+  --line-strong:#D4D8DE;
+
+  /* --brand: unconfirmed — replace with Venio brand hex */
+  --brand:#1A6CF6;
+  --brand-ink:#0E4FBF;        /* darker brand for text-on-light AA */
+  --brand-wash:#EAF1FE;       /* subtle brand tint (accent, used sparingly) */
+  --on-brand:#FFFFFF;
+
+  /* Geometry — ONE radius system: 14px cards, pill buttons */
+  --r-card:14px;
+  --r-sm:10px;
+  --r-pill:999px;
+
+  /* Elevation */
+  --shadow-frame:0 8px 32px rgba(0,0,0,.08);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+
+  /* Layout */
+  --maxw:1240px;
+  --gutter:clamp(20px, 4vw, 40px);
+  --section-y:clamp(72px, 9vw, 144px);
+  --gap:28px;
+
+  /* Z scale */
+  --z-header:50; --z-overlay:40;
+}
+
+/* =========================================================
+   RESET / BASE
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  font-size:var(--fs-400);
+  line-height:1.6;
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+ul{margin:0;padding:0;list-style:none;}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin:0;}
+
+/* Focus — visible ring on everything interactive */
+a,button,input,[tabindex]{outline:none;}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+  outline:3px solid var(--brand);
+  outline-offset:3px;
+  border-radius:var(--r-sm);
+}
+
+/* Screen-reader-only utility (standard clip-path pattern) */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+/* Skip link */
+.skip-link{
+  position:absolute;left:16px;top:-60px;z-index:100;
+  background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r-sm);
+  transition:top .15s ease;
+}
+.skip-link:focus{top:16px;}
+
+/* Container + grid */
+.container{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter);}
+.section{padding-block:var(--section-y);}
+.section--alt{background:var(--bg-alt);}
+
+/* Section header */
+.eyebrow{
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink);
+  display:inline-block;margin-bottom:14px;
+}
+.section-head{max-width:62ch;margin-bottom:clamp(36px,5vw,64px);}
+.section-head h2{font-size:var(--fs-700);}
+.section-head p{color:var(--ink-soft);font-size:var(--fs-500);margin:18px 0 0;line-height:1.5;}
+
+/* =========================================================
+   BUTTONS — pill geometry, 44px+ targets
+   ========================================================= */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-400);
+  min-height:48px;padding:0 26px;border-radius:var(--r-pill);
+  border:1.5px solid transparent;cursor:pointer;
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease;
+  white-space:nowrap;
+}
+.btn--primary{background:var(--brand);color:var(--on-brand);}
+.btn--primary:hover{background:var(--brand-ink);}
+.btn--secondary{background:transparent;color:var(--ink);border-color:var(--line-strong);}
+.btn--secondary:hover{border-color:var(--ink);background:#fff;}
+.btn--ghost{background:transparent;color:var(--ink);min-height:44px;padding:0 14px;}
+.btn--ghost:hover{color:var(--brand-ink);}
+.btn--sm{min-height:40px;padding:0 18px;font-size:var(--fs-300);}
+.btn--block{width:100%;}
+
+.link-arrow{
+  display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);
+  font-weight:600;color:var(--brand-ink);font-size:var(--fs-400);
+  min-height:44px;transition:gap .2s ease;
+}
+.link-arrow svg{transition:transform .2s ease;}
+.link-arrow:hover{gap:11px;}
+.link-arrow:hover svg{transform:translateX(2px);}
+
+/* =========================================================
+   PLACEHOLDERS — calm, intentional empty frames (no debug dashes)
+   Soft neutral fill + quiet centered label + ratio. Not "image failed".
+   ========================================================= */
+.ph{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  border-radius:var(--r-card);background:var(--bg-alt);
+  border:1px solid var(--line);
+  color:var(--ink-soft);padding:24px;position:relative;
+}
+.ph__label{font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
+  letter-spacing:.04em;line-height:1.5;}
+.ph__ratio{display:block;margin-top:8px;font-weight:500;font-size:var(--fs-300);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);}
+/* brand-washed frame — used for hero mascot / accent slots */
+.ph--wash{background:var(--brand-wash);border-color:transparent;}
+.ph--wash .ph__label,.ph--wash .ph__ratio{color:var(--brand-ink);}
+.ph--solid{background:#fff;box-shadow:var(--shadow-frame);border:1px solid var(--line);}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.site-header{
+  position:sticky;top:0;z-index:var(--z-header);
+  background:rgba(255,255,255,.86);
+  backdrop-filter:saturate(180%) blur(12px);
+  -webkit-backdrop-filter:saturate(180%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner{display:flex;align-items:center;gap:24px;min-height:68px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);
+  font-weight:800;font-size:var(--fs-500);letter-spacing:-0.03em;color:var(--ink);}
+.brand .mark{width:28px;height:28px;border-radius:var(--r-sm);background:var(--brand);
+  display:grid;place-items:center;color:#fff;font-size:var(--fs-400);}
+
+.primary-nav{display:none;}
+.primary-nav ul{display:flex;align-items:center;gap:4px;}
+.primary-nav a{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 14px;
+  font-family:var(--font-display);font-weight:500;font-size:var(--fs-400);
+  color:var(--ink);border-radius:var(--r-sm);transition:background-color .2s ease,color .2s ease;
+}
+.primary-nav a:hover{color:var(--brand-ink);background:var(--brand-wash);}
+
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:10px;}
+
+/* EN/TH toggle — visual only */
+.lang-toggle{display:inline-flex;background:var(--bg-alt);border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:3px;gap:2px;}
+.lang-toggle button{
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
+  min-height:36px;min-width:42px;padding:0 12px;border:0;border-radius:var(--r-pill);
+  background:transparent;color:var(--ink-soft);cursor:pointer;transition:background-color .2s ease,color .2s ease;}
+.lang-toggle button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:var(--shadow-sm);}
+
+.login-link{display:none;}
+
+/* Mobile nav */
+.nav-toggle{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;border:1px solid var(--line);border-radius:var(--r-sm);
+  background:#fff;cursor:pointer;color:var(--ink);
+}
+.nav-toggle svg{width:24px;height:24px;}
+.mobile-nav{display:none;border-top:1px solid var(--line);background:#fff;}
+.mobile-nav.open{display:block;}
+.mobile-nav ul{padding:8px var(--gutter) 16px;}
+.mobile-nav a{display:flex;align-items:center;min-height:52px;
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-500);
+  border-bottom:1px solid var(--line);}
+.mobile-nav .mobile-cta{display:flex;flex-direction:column;gap:10px;padding:16px var(--gutter) 8px;}
+
+@media (min-width:980px){
+  .primary-nav{display:block;}
+  .login-link{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;
+    font-family:var(--font-display);font-weight:500;color:var(--ink);}
+  .login-link:hover{color:var(--brand-ink);}
+  .nav-toggle{display:none;}
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{padding-block:clamp(48px,7vw,96px) var(--section-y);}
+.hero-grid{display:grid;gap:clamp(40px,5vw,56px);align-items:center;}
+.hero-copy{max-width:60ch;}
+.hero h1{font-size:var(--fs-800);font-weight:800;}
+.hero h1 em{font-style:normal;color:var(--brand);}
+.hero .lead{font-size:var(--fs-500);color:var(--ink-soft);line-height:1.5;margin:24px 0 0;max-width:52ch;}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;}
+.trust-line{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin-top:30px;
+  color:var(--ink-soft);font-size:var(--fs-300);}
+.trust-line .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);
+  font-weight:600;color:var(--ink);}
+.trust-line .badge svg{color:var(--brand);width:18px;height:18px;flex:none;}
+.trust-dot{width:4px;height:4px;border-radius:50%;background:var(--line-strong);}
+
+/* Hero visual: product frame + mascot slot */
+.hero-visual{position:relative;}
+.hero-product{aspect-ratio:16/11;}
+.hero-mascot{
+  position:absolute;right:-6px;bottom:-22px;width:34%;min-width:120px;max-width:190px;
+  aspect-ratio:1/1;
+}
+
+@media (min-width:980px){
+  .hero-grid{grid-template-columns:1.05fr .95fr;}
+}
+
+/* =========================================================
+   LOGO STRIP
+   ========================================================= */
+.logo-strip{padding-block:clamp(44px,6vw,72px);}
+.logo-strip__title{text-align:center;color:var(--ink-faint);font-family:var(--font-display);
+  font-weight:600;font-size:var(--fs-300);letter-spacing:.12em;text-transform:uppercase;margin:0 0 clamp(28px,3vw,40px);}
+/* Restrained monochrome text wordmarks — calm, no boxes */
+.logo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:clamp(28px,5vw,64px);}
+.logo-cell{color:var(--ink-soft);font-family:var(--font-display);font-weight:700;
+  font-size:var(--fs-500);letter-spacing:-0.01em;opacity:.7;}
+
+/* =========================================================
+   BIG-NUMBER BAND — editorial anchor
+   ========================================================= */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.stats-grid{display:grid;gap:8px 48px;}
+.stat{padding-block:18px;border-bottom:1px solid var(--line);}
+.stat:last-child{border-bottom:0;}
+.stat__num{font-family:var(--font-display);font-weight:800;font-size:var(--fs-900);
+  line-height:1;letter-spacing:-0.04em;color:var(--ink);}
+.stat__num span{color:var(--brand);}
+.stat__label{margin-top:10px;color:var(--ink-soft);font-size:var(--fs-400);max-width:24ch;}
+@media (min-width:760px){
+  .stats-grid{grid-template-columns:repeat(3,1fr);}
+  .stat{border-bottom:0;border-left:1px solid var(--line);padding:6px 0 6px 32px;}
+  .stat:first-child{border-left:0;padding-left:0;}
+}
+
+/* =========================================================
+   PILLARS — rhythm: 1 large feature block, then a 2-up pair,
+   then a final wide row. Breaks the monotonous alternation.
+   ========================================================= */
+.pillar__index{font-family:var(--font-display);font-weight:700;font-size:var(--fs-300);
+  letter-spacing:.16em;color:var(--brand-ink);text-transform:uppercase;margin-bottom:14px;}
+.pillar h3,.pillar-card h3{font-size:var(--fs-600);}
+.pillar__benefit{font-size:var(--fs-400);color:var(--ink-soft);line-height:1.55;margin:14px 0 22px;max-width:46ch;}
+.pillar__feats{display:grid;gap:12px;margin-bottom:24px;}
+.pillar__feats li{display:flex;gap:12px;align-items:flex-start;font-size:var(--fs-400);}
+.pillar__feats svg{flex:none;width:22px;height:22px;color:var(--brand);margin-top:1px;}
+.pillar__visual{aspect-ratio:4/3;}
+
+/* Feature block — pillar 01, larger, two-column from 768px */
+.pillar-feature{display:grid;gap:clamp(28px,4vw,56px);align-items:center;
+  margin-bottom:clamp(36px,5vw,64px);}
+.pillar-feature .pillar h3{font-size:var(--fs-700);}
+.pillar-feature .pillar__benefit{font-size:var(--fs-500);max-width:44ch;}
+.pillar-feature .pillar__visual{aspect-ratio:16/11;}
+
+/* Two-up cards — pillars 02 + 03 */
+.pillar-pair{display:grid;gap:var(--gap);margin-bottom:clamp(36px,5vw,64px);}
+.pillar-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-card);
+  padding:clamp(26px,3vw,36px);display:flex;flex-direction:column;
+  transition:border-color .2s ease,box-shadow .2s ease;}
+.pillar-card:hover{border-color:var(--line-strong);box-shadow:var(--shadow-frame);}
+.pillar-card .pillar__visual{aspect-ratio:16/10;margin-bottom:24px;border-radius:var(--r-sm);}
+.pillar-card .pillar__feats{margin-top:auto;}
+
+/* Wide row — pillar 04, single full-width with side visual */
+.pillar-wide{display:grid;gap:clamp(28px,4vw,56px);align-items:center;
+  padding-block:clamp(32px,4vw,48px);border-top:1px solid var(--line);}
+
+@media (min-width:768px){
+  .pillar-feature{grid-template-columns:1.05fr .95fr;}
+  .pillar-feature .pillar__media{order:-1;}
+  .pillar-pair{grid-template-columns:repeat(2,1fr);}
+  .pillar-wide{grid-template-columns:1fr 1.1fr;}
+}
+
+/* =========================================================
+   HOW IT WORKS — numbered steps
+   ========================================================= */
+.steps{display:grid;gap:var(--gap);counter-reset:step;}
+.step{background:#fff;border:1px solid var(--line);border-radius:var(--r-card);padding:28px;
+  position:relative;}
+.step__n{font-family:var(--font-display);font-weight:800;font-size:var(--fs-600);color:var(--brand);
+  width:48px;height:48px;border-radius:var(--r-sm);background:var(--brand-wash);
+  display:grid;place-items:center;margin-bottom:18px;}
+.step h3{font-size:var(--fs-600);}
+.step p{color:var(--ink-soft);margin:10px 0 0;font-size:var(--fs-400);line-height:1.55;}
+@media (min-width:600px){.steps{grid-template-columns:repeat(2,1fr);}}
+@media (min-width:1000px){.steps{grid-template-columns:repeat(4,1fr);}}
+
+/* =========================================================
+   SOLUTIONS — compact cards
+   ========================================================= */
+.cards-grid{display:grid;gap:var(--gap);}
+.solution-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r-card);padding:26px;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;}
+.solution-card:hover{border-color:var(--line-strong);box-shadow:var(--shadow-frame);}
+.solution-card__icon{width:46px;height:46px;border-radius:var(--r-sm);background:var(--brand-wash);
+  display:grid;place-items:center;color:var(--brand-ink);margin-bottom:18px;}
+.solution-card__icon svg{width:24px;height:24px;}
+.solution-card h3{font-size:var(--fs-600);}
+.solution-card p{color:var(--ink-soft);font-size:var(--fs-400);margin:10px 0 20px;line-height:1.5;flex:1;}
+@media (min-width:560px){.cards-grid{grid-template-columns:repeat(2,1fr);}}
+@media (min-width:980px){.cards-grid--4{grid-template-columns:repeat(4,1fr);}}
+@media (min-width:980px){.cards-grid--3{grid-template-columns:repeat(3,1fr);}}
+
+/* =========================================================
+   TESTIMONIAL — editorial pull quote
+   ========================================================= */
+.quote-head{margin-bottom:clamp(32px,4vw,48px);}
+.quote-head h2{font-size:var(--fs-700);}
+.quote-grid{display:grid;gap:clamp(32px,5vw,56px);align-items:center;}
+.quote blockquote{margin:0;font-family:var(--font-display);font-weight:600;
+  font-size:var(--fs-700);line-height:1.25;letter-spacing:-0.02em;color:var(--ink);}
+.quote .quote-mark{font-size:var(--fs-800);line-height:.4;color:var(--brand);font-family:var(--font-display);
+  display:block;height:0;}
+.quote cite{display:block;margin-top:28px;font-style:normal;color:var(--ink-soft);font-size:var(--fs-400);}
+.quote cite strong{display:block;color:var(--ink);font-family:var(--font-display);font-weight:600;
+  font-size:var(--fs-500);margin-bottom:2px;}
+.metric-card{background:var(--bg-dark);color:#fff;border-radius:var(--r-card);padding:clamp(28px,4vw,44px);}
+.metric-card .metric-num{font-family:var(--font-display);font-weight:800;
+  font-size:var(--fs-900);line-height:1;letter-spacing:-0.04em;}
+.metric-card .metric-num span{color:#7FB0FF;}
+.metric-card .metric-label{margin-top:14px;color:var(--on-dark-soft);font-size:var(--fs-400);max-width:26ch;}
+.demo-tag{display:inline-block;margin-top:22px;font-family:var(--font-display);font-weight:600;
+  font-size:var(--fs-300);letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-soft);
+  border:1px solid rgba(255,255,255,.28);border-radius:var(--r-pill);padding:5px 12px;}
+@media (min-width:820px){.quote-grid{grid-template-columns:1.4fr 1fr;}}
+
+/* =========================================================
+   PRICING
+   ========================================================= */
+.price-grid{display:grid;gap:var(--gap);align-items:stretch;}
+.price-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r-card);padding:30px;position:relative;}
+.price-card--featured{border-color:var(--brand);box-shadow:var(--shadow-frame);}
+.price-card__tag{position:absolute;top:-13px;left:30px;background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);letter-spacing:.04em;
+  padding:5px 14px;border-radius:var(--r-pill);}
+.price-card h3{font-size:var(--fs-600);}
+.price-card .tier-desc{color:var(--ink-soft);font-size:var(--fs-400);margin:8px 0 22px;min-height:48px;}
+.price-amount{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.price-amount .amount{font-family:var(--font-display);font-weight:800;font-size:var(--fs-700);
+  letter-spacing:-0.03em;line-height:1;}
+.price-amount .period{color:var(--ink-soft);font-size:var(--fs-400);}
+.price-seats{color:var(--ink-soft);font-size:var(--fs-300);margin:0 0 24px;}
+.price-feats{display:grid;gap:12px;margin:0 0 28px;flex:1;}
+.price-feats li{display:flex;gap:10px;align-items:flex-start;font-size:var(--fs-400);}
+.price-feats svg{flex:none;width:20px;height:20px;color:var(--brand);margin-top:2px;}
+.pricing-note{text-align:center;margin-top:32px;color:var(--ink-soft);font-size:var(--fs-400);}
+@media (min-width:820px){.price-grid{grid-template-columns:repeat(3,1fr);}}
+
+/* =========================================================
+   RESOURCES
+   ========================================================= */
+.resource-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r-card);overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease;}
+.resource-card:hover{border-color:var(--line-strong);box-shadow:var(--shadow-frame);}
+.resource-card__media{aspect-ratio:16/9;border:0;border-bottom:1px solid var(--line);
+  border-radius:var(--r-card) var(--r-card) 0 0;}
+.resource-card__body{padding:24px;display:flex;flex-direction:column;flex:1;}
+.resource-card__kicker{font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--brand-ink);margin-bottom:10px;}
+.resource-card h3{font-size:var(--fs-600);}
+.resource-card p{color:var(--ink-soft);font-size:var(--fs-400);margin:10px 0 18px;flex:1;line-height:1.5;}
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+.final-cta-section{background:var(--bg-alt);border-top:1px solid var(--line);}
+.final-cta{background:var(--bg-dark);color:#fff;border-radius:var(--r-card);
+  padding:clamp(40px,6vw,80px);text-align:center;}
+.final-cta h2{font-size:var(--fs-700);max-width:18ch;margin-inline:auto;}
+.final-cta p{color:var(--on-dark-soft);font-size:var(--fs-500);margin:18px auto 0;max-width:48ch;line-height:1.5;}
+.final-cta .hero-actions{justify-content:center;margin-top:34px;}
+.final-cta .btn--secondary{color:#fff;border-color:rgba(255,255,255,.3);}
+.final-cta .btn--secondary:hover{border-color:#fff;background:rgba(255,255,255,.08);}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.site-footer{background:var(--bg-alt);border-top:1px solid var(--line);
+  padding-block:clamp(48px,6vw,80px) 36px;}
+.footer-top{display:grid;gap:40px;margin-bottom:48px;}
+.footer-brand .brand{margin-bottom:16px;}
+.footer-brand p{color:var(--ink-soft);font-size:var(--fs-400);max-width:34ch;line-height:1.55;}
+.footer-awards{margin-top:12px;color:var(--ink-faint);font-size:var(--fs-300);letter-spacing:.02em;}
+.footer-cols{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;}
+.footer-col h4{font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:16px;}
+.footer-col a{display:inline-flex;min-height:36px;align-items:center;color:var(--ink-soft);
+  font-size:var(--fs-400);transition:color .2s ease;}
+.footer-col a:hover{color:var(--brand-ink);}
+.footer-family{margin-bottom:36px;padding:24px;background:#fff;border:1px solid var(--line);border-radius:var(--r-card);}
+.footer-family h4{font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px;}
+.footer-family ul{display:flex;flex-wrap:wrap;gap:8px 10px;}
+.footer-family a{font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
+  color:var(--ink);background:var(--bg-alt);border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:8px 16px;min-height:40px;display:inline-flex;align-items:center;
+  transition:border-color .2s ease,color .2s ease;}
+.footer-family a:hover{border-color:var(--brand);color:var(--brand-ink);}
+.footer-bottom{display:flex;flex-direction:column;gap:20px;padding-top:28px;border-top:1px solid var(--line);
+  color:var(--ink-soft);font-size:var(--fs-300);}
+.footer-social{display:flex;gap:8px;}
+.footer-social a{width:44px;height:44px;border-radius:var(--r-sm);border:1px solid var(--line);
+  background:#fff;display:grid;place-items:center;color:var(--ink-soft);transition:color .2s ease,border-color .2s ease;}
+.footer-social a:hover{color:var(--brand-ink);border-color:var(--brand);}
+.footer-social svg{width:20px;height:20px;}
+.footer-legal{display:flex;flex-wrap:wrap;gap:6px 18px;}
+@media (min-width:760px){
+  .footer-top{grid-template-columns:1.2fr 2fr;}
+  .footer-cols{grid-template-columns:repeat(4,1fr);}
+  .footer-bottom{flex-direction:row;align-items:center;justify-content:space-between;}
+}
+
+/* =========================================================
+   MOTION — calm fade-up entrances only
+   ========================================================= */
+.reveal{opacity:0;transform:translateY(18px);
+  transition:opacity .6s ease,transform .6s ease;}
+.reveal.is-visible{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none;}
+  .btn,.link-arrow,.solution-card,.resource-card,.primary-nav a{transition:none;}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<!-- ============================ HEADER ============================ -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#" aria-label="Venio CRM home">
+      <span class="mark" aria-hidden="true">V</span>Venio
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="#features" data-i18n data-en="Features" data-th="ฟีเจอร์">Features</a></li>
+        <li><a href="#solutions" data-i18n data-en="Solutions" data-th="โซลูชัน">Solutions</a></li>
+        <li><a href="#pricing" data-i18n data-en="Pricing" data-th="ราคา">Pricing</a></li>
+        <li><a href="#resources" data-i18n data-en="Resources" data-th="แหล่งความรู้">Resources</a></li>
+        <li><a href="#about" data-i18n data-en="About" data-th="เกี่ยวกับเรา">About</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" aria-pressed="true" data-lang="en">EN</button>
+        <button type="button" aria-pressed="false" data-lang="th">TH</button>
+      </div>
+      <a class="login-link" href="#" data-i18n data-en="Login" data-th="เข้าสู่ระบบ">Login</a>
+      <a class="btn btn--primary btn--sm" href="#" data-i18n data-en="Start free trial" data-th="ทดลองใช้ฟรี">Start free trial</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <ul>
+      <li><a href="#features" data-i18n data-en="Features" data-th="ฟีเจอร์">Features</a></li>
+      <li><a href="#solutions" data-i18n data-en="Solutions" data-th="โซลูชัน">Solutions</a></li>
+      <li><a href="#pricing" data-i18n data-en="Pricing" data-th="ราคา">Pricing</a></li>
+      <li><a href="#resources" data-i18n data-en="Resources" data-th="แหล่งความรู้">Resources</a></li>
+      <li><a href="#about" data-i18n data-en="About" data-th="เกี่ยวกับเรา">About</a></li>
+    </ul>
+    <div class="mobile-cta">
+      <a class="btn btn--secondary btn--block" href="#" data-i18n data-en="Login" data-th="เข้าสู่ระบบ">Login</a>
+      <a class="btn btn--primary btn--block" href="#" data-i18n data-en="Start free trial" data-th="ทดลองใช้ฟรี">Start free trial</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <span class="eyebrow" data-i18n data-en="B2B Sales CRM by Gofive" data-th="ระบบ CRM สำหรับงานขาย B2B โดย Gofive">B2B Sales CRM by Gofive</span>
+        <h1 id="hero-title" data-i18n-html
+            data-en="The most usable CRM for teams that &lt;em&gt;actually sell.&lt;/em&gt;"
+            data-th="CRM ที่ใช้งานง่ายที่สุด สำหรับทีมที่&lt;em&gt;ขายได้จริง&lt;/em&gt;">The most usable CRM for teams that <em>actually sell.</em></h1>
+        <p class="lead" data-i18n
+           data-en="Venio gives B2B sales teams a 360° customer view, an AI-scored pipeline, and real-time analytics for managers — on web and native mobile, built for SME to enterprise."
+           data-th="Venio ให้ทีมขาย B2B เห็นลูกค้าแบบ 360° จัดการไปป์ไลน์ที่ AI ช่วยจัดลำดับ และวิเคราะห์ผลแบบเรียลไทม์สำหรับผู้จัดการ ทั้งบนเว็บและแอปมือถือ รองรับตั้งแต่ SME ถึงองค์กรขนาดใหญ่">Venio gives B2B sales teams a 360° customer view, an AI-scored pipeline, and real-time analytics for managers — on web and native mobile, built for SME to enterprise.</p>
+        <div class="hero-actions">
+          <a class="btn btn--primary" href="#" data-i18n data-en="Start free trial" data-th="ทดลองใช้ฟรี">Start free trial</a>
+          <a class="btn btn--secondary" href="#" data-i18n data-en="Book a demo" data-th="นัดดูเดโม">Book a demo</a>
+        </div>
+        <p class="trust-line">
+          <span class="badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.3L12 15.1 7.2 17.6l.9-5.3L4.2 8.5l5.4-.8L12 2z" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            Award-winning Thai CRM
+          </span>
+          <span class="trust-dot" aria-hidden="true"></span>
+          <span>Trusted by 100+ B2B teams</span>
+        </p>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="ph ph--solid hero-product">
+          <div>
+            <span class="ph__label">Product dashboard</span>
+            <span class="ph__ratio">16 : 11</span>
+          </div>
+        </div>
+        <div class="ph ph--wash hero-mascot">
+          <div>
+            <span class="ph__label">Mascot</span>
+            <span class="ph__ratio">1 : 1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ LOGO STRIP ============================ -->
+  <section class="logo-strip section--alt" aria-labelledby="logos-title">
+    <div class="container">
+      <h2 id="logos-title" class="logo-strip__title">Powering sales teams across Thailand</h2>
+      <ul class="logo-row reveal">
+        <li class="logo-cell">Aspara</li>
+        <li class="logo-cell">Northbridge</li>
+        <li class="logo-cell">Siri&amp;Co</li>
+        <li class="logo-cell">Maxa</li>
+        <li class="logo-cell">Greenfield</li>
+        <li class="logo-cell">Lumen</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================ BIG-NUMBER BAND ============================ -->
+  <section class="stats" aria-labelledby="stats-title">
+    <h2 id="stats-title" class="sr-only">Venio by the numbers</h2>
+    <div class="container section" style="padding-block:clamp(40px,5vw,72px);">
+      <div class="stats-grid">
+        <div class="stat reveal">
+          <div class="stat__num">100<span>+</span></div>
+          <p class="stat__label">B2B companies running sales on Venio</p>
+        </div>
+        <div class="stat reveal">
+          <div class="stat__num">30K<span>+</span></div>
+          <p class="stat__label">Sales activities logged every month</p>
+        </div>
+        <div class="stat reveal">
+          <div class="stat__num">10<span>+</span></div>
+          <p class="stat__label">Years building CRM for Thai sales teams</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PILLARS ============================ -->
+  <section class="section" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">The platform</span>
+        <h2 id="features-title">Four pillars, one place to run B2B sales.</h2>
+        <p>Everything from first lead to closed deal — and the marketing and mobility to support it.</p>
+      </div>
+
+      <!-- Pillar 01 — CRM: large feature block -->
+      <article class="pillar-feature reveal">
+        <div class="pillar pillar__body">
+          <div class="pillar__index">01 — CRM</div>
+          <h3>See every customer, manage every deal.</h3>
+          <p class="pillar__benefit">A single 360° view of leads, customers, and a deal pipeline you can shape your way — the foundation the rest of Venio is built on.</p>
+          <ul class="pillar__feats">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Leads &amp; customer 360° profiles</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Deal pipeline with up to 10 stages</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Case management &amp; reports</li>
+          </ul>
+          <a class="link-arrow" href="#">Explore CRM <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="pillar__media">
+          <div class="ph ph--solid pillar__visual"><div><span class="ph__label">CRM illustration</span><span class="ph__ratio">16 : 11</span></div></div>
+        </div>
+      </article>
+
+      <!-- Pillars 02 + 03 — two-up cards -->
+      <div class="pillar-pair">
+        <article class="pillar-card reveal">
+          <div class="ph pillar__visual"><div><span class="ph__label">Sales Assistant illustration</span><span class="ph__ratio">16 : 10</span></div></div>
+          <div class="pillar__index">02 — Sales Assistant</div>
+          <h3>Plan the day. Let AI close the gap.</h3>
+          <p class="pillar__benefit">From activity planning to AI deal-probability scoring, quotations, and expenses — your reps' co-pilot.</p>
+          <ul class="pillar__feats">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Activity planning &amp; sales targets</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>AI sales tools &amp; deal scoring</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Quotations, orders &amp; expenses</li>
+          </ul>
+          <a class="link-arrow" href="#">Explore Sales Assistant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+        <article class="pillar-card reveal">
+          <div class="ph pillar__visual"><div><span class="ph__label">Marketing illustration</span><span class="ph__ratio">16 : 10</span></div></div>
+          <div class="pillar__index">03 — Marketing</div>
+          <h3>Turn campaigns into qualified pipeline.</h3>
+          <p class="pillar__benefit">Run campaigns and build sales pages that feed leads straight into the CRM.</p>
+          <ul class="pillar__feats">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Campaign creation &amp; tracking</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Sales pages with lead capture</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Direct hand-off to sales</li>
+          </ul>
+          <a class="link-arrow" href="#">Explore Marketing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+      </div>
+
+      <!-- Pillar 04 — Mobility: wide closing row -->
+      <article class="pillar-wide reveal">
+        <div class="pillar__media">
+          <div class="ph ph--solid pillar__visual"><div><span class="ph__label">Mobility illustration</span><span class="ph__ratio">4 : 3</span></div></div>
+        </div>
+        <div class="pillar pillar__body">
+          <div class="pillar__index">04 — Mobility</div>
+          <h3>Built for the field, secured for the enterprise.</h3>
+          <p class="pillar__benefit">Cloud-based with native iOS and Android apps, enterprise security, and the integrations you rely on.</p>
+          <ul class="pillar__feats">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Cloud + native iOS / Android apps</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Enterprise-grade security</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Integrations with your stack</li>
+          </ul>
+          <a class="link-arrow" href="#">Explore Mobility <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================ HOW IT WORKS ============================ -->
+  <section class="section section--alt" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2 id="how-title">From sign-up to selling in four steps.</h2>
+      </div>
+      <ol class="steps">
+        <li class="step reveal">
+          <div class="step__n" aria-hidden="true">1</div>
+          <h3>Set up your pipeline</h3>
+          <p>Define your stages, import leads and customers, and shape the deal flow to match how you sell.</p>
+        </li>
+        <li class="step reveal">
+          <div class="step__n" aria-hidden="true">2</div>
+          <h3>Plan &amp; log activity</h3>
+          <p>Reps plan visits and calls, then log activity from the field on native mobile apps.</p>
+        </li>
+        <li class="step reveal">
+          <div class="step__n" aria-hidden="true">3</div>
+          <h3>Let AI prioritise</h3>
+          <p>Deal-probability scoring surfaces the deals most likely to close, so effort goes where it counts.</p>
+        </li>
+        <li class="step reveal">
+          <div class="step__n" aria-hidden="true">4</div>
+          <h3>Manage in real time</h3>
+          <p>Managers track targets and pipeline health with real-time analytics — no end-of-month surprises.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================ SOLUTIONS ============================ -->
+  <section class="section" id="solutions" aria-labelledby="solutions-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Solutions</span>
+        <h2 id="solutions-title">Tuned for how your industry sells.</h2>
+      </div>
+      <div class="cards-grid cards-grid--4">
+        <article class="solution-card reveal">
+          <div class="solution-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l6-4 6 4v13M9 13h2m2 0h2M9 17h2m2 0h2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>B2B Sales</h3>
+          <p>Long cycles, multiple stakeholders, structured pipelines — managed end to end.</p>
+          <a class="link-arrow" href="#">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+        <article class="solution-card reveal">
+          <div class="solution-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.6a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.07a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.85a5.5 5.5 0 0 0 0-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Service</h3>
+          <p>Cases, follow-ups, and customer history in one place for service-led teams.</p>
+          <a class="link-arrow" href="#">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+        <article class="solution-card reveal">
+          <div class="solution-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c4-4 6-7 6-11a6 6 0 0 0-12 0c0 4 2 7 6 11zM12 4v9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Agriculture</h3>
+          <p>Field-first workflows for distributed teams working far from the office.</p>
+          <a class="link-arrow" href="#">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+        <article class="solution-card reveal">
+          <div class="solution-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18M7 3v18m10-18v18" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Channel distribution</h3>
+          <p>Coordinate partners, resellers, and multi-tier distribution from one CRM.</p>
+          <a class="link-arrow" href="#">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TESTIMONIAL ============================ -->
+  <section class="section section--alt" aria-labelledby="quote-title">
+    <div class="container">
+      <div class="quote-head reveal">
+        <span class="eyebrow">Customer story</span>
+        <h2 id="quote-title">What teams see after switching to Venio.</h2>
+      </div>
+      <div class="quote-grid">
+        <div class="quote reveal">
+          <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>Our reps are in front of more customers, and managers finally see the pipeline in real time.</blockquote>
+          <cite><strong>Head of Sales</strong>Enterprise B2B customer, Thailand</cite>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-num">+20<span>%</span></div>
+          <p class="metric-label">more customer visits after adopting Venio.</p>
+          <span class="demo-tag">Demo content — illustrative</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PRICING ============================ -->
+  <section class="section" id="pricing" aria-labelledby="pricing-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Pricing</span>
+        <h2 id="pricing-title">Start free. Scale when you're ready.</h2>
+        <p>14-day free trial. 30-day money-back guarantee. No credit card to start.</p>
+      </div>
+      <div class="price-grid">
+        <article class="price-card reveal">
+          <h3>Free</h3>
+          <p class="tier-desc">For small teams getting started with structured selling.</p>
+          <div class="price-amount"><span class="amount">฿0</span><span class="period">/ forever</span></div>
+          <p class="price-seats">Up to 3 users · 500 records</p>
+          <ul class="price-feats">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Core CRM &amp; pipeline</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Mobile apps</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Up to 3 users</li>
+          </ul>
+          <a class="btn btn--secondary btn--block" href="#">Get started</a>
+        </article>
+
+        <article class="price-card price-card--featured reveal">
+          <span class="price-card__tag">Most popular</span>
+          <h3>Pro</h3>
+          <p class="tier-desc">For growing sales teams that need AI and reporting.</p>
+          <div class="price-amount"><span class="amount">฿5,990</span><span class="period">/ mo</span></div>
+          <p class="price-seats">Up to 5 users</p>
+          <ul class="price-feats">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Free</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>AI deal scoring &amp; sales tools</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Real-time analytics</li>
+          </ul>
+          <a class="btn btn--primary btn--block" href="#">Start free trial</a>
+        </article>
+
+        <article class="price-card reveal">
+          <h3>Pro+</h3>
+          <p class="tier-desc">For larger teams needing advanced control and scale.</p>
+          <div class="price-amount"><span class="amount">฿9,990</span><span class="period">/ mo</span></div>
+          <p class="price-seats">Up to 5 users</p>
+          <ul class="price-feats">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in Pro</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Advanced marketing tools</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority support &amp; integrations</li>
+          </ul>
+          <a class="btn btn--secondary btn--block" href="#">Start free trial</a>
+        </article>
+      </div>
+      <p class="pricing-note reveal">Prices indicative — see the <a class="link-arrow" href="#">Pricing page <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a> for full details.</p>
+    </div>
+  </section>
+
+  <!-- ============================ RESOURCES ============================ -->
+  <section class="section section--alt" id="resources" aria-labelledby="resources-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Resources</span>
+        <h2 id="resources-title">Learn to sell better with Venio.</h2>
+      </div>
+      <div class="cards-grid cards-grid--3">
+        <article class="resource-card reveal">
+          <div class="ph resource-card__media"><div><span class="ph__label">Blog cover</span><span class="ph__ratio">16 : 9</span></div></div>
+          <div class="resource-card__body">
+            <span class="resource-card__kicker">Blog</span>
+            <h3>Sales playbooks &amp; CRM tips</h3>
+            <p>Practical articles on pipeline management, B2B selling, and getting the most from Venio.</p>
+            <a class="link-arrow" href="#">Read the blog <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+        <article class="resource-card reveal">
+          <div class="ph resource-card__media"><div><span class="ph__label">Academy cover</span><span class="ph__ratio">16 : 9</span></div></div>
+          <div class="resource-card__body">
+            <span class="resource-card__kicker">Academy</span>
+            <h3>Venio Academy courses</h3>
+            <p>Guided lessons to onboard your team and master every pillar of the platform.</p>
+            <a class="link-arrow" href="#">Visit Academy <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+        <article class="resource-card reveal">
+          <div class="ph resource-card__media"><div><span class="ph__label">Guide cover</span><span class="ph__ratio">16 : 9</span></div></div>
+          <div class="resource-card__body">
+            <span class="resource-card__kicker">Guide</span>
+            <h3>The B2B pipeline starter</h3>
+            <p>A free guide to building a pipeline that managers can actually forecast from.</p>
+            <a class="link-arrow" href="#">Get the guide <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FINAL CTA ============================ -->
+  <section class="section final-cta-section" aria-labelledby="cta-title">
+    <div class="container">
+      <div class="final-cta reveal">
+        <h2 id="cta-title">Give your sales team the most usable CRM.</h2>
+        <p>Start a 14-day free trial today, or talk to our team about rolling Venio out across your organisation.</p>
+        <div class="hero-actions">
+          <a class="btn btn--primary" href="#">Start free trial</a>
+          <a class="btn btn--secondary" href="#">Contact sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="site-footer" id="about">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="#" aria-label="Venio CRM home"><span class="mark" aria-hidden="true">V</span>Venio</a>
+        <p>The most usable B2B sales CRM, built by Gofive for teams across Thailand and beyond.</p>
+        <p class="footer-awards">ICT Award 2019 · MarTech Gold 2026</p>
+      </div>
+      <nav class="footer-cols" aria-label="Footer">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">CRM</a></li>
+            <li><a href="#">Sales Assistant</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">Mobility</a></li>
+            <li><a href="#">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Solutions</h4>
+          <ul>
+            <li><a href="#">B2B Sales</a></li>
+            <li><a href="#">Service</a></li>
+            <li><a href="#">Agriculture</a></li>
+            <li><a href="#">Channel distribution</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Academy</a></li>
+            <li><a href="#">Help center</a></li>
+            <li><a href="#">Book a demo</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Gofive</a></li>
+            <li><a href="#">Customers</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="footer-family">
+      <h4>Family of products</h4>
+      <ul>
+        <li><a href="#">empeo</a></li>
+        <li><a href="#">SalesBear</a></li>
+        <li><a href="#">eTaxGo</a></li>
+        <li><a href="#">IOMO</a></li>
+        <li><a href="#">Signtogo</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Gofive Co., Ltd. All rights reserved.</p>
+      <nav class="footer-legal" aria-label="Legal">
+        <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a><a href="#">Cookies</a>
+      </nav>
+      <div class="footer-social">
+        <a href="#" aria-label="Venio on Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="#" aria-label="Venio on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18V10.4H5.96V18h2.38zM7.15 9.36a1.38 1.38 0 1 0 0-2.76 1.38 1.38 0 0 0 0 2.76zM18.04 18v-4.17c0-2.23-1.19-3.27-2.78-3.27-1.28 0-1.86.71-2.18 1.2V10.4h-2.38V18h2.38v-4.03c0-1.06.2-2.09 1.52-2.09 1.3 0 1.32 1.22 1.32 2.16V18h2.4z"/></svg></a>
+        <a href="#" aria-label="Venio on YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 12s0-3.3-.42-4.88a2.55 2.55 0 0 0-1.8-1.8C19.2 5 12 5 12 5s-7.2 0-8.78.42a2.55 2.55 0 0 0-1.8 1.8C1 8.7 1 12 1 12s0 3.3.42 4.88c.23.86.9 1.54 1.8 1.8C4.8 19 12 19 12 19s7.2 0 8.78-.42a2.55 2.55 0 0 0 1.8-1.8C23 15.3 23 12 23 12zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* Mobile nav toggle */
+  var toggle=document.querySelector('.nav-toggle');
+  var nav=document.getElementById('mobile-nav');
+  if(toggle&&nav){
+    toggle.addEventListener('click',function(){
+      var open=nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded',String(open));
+      toggle.setAttribute('aria-label',open?'Close menu':'Open menu');
+    });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(){
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded','false');
+        toggle.setAttribute('aria-label','Open menu');
+      });
+    });
+  }
+
+  /* EN/TH toggle — real (minimal) swap of nav + hero copy.
+     Elements opt in via data-i18n (textContent) or data-i18n-html (innerHTML). */
+  var langBtns=document.querySelectorAll('.lang-toggle button');
+  function applyLang(lang){
+    document.documentElement.setAttribute('lang',lang);
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var v=el.getAttribute('data-'+lang);
+      if(v!=null){el.textContent=v;}
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+      var v=el.getAttribute('data-'+lang);
+      if(v!=null){el.innerHTML=v;}
+    });
+    langBtns.forEach(function(b){
+      b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===lang));
+    });
+  }
+  langBtns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      applyLang(btn.getAttribute('data-lang'));
+    });
+  });
+
+  /* Fade-up reveal — respects reduced motion */
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els=document.querySelectorAll('.reveal');
+  if(reduce||!('IntersectionObserver'in window)){
+    els.forEach(function(el){el.classList.add('is-visible');});
+  }else{
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:0.1});
+    els.forEach(function(el){io.observe(el);});
+  }
+})();
+</script>
+</body>
+</html>

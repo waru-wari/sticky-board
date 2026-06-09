@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Venio CRM — Sales relationships, beautifully organized</title>
+<meta name="description" content="Venio is a calm, all-in-one CRM that helps Thai sales teams track activities, close more deals, and keep every customer relationship in one place." />
+
+<!--
+  ============================================================================
+  VENIO HOME V2 — original design emulating aave.com's visual LANGUAGE only
+  (calm playful minimalism). All copy/assets are new Venio; zero aave text.
+  ============================================================================
+
+  DESIGN SYSTEM (chosen via ui-ux-pro-max — deliberately overrode the default
+  "vibrant/block-based" recommendation toward the calm/restraint direction the
+  brief requires)
+  - Style:      Flat Design + calm restraint. The whole PAGE is mostly white,
+                with sparing pale-blue bands and exactly ONE dark moment = the
+                FOOTER. No shadows of substance; flat surfaces, 1px borders or
+                light tinted fills. Sparseness is the point — surfaces are kept
+                to a handful of treatments (white / one pale-blue band tint /
+                graduated-blue pillar tints / one dark footer).
+  - Palette:    MONOCHROMATIC BLUE. Every tint lives in the same blue/sky hue
+                family, stepped only in lightness (no violet, no cyan, no
+                emerald). Brand #2563EB; deeper #1E3A8A for small text on tint.
+  - Type:       "Friendly SaaS" pairing — Plus Jakarta Sans (display/headings)
+                + Inter (body). Brand font Gofive can be dropped into the
+                @font-face below later (see GOFIVE SWAP note).
+  - Radius:     ONE consistent generous/rounded scale —
+                10 (chips/inputs) · 18 (cards) · 28 (large feature blocks) ·
+                9999 (pills). These are CSS border-radius rounded-rects, NOT
+                true squircles — kept consistent, not claimed as squircles.
+  - Motion:     fade-up reveal (IntersectionObserver) + hover limited to a
+                subtle border/background COLOR change only — cards do NOT lift
+                (a translateY card-lift is the #1 generic-SaaS tell). All motion
+                disabled under prefers-reduced-motion.
+
+  GOFIVE SWAP: when the licensed Gofive web font is ready, uncomment the
+  @font-face block and set --font-display: 'Gofive', 'Plus Jakarta Sans', sans-serif;
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/*
+@font-face {
+  font-family: 'Gofive';
+  src: url('/fonts/Gofive.woff2') format('woff2');
+  font-weight: 400 800; font-display: swap;
+}
+*/
+
+/* ---------- TOKENS ---------- */
+:root{
+  /* Brand / accent
+     --brand is UNCONFIRMED — replace with the official Venio brand hex.
+     #2563EB passes WCAG AA on white (~5.9:1). */
+  --brand:        #2563EB;
+  --brand-hover:  #1D4ED8;
+  --brand-ink:    #1E3A8A;   /* deeper blue for text-on-tint, AA on pale tints */
+
+  /* Surfaces — sparse on purpose: white is the default canvas;
+     one pale-blue band tint; one dark band (footer only). */
+  --white:        #FFFFFF;
+  --band-blue:    #EFF6FF;   /* the single pale-blue section band */
+  --gray-50:      #F8FAFC;   /* barely-there off-white (FAQ) */
+  --gray-100:     #F1F5F9;   /* light gray chrome surface (nav pills) */
+
+  /* Pillar tints — MONOCHROMATIC: all the same blue/sky hue, stepped only
+     in lightness. No violet, no cyan. Graduated lightest -> deepest. */
+  --tint-1:       #F5F9FF;   /* blue 1 — lightest */
+  --tint-2:       #EFF6FF;   /* blue 2 */
+  --tint-3:       #E6F0FE;   /* blue 3 */
+  --tint-4:       #DCEAFD;   /* blue 4 — deepest pale */
+  --tint-1-line:  #E1ECFB;
+  --tint-2-line:  #D7E6FA;
+  --tint-3-line:  #CBDFF8;
+  --tint-4-line:  #BDD5F4;
+
+  /* The ONE dark band on the whole page = footer. Single dark moment. */
+  --ink-band:     #1E3A5F;
+
+  /* Text */
+  --ink:          #111827;   /* near-black */
+  --muted:        #475569;   /* AA on white (~7:1) for small labels */
+  --line:         #E2E8F0;   /* 1px hairline (dividers, subtle fills) */
+  --line-strong:  #94A3B8;   /* visible non-text border (>=3:1) for outline CTA */
+  --line-tint:    #DBEAFE;   /* border inside blue tints */
+
+  /* Radius scale — ONE consistent generous scale (border-radius, not squircle) */
+  --r-sm:   10px;   /* chips / inputs */
+  --r-md:   18px;   /* cards */
+  --r-lg:   28px;   /* large feature blocks */
+  --r-pill: 9999px;
+
+  /* Type scale (tight token set — ~6 sizes) */
+  --t-hero:   clamp(2.75rem, 5.2vw + 1rem, 4.5rem);  /* 44 → 72 */
+  --t-h2:     clamp(2rem, 2.4vw + 1rem, 3rem);       /* 32 → 48 */
+  --t-stat:   clamp(2.75rem, 4vw + 1rem, 4rem);      /* 44 → 64 */
+  --t-h3:     1.375rem;   /* 22 card head */
+  --t-body:   1.0625rem;  /* 17 */
+  --t-small:  0.875rem;   /* 14 labels */
+
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  --maxw: 1200px;
+  --pad:  clamp(1.25rem, 4vw, 2.5rem);
+
+  --z-nav: 50;
+}
+
+/* ---------- RESET ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+body{
+  margin:0;
+  font-family:var(--font-body);
+  font-size:var(--t-body);
+  line-height:1.6;
+  color:var(--ink);
+  background:var(--white);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{ font-family:var(--font-display); line-height:1.1; margin:0; letter-spacing:-0.02em; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+img,svg{ display:block; max-width:100%; }
+ul{ margin:0; padding:0; list-style:none; }
+button{ font-family:inherit; cursor:pointer; }
+
+/* ---------- A11Y ---------- */
+.skip-link{
+  position:absolute; left:1rem; top:-100px;
+  background:var(--brand); color:#fff; padding:.75rem 1.25rem;
+  border-radius:var(--r-pill); z-index:100; font-weight:600;
+  transition:top .2s ease;
+}
+.skip-link:focus{ top:1rem; }
+:focus-visible{ outline:3px solid var(--brand); outline-offset:2px; border-radius:var(--r-sm); }
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+/* ---------- LAYOUT ---------- */
+.wrap{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--pad); }
+.section{ padding-block:clamp(3.5rem, 7vw, 6rem); }
+.eyebrow{
+  /* brand-ink (#1E3A8A) not --brand: small bold text must clear 4.5:1 on
+     both white and the pale tints. #1E3A8A on white ~10:1, on #EFF6FF ~9:1. */
+  font-family:var(--font-display); font-weight:700; font-size:var(--t-small);
+  letter-spacing:.08em; text-transform:uppercase; color:var(--brand-ink);
+}
+.section-head{ max-width:46rem; margin-inline:auto; text-align:center; margin-bottom:clamp(2rem,4vw,3.5rem); }
+.section-head h2{ font-size:var(--t-h2); font-weight:700; margin-top:.75rem; }
+.section-head p{ color:var(--muted); margin-top:1rem; font-size:1.125rem; }
+
+/* ---------- BUTTONS (pills) ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  min-height:48px; padding:.75rem 1.5rem; border-radius:var(--r-pill);
+  font-family:var(--font-display); font-weight:600; font-size:1rem;
+  border:1.5px solid transparent; transition:background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.btn-primary{ background:var(--brand); color:#fff; }
+.btn-primary:hover{ background:var(--brand-hover); }
+/* secondary CTA: visible border (--brand at >=3:1 vs white) + faint tint fill */
+.btn-outline{ background:var(--band-blue); color:var(--brand-ink); border-color:var(--brand); }
+.btn-outline:hover{ background:#E0ECFE; border-color:var(--brand-hover); color:var(--brand-hover); }
+.btn-ghost{ background:transparent; color:var(--ink); min-height:44px; padding:.5rem 1rem; }
+.btn-ghost:hover{ color:var(--brand); }
+.btn-light{ background:#fff; color:var(--ink-band); }
+.btn-light:hover{ background:var(--band-blue); }
+@media (prefers-reduced-motion: no-preference){
+  .btn:active{ transform:translateY(1px); }
+}
+
+/* ---------- NAV ---------- */
+.nav{
+  position:sticky; top:0; z-index:var(--z-nav);
+  background:rgba(255,255,255,.85); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{ display:flex; align-items:center; gap:1.5rem; min-height:68px; }
+.logo{
+  font-family:var(--font-display); font-weight:800; font-size:1.375rem;
+  letter-spacing:-0.03em; color:var(--ink); display:inline-flex; align-items:center; gap:.5rem;
+}
+.logo .dot{ width:11px; height:11px; border-radius:var(--r-pill); background:var(--brand); }
+.nav-links{ display:flex; gap:.25rem; margin-inline:auto; }
+.nav-links a{
+  padding:.6rem .9rem; border-radius:var(--r-sm); font-weight:500; color:var(--ink);
+  font-size:.9375rem; transition:background-color .2s ease, color .2s ease;
+}
+.nav-links a:hover{ background:var(--gray-100); color:var(--brand); }
+.nav-actions{ display:flex; align-items:center; gap:.5rem; }
+
+/* EN/TH toggle */
+.lang{
+  display:inline-flex; background:var(--gray-100); border-radius:var(--r-pill); padding:3px;
+  border:1px solid var(--line);
+}
+.lang button{
+  border:0; background:transparent; padding:.4rem .75rem; min-height:38px;
+  border-radius:var(--r-pill); font-weight:600; font-size:.8125rem; color:var(--muted);
+  transition:background-color .2s ease, color .2s ease;
+}
+.lang button[aria-pressed="true"]{ background:#fff; color:var(--brand); box-shadow:0 1px 2px rgba(15,23,42,.08); }
+
+/* hamburger — hidden on desktop, shown <=900px */
+.nav-toggle{
+  display:none; align-items:center; justify-content:center;
+  width:48px; height:48px; min-height:48px; margin-left:auto;
+  background:transparent; border:1px solid var(--line); border-radius:var(--r-sm);
+  color:var(--ink); transition:background-color .2s ease, border-color .2s ease;
+}
+.nav-toggle:hover{ background:var(--gray-100); border-color:var(--line-strong); }
+
+/* mobile drawer */
+.nav-drawer{ display:none; }
+.nav-backdrop{ display:none; }
+
+@media (max-width: 900px){
+  .nav-links{ display:none; }
+  .nav-actions .btn-ghost,
+  .nav-actions .btn-primary{ display:none; }   /* moved into the drawer */
+  .nav-toggle{ display:inline-flex; }
+
+  .nav-backdrop{
+    display:block; position:fixed; inset:0; background:rgba(15,23,42,.4);
+    opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s ease;
+    z-index:calc(var(--z-nav) - 1);
+  }
+  .nav-backdrop.open{ opacity:1; visibility:visible; }
+
+  .nav-drawer{
+    display:flex; flex-direction:column; gap:.25rem;
+    position:fixed; top:0; right:0; height:100dvh; width:min(86vw, 340px);
+    background:var(--white); border-left:1px solid var(--line);
+    padding:1.25rem; z-index:var(--z-nav);
+    transform:translateX(100%); transition:transform .28s ease;
+    overflow-y:auto;
+  }
+  .nav-drawer.open{ transform:none; }
+  .nav-drawer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+  .nav-drawer-close{
+    width:48px; height:48px; min-height:48px; display:inline-flex; align-items:center; justify-content:center;
+    background:transparent; border:1px solid var(--line); border-radius:var(--r-sm); color:var(--ink);
+    transition:background-color .2s ease;
+  }
+  .nav-drawer-close:hover{ background:var(--gray-100); }
+  .nav-drawer a.drawer-link{
+    display:block; padding:.85rem .75rem; border-radius:var(--r-sm);
+    font-family:var(--font-display); font-weight:600; font-size:1.0625rem; color:var(--ink);
+    transition:background-color .2s ease, color .2s ease;
+  }
+  .nav-drawer a.drawer-link:hover{ background:var(--gray-100); color:var(--brand-ink); }
+  .nav-drawer .drawer-actions{ display:flex; flex-direction:column; gap:.75rem; margin-top:1.25rem; }
+  .nav-drawer .drawer-actions .btn{ width:100%; }
+}
+@media (prefers-reduced-motion: reduce){
+  .nav-backdrop, .nav-drawer{ transition:none; }
+}
+
+/* ---------- HERO ---------- */
+.hero{ text-align:center; padding-top:clamp(3rem,6vw,5rem); padding-bottom:clamp(2rem,5vw,4rem); }
+.hero-badge{
+  display:inline-flex; align-items:center; gap:.5rem; background:var(--band-blue);
+  color:var(--brand-ink); border:1px solid var(--line-tint);
+  padding:.4rem 1rem; border-radius:var(--r-pill); font-weight:600; font-size:.8125rem;
+  margin-bottom:1.5rem;
+}
+.hero-badge .pulse{ width:8px; height:8px; border-radius:var(--r-pill); background:var(--brand); }
+.hero h1{ font-size:var(--t-hero); font-weight:800; max-width:16ch; margin-inline:auto; }
+.hero h1 .accent{ color:var(--brand); }
+.hero-sub{ color:var(--muted); font-size:1.1875rem; max-width:44ch; margin:1.5rem auto 0; }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:.75rem; justify-content:center; margin-top:2rem; }
+
+/* placeholder frames */
+.ph{
+  position:relative; display:flex; align-items:center; justify-content:center;
+  text-align:center; background:var(--band-blue); border:1px solid var(--line-tint);
+  color:var(--brand-ink); border-radius:var(--r-lg); overflow:hidden;
+}
+.ph-label{
+  font-family:var(--font-display); font-weight:600; font-size:.8125rem;
+  letter-spacing:.04em; text-transform:uppercase; opacity:.75; padding:1rem;
+}
+.hero-mock{ margin-top:clamp(2.5rem,5vw,3.5rem); position:relative; }
+.hero-mock .ph{ aspect-ratio:16/9; }
+/* Mascot is CONTAINED inside the mock frame so it can never overflow/clip into
+   the next section at any breakpoint. Inset within the frame, not negative. */
+.hero-mascot{
+  position:absolute; right:clamp(.75rem,2vw,1.25rem); bottom:clamp(.75rem,2vw,1.25rem);
+  width:clamp(82px,11vw,124px); aspect-ratio:1;
+  background:var(--tint-4); border:1px solid var(--tint-4-line); border-radius:var(--r-md);
+  display:flex; align-items:center; justify-content:center; color:var(--brand-ink);
+}
+.hero-mascot .ph-label{ font-size:.625rem; }
+@media (max-width:560px){
+  /* on the smallest screens, let it flow below rather than overlap the UI mock */
+  .hero-mascot{ position:static; width:100%; aspect-ratio:auto; margin-top:.75rem; min-height:96px; }
+}
+
+/* ---------- PILLARS ---------- */
+.pillars-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(1rem,2vw,1.5rem); }
+@media (max-width:768px){ .pillars-grid{ grid-template-columns:1fr; } }
+.pillar{
+  border-radius:var(--r-lg); padding:clamp(1.5rem,3vw,2rem); border:1px solid transparent;
+  /* NO lift — hover changes border/background colour only (flat-surface premise) */
+  transition:border-color .2s ease, background-color .2s ease;
+  display:flex; flex-direction:column; gap:1.25rem;
+}
+.pillar.t1{ background:var(--tint-1); border-color:var(--tint-1-line); }
+.pillar.t2{ background:var(--tint-2); border-color:var(--tint-2-line); }
+.pillar.t3{ background:var(--tint-3); border-color:var(--tint-3-line); }
+.pillar.t4{ background:var(--tint-4); border-color:var(--tint-4-line); }
+.pillar:hover{ border-color:var(--brand); }
+.pillar h3{ font-size:var(--t-h3); font-weight:700; }
+.pillar .lead{ color:var(--muted); }
+/* all accents stay in the one blue family */
+.pillar-icon{ width:44px; height:44px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; background:#fff; color:var(--brand); border:1px solid rgba(37,99,235,.18); }
+.pillar ul{ display:grid; gap:.6rem; }
+.pillar li{ display:flex; align-items:flex-start; gap:.6rem; font-size:.9375rem; color:var(--ink); }
+.pillar li svg{ flex:0 0 auto; margin-top:3px; color:var(--brand); }
+.pillar-ph{ aspect-ratio:16/7; background:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.95); color:var(--brand-ink); }
+.pillar-link{ font-family:var(--font-display); font-weight:600; color:var(--brand-ink); display:inline-flex; align-items:center; gap:.35rem; margin-top:auto; }
+.pillar-link:hover{ gap:.6rem; }
+
+/* ---------- STATS ---------- */
+.stats-band{ background:var(--band-blue); }
+.stats-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; text-align:center; }
+@media (max-width:560px){ .stats-grid{ grid-template-columns:1fr; gap:2.25rem; } }
+.stat .num{ font-family:var(--font-display); font-weight:800; font-size:var(--t-stat); color:var(--brand-ink); line-height:1; letter-spacing:-0.03em; }
+.stat .lbl{ font-size:var(--t-small); color:var(--muted); margin-top:.6rem; font-weight:500; }
+.stats-note{ text-align:center; color:var(--muted); font-size:var(--t-small); margin-top:1.75rem; font-weight:500; }
+.stats-note svg{ display:inline-block; vertical-align:-3px; margin-right:.4rem; color:var(--brand-ink); }
+
+/* ---------- LOGO STRIP ---------- */
+.logos{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:clamp(1rem,3vw,2rem); }
+/* restrained wordmark-style placeholders with VARIED widths/labels so the row
+   reads intentional (real logos slot straight in) rather than "never started". */
+.logo-ph{
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:700; font-size:1rem; letter-spacing:-0.01em;
+  color:#94A3B8; transition:color .2s ease;
+}
+.logo-ph .dot{ width:9px; height:9px; border-radius:var(--r-pill); background:currentColor; margin-right:.4rem; flex:0 0 auto; }
+.logo-ph:hover{ color:var(--muted); }
+
+/* ---------- SOLUTIONS ---------- */
+.sol-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+@media (max-width:900px){ .sol-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:480px){ .sol-grid{ grid-template-columns:1fr; } }
+.sol{
+  background:var(--white); border:1px solid var(--line); border-radius:var(--r-md);
+  padding:1.5rem; transition:border-color .2s ease, background-color .2s ease;
+}
+.sol:hover{ border-color:var(--brand); background:var(--tint-1); }
+.sol-ico{ width:40px; height:40px; border-radius:var(--r-sm); background:var(--band-blue); color:var(--brand); display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
+.sol h3{ font-size:1.0625rem; font-weight:700; margin-bottom:.4rem; }
+.sol p{ color:var(--muted); font-size:.9375rem; }
+
+/* ---------- TESTIMONIAL (LIGHT — the page's one dark band is the footer) ---------- */
+.quote-band{ background:var(--band-blue); color:var(--ink); border:1px solid var(--line-tint); border-radius:var(--r-lg); padding:clamp(2.5rem,5vw,4rem); text-align:center; }
+.quote-band .stat-line{ font-family:var(--font-display); font-weight:800; font-size:clamp(2.25rem,5vw,3.5rem); letter-spacing:-0.03em; color:var(--brand-ink); }
+.quote-band blockquote{ margin:1.25rem auto 0; max-width:48ch; font-size:1.25rem; line-height:1.5; color:var(--ink); }
+.quote-band .cite{ margin-top:1.5rem; font-size:.875rem; color:var(--muted); }
+/* non-production marker — small muted caption, NOT a styled pill. Remove before launch. */
+.demo-tag{ display:block; margin-bottom:1rem; color:var(--muted); font-size:.75rem; font-weight:500; font-style:italic; letter-spacing:.02em; }
+
+/* ---------- PRICING ---------- */
+.price-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; align-items:stretch; }
+@media (max-width:900px){ .price-grid{ grid-template-columns:1fr; max-width:26rem; margin-inline:auto; } }
+.tier{
+  background:var(--white); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:clamp(1.75rem,3vw,2.25rem); display:flex; flex-direction:column; gap:1.25rem;
+  transition:border-color .2s ease, background-color .2s ease;
+}
+.tier:hover{ border-color:var(--brand); }
+.tier.featured:hover{ background:var(--white); }
+.tier.featured{ border:2px solid var(--brand); background:var(--gray-50); position:relative; }
+.tier-badge{ position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--brand); color:#fff; font-family:var(--font-display); font-weight:700; font-size:.75rem; padding:.3rem .9rem; border-radius:var(--r-pill); letter-spacing:.03em; }
+.tier h3{ font-size:1.25rem; font-weight:700; }
+.tier .price{ font-family:var(--font-display); font-weight:800; font-size:2.5rem; letter-spacing:-0.03em; }
+.tier .price small{ font-family:var(--font-body); font-weight:500; font-size:.9375rem; color:var(--muted); }
+.tier .tier-desc{ color:var(--muted); font-size:.9375rem; min-height:2.6em; }
+.tier ul{ display:grid; gap:.7rem; margin:.25rem 0; }
+.tier li{ display:flex; gap:.6rem; align-items:flex-start; font-size:.9375rem; }
+.tier li svg{ flex:0 0 auto; margin-top:3px; color:var(--brand); }
+.tier .btn{ width:100%; margin-top:auto; }
+.price-note{ text-align:center; color:var(--muted); font-size:var(--t-small); margin-top:1.5rem; }
+
+/* ---------- FAQ ---------- */
+.faq{ max-width:48rem; margin-inline:auto; }
+.faq-item{ border:1px solid var(--line); border-radius:var(--r-md); margin-bottom:.75rem; background:var(--white); overflow:hidden; }
+.faq-item summary, .faq-q{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  width:100%; text-align:left; border:0; background:transparent;
+  padding:1.25rem 1.5rem; font-family:var(--font-display); font-weight:600; font-size:1.0625rem; color:var(--ink);
+}
+.faq-q .chev{ flex:0 0 auto; color:var(--brand); transition:transform .25s ease; }
+.faq-q[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+.faq-a{ padding:0 1.5rem; max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s ease; color:var(--muted); }
+.faq-a.open{ padding:0 1.5rem 1.25rem; }
+@media (prefers-reduced-motion: reduce){ .faq-a{ transition:none; } }
+
+/* ---------- NEWSLETTER ---------- */
+.cta-strip{ background:var(--band-blue); border:1px solid var(--line-tint); border-radius:var(--r-lg); padding:clamp(2rem,4vw,3rem); text-align:center; }
+.cta-strip h2{ font-size:var(--t-h2); font-weight:700; }
+.cta-strip p{ color:var(--muted); margin-top:.75rem; }
+.news-form{ display:flex; flex-wrap:wrap; gap:.75rem; justify-content:center; margin-top:1.75rem; max-width:32rem; margin-inline:auto; }
+.news-form input{
+  flex:1 1 16rem; min-height:48px; padding:.75rem 1.25rem; border-radius:var(--r-pill);
+  border:1.5px solid var(--line); font-family:var(--font-body); font-size:1rem; background:#fff; color:var(--ink);
+}
+.news-form input::placeholder{ color:#94A3B8; }
+.news-form input:focus-visible{ outline:3px solid var(--brand); outline-offset:1px; border-color:var(--brand); }
+.news-note{ font-size:.8125rem; color:var(--muted); margin-top:1rem; }
+
+/* ---------- FOOTER (dark band) ---------- */
+.footer{ background:var(--ink-band); color:#CBD5E1; padding-block:clamp(3rem,5vw,4rem); }
+.footer a{ color:#CBD5E1; transition:color .2s ease; }
+.footer a:hover{ color:#fff; }
+.footer :focus-visible{ outline-color:#93C5FD; }
+.footer-top{ display:grid; grid-template-columns:1.4fr repeat(4,1fr); gap:2rem; }
+@media (max-width:900px){ .footer-top{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:480px){ .footer-top{ grid-template-columns:1fr; } }
+.footer .logo{ color:#fff; margin-bottom:1rem; }
+.footer-brand p{ color:#94A3B8; font-size:.9375rem; max-width:26ch; }
+.footer-col h4{ font-family:var(--font-display); font-size:.8125rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#fff; margin-bottom:1rem; }
+.footer-col li{ margin-bottom:.65rem; font-size:.9375rem; }
+.footer-fam{ margin-top:2.5rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,.12); }
+.footer-fam .lbl{ font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; color:#94A3B8; font-weight:600; margin-bottom:.75rem; }
+.footer-fam ul{ display:flex; flex-wrap:wrap; gap:.5rem .75rem; }
+.footer-fam a{ font-family:var(--font-display); font-weight:600; font-size:.875rem; padding:.4rem .9rem; border:1px solid rgba(255,255,255,.18); border-radius:var(--r-pill); }
+.footer-bottom{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; margin-top:2rem; padding-top:1.75rem; border-top:1px solid rgba(255,255,255,.12); font-size:.8125rem; color:#94A3B8; }
+.footer-social{ display:flex; gap:.5rem; }
+.footer-social a{ width:40px; height:40px; min-height:40px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.18); border-radius:var(--r-pill); }
+.footer-award{ color:#93C5FD; }
+
+/* ---------- reveal motion ---------- */
+.reveal{ opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1; transform:none; transition:none; }
+  .pillar,.sol,.tier{ transition:none; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="logo" aria-label="Venio home"><span class="dot" aria-hidden="true"></span>Venio</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#features" data-i18n="nav.features">Features</a>
+      <a href="#solutions" data-i18n="nav.solutions">Solutions</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#resources" data-i18n="nav.resources">Resources</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="th" aria-pressed="false">TH</button>
+      </div>
+      <a href="#" class="btn btn-ghost" data-i18n="nav.login">Log in</a>
+      <a href="#" class="btn btn-primary" data-i18n="nav.start">Start free</a>
+    </div>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-drawer" aria-label="Open menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- mobile nav drawer (<=900px); exposes every primary destination + actions -->
+<div class="nav-backdrop" id="nav-backdrop" hidden></div>
+<nav class="nav-drawer" id="nav-drawer" aria-label="Mobile" aria-hidden="true">
+  <div class="nav-drawer-head">
+    <a href="#" class="logo" aria-label="Venio home"><span class="dot" aria-hidden="true"></span>Venio</a>
+    <button type="button" class="nav-drawer-close" id="nav-drawer-close" aria-label="Close menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <a class="drawer-link" href="#features" data-i18n="nav.features">Features</a>
+  <a class="drawer-link" href="#solutions" data-i18n="nav.solutions">Solutions</a>
+  <a class="drawer-link" href="#pricing" data-i18n="nav.pricing">Pricing</a>
+  <a class="drawer-link" href="#resources" data-i18n="nav.resources">Resources</a>
+  <div class="drawer-actions">
+    <a href="#" class="btn btn-outline" data-i18n="nav.login">Log in</a>
+    <a href="#" class="btn btn-primary" data-i18n="nav.start">Start free</a>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="section hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <span class="hero-badge"><span class="pulse" aria-hidden="true"></span><span data-i18n="hero.badge">Built for Thai sales teams</span></span>
+      <h1 id="hero-title"><span data-i18n="hero.title1">Every customer relationship,</span> <span class="accent" data-i18n="hero.title2">calmly organized</span></h1>
+      <p class="hero-sub" data-i18n="hero.sub">Venio brings your contacts, activities, and deals into one tidy place — so your team spends less time on admin and more time closing.</p>
+      <div class="hero-cta">
+        <a href="#" class="btn btn-primary" data-i18n="hero.cta1">Start free</a>
+        <a href="#" class="btn btn-outline" data-i18n="hero.cta2">Book a demo</a>
+      </div>
+
+      <div class="hero-mock reveal">
+        <div class="ph" role="img" aria-label="Placeholder for the Venio product interface">
+          <span class="ph-label">[ Product UI — app mockups ]<br>16 : 9</span>
+        </div>
+        <div class="hero-mascot" role="img" aria-label="Placeholder for the Venio mascot, supplied later">
+          <span class="ph-label">[ Mascot ]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PILLARS ============ -->
+  <section class="section" id="features" aria-labelledby="pillars-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="pillars.eyebrow">The platform</span>
+        <h2 id="pillars-title" data-i18n="pillars.title">Four pillars, one connected CRM</h2>
+        <p data-i18n="pillars.sub">Everything your sales motion needs — without the clutter of a dozen disconnected tools.</p>
+      </div>
+
+      <div class="pillars-grid">
+        <!-- Pillar 1 -->
+        <article class="pillar t1 reveal">
+          <span class="pillar-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          <div>
+            <h3 data-i18n="p1.name">Contact hub</h3>
+            <p class="lead" data-i18n="p1.lead">A single, searchable home for every customer, company, and conversation.</p>
+          </div>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p1.f1">360° customer timeline</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p1.f2">Smart duplicate merging</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p1.f3">Custom fields &amp; tags</span></li>
+          </ul>
+          <div class="ph pillar-ph" role="img" aria-label="Illustration placeholder for the Contact hub pillar"><span class="ph-label">[ Illustration — Contact hub ]</span></div>
+          <a href="#" class="pillar-link" data-i18n="learn">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+
+        <!-- Pillar 2 -->
+        <article class="pillar t2 reveal">
+          <span class="pillar-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </span>
+          <div>
+            <h3 data-i18n="p2.name">Activity tracking</h3>
+            <p class="lead" data-i18n="p2.lead">Log calls, visits, and follow-ups in seconds — and never let a lead go cold.</p>
+          </div>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p2.f1">One-tap check-ins with GPS</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p2.f2">Automated reminders</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p2.f3">Daily activity feed</span></li>
+          </ul>
+          <div class="ph pillar-ph" role="img" aria-label="Illustration placeholder for the Activity tracking pillar"><span class="ph-label">[ Illustration — Activity tracking ]</span></div>
+          <a href="#" class="pillar-link" data-i18n="learn">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+
+        <!-- Pillar 3 -->
+        <article class="pillar t3 reveal">
+          <span class="pillar-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+          </span>
+          <div>
+            <h3 data-i18n="p3.name">Deal pipeline</h3>
+            <p class="lead" data-i18n="p3.lead">Drag-and-drop stages that show exactly where revenue is — and what to do next.</p>
+          </div>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p3.f1">Visual kanban stages</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p3.f2">Weighted forecasting</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p3.f3">Quote &amp; order tracking</span></li>
+          </ul>
+          <div class="ph pillar-ph" role="img" aria-label="Illustration placeholder for the Deal pipeline pillar"><span class="ph-label">[ Illustration — Deal pipeline ]</span></div>
+          <a href="#" class="pillar-link" data-i18n="learn">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+
+        <!-- Pillar 4 -->
+        <article class="pillar t4 reveal">
+          <span class="pillar-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+          </span>
+          <div>
+            <h3 data-i18n="p4.name">Insights &amp; reports</h3>
+            <p class="lead" data-i18n="p4.lead">Live dashboards turn daily activity into decisions managers can act on.</p>
+          </div>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p4.f1">Team performance dashboards</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p4.f2">Sales funnel analytics</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="p4.f3">Scheduled export &amp; share</span></li>
+          </ul>
+          <div class="ph pillar-ph" role="img" aria-label="Illustration placeholder for the Insights and reports pillar"><span class="ph-label">[ Illustration — Insights &amp; reports ]</span></div>
+          <a href="#" class="pillar-link" data-i18n="learn">Learn more <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="section stats-band" aria-labelledby="stats-title">
+    <div class="wrap">
+      <h2 id="stats-title" class="sr-only">Venio by the numbers</h2>
+      <div class="stats-grid reveal">
+        <div class="stat"><div class="num">100+</div><div class="lbl" data-i18n="stat.1">Teams trust Venio</div></div>
+        <div class="stat"><div class="num">30,000+</div><div class="lbl" data-i18n="stat.2">Activities logged / month</div></div>
+        <div class="stat"><div class="num">10+</div><div class="lbl" data-i18n="stat.3">Years building CRM</div></div>
+      </div>
+      <p class="stats-note reveal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg>
+        <span data-i18n="stat.award">An award-winning sales platform, built in Thailand.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ LOGO STRIP ============ -->
+  <section class="section" aria-labelledby="logos-title" style="padding-block:clamp(2.5rem,4vw,3.5rem);">
+    <div class="wrap">
+      <h2 id="logos-title" class="eyebrow" style="text-align:center; display:block; margin-bottom:2rem;" data-i18n="logos.title">Trusted by teams across Thailand</h2>
+      <!-- restrained wordmark placeholders, varied labels/widths; real logos slot in here -->
+      <div class="logos reveal" role="list" aria-label="Customer logos (placeholders)">
+        <span class="logo-ph" role="listitem"><span class="dot" aria-hidden="true"></span>Northwind</span>
+        <span class="logo-ph" role="listitem"><span class="dot" aria-hidden="true"></span>Siam Foods</span>
+        <span class="logo-ph" role="listitem"><span class="dot" aria-hidden="true"></span>Mekong Co.</span>
+        <span class="logo-ph" role="listitem"><span class="dot" aria-hidden="true"></span>Ratana</span>
+        <span class="logo-ph" role="listitem"><span class="dot" aria-hidden="true"></span>BluePeak</span>
+        <span class="logo-ph" role="listitem"><span class="dot" aria-hidden="true"></span>Asia Distrib.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOLUTIONS ============ -->
+  <section class="section" id="solutions" aria-labelledby="sol-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="sol.eyebrow">Solutions</span>
+        <h2 id="sol-title" data-i18n="sol.title">Made to fit how your industry sells</h2>
+      </div>
+      <div class="sol-grid">
+        <article class="sol reveal" id="sol-b2b">
+          <span class="sol-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+          <h3 data-i18n="sol.b2b">B2B sales</h3>
+          <p data-i18n="sol.b2b.d">Long cycles, many stakeholders, full visibility.</p>
+        </article>
+        <article class="sol reveal" id="sol-service">
+          <span class="sol-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+          <h3 data-i18n="sol.svc">Service teams</h3>
+          <p data-i18n="sol.svc.d">Tickets, SLAs, and happy repeat customers.</p>
+        </article>
+        <article class="sol reveal" id="sol-agri">
+          <span class="sol-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg></span>
+          <h3 data-i18n="sol.agri">Agriculture</h3>
+          <p data-i18n="sol.agri.d">Field reps, dealers, and seasonal demand.</p>
+        </article>
+        <article class="sol reveal" id="sol-channel">
+          <span class="sol-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+          <h3 data-i18n="sol.chan">Channel sales</h3>
+          <p data-i18n="sol.chan.d">Distributors and partners in one network.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIAL ============ -->
+  <section class="section" aria-labelledby="quote-title">
+    <div class="wrap">
+      <h2 id="quote-title" class="sr-only">What teams say about Venio</h2>
+      <div class="quote-band reveal">
+        <!-- non-production marker — remove before launch -->
+        <span class="demo-tag" data-i18n="quote.tag">Illustrative example</span>
+        <div class="stat-line" aria-hidden="true">+20%</div>
+        <blockquote data-i18n="quote.body">"Within a quarter of switching to Venio, our reps were logging 20% more customer visits — and our managers finally trusted the pipeline."</blockquote>
+        <div class="cite" data-i18n="quote.cite">— Head of Sales, sample manufacturing client</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="section" id="pricing" aria-labelledby="price-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="price.eyebrow">Pricing</span>
+        <h2 id="price-title" data-i18n="price.title">Simple plans that grow with you</h2>
+        <p data-i18n="price.sub">Start free. Upgrade when your team is ready. No surprises.</p>
+      </div>
+      <div class="price-grid">
+        <!-- Free -->
+        <article class="tier reveal">
+          <h3 data-i18n="tier.free">Free</h3>
+          <div class="price">฿0<small data-i18n="tier.permo">/mo</small></div>
+          <p class="tier-desc" data-i18n="tier.free.d">For solo sellers getting organized — up to 3 users and 500 records.</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.free.1">3 users</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.free.2">500 records</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.free.3">Core CRM features</span></li>
+          </ul>
+          <a href="#" class="btn btn-outline" data-i18n="tier.free.cta">Get started free</a>
+        </article>
+
+        <!-- Pro (featured) -->
+        <article class="tier featured reveal">
+          <span class="tier-badge" data-i18n="tier.popular">Most popular</span>
+          <h3 data-i18n="tier.pro">Pro</h3>
+          <div class="price">฿5,990<small data-i18n="tier.permo">/mo</small></div>
+          <p class="tier-desc" data-i18n="tier.pro.d">For growing sales teams who want full pipeline visibility — up to 5 users.</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.pro.1">Up to 5 users</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.pro.2">Unlimited records</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.pro.3">Dashboards &amp; forecasting</span></li>
+          </ul>
+          <a href="#" class="btn btn-primary" data-i18n="tier.pro.cta">Start free trial</a>
+        </article>
+
+        <!-- Pro+ -->
+        <article class="tier reveal">
+          <h3 data-i18n="tier.proplus">Pro+</h3>
+          <div class="price">฿9,990<small data-i18n="tier.permo">/mo</small></div>
+          <p class="tier-desc" data-i18n="tier.proplus.d">For larger teams that need automation, integrations, and priority support — up to 15 users.</p>
+          <ul>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.proplus.0">Up to 15 users</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.proplus.1">Everything in Pro</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.proplus.2">Workflow automation</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="tier.proplus.3">Priority support</span></li>
+          </ul>
+          <a href="#" class="btn btn-outline" data-i18n="tier.proplus.cta">Contact sales</a>
+        </article>
+      </div>
+      <p class="price-note" data-i18n="price.note">Prices indicative — see the Pricing page for current plans and billing options.</p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ / RESOURCES ============ -->
+  <span id="resources" aria-hidden="true" tabindex="-1" style="position:relative; top:-68px; display:block;"></span>
+  <section class="section" id="faq" aria-labelledby="faq-title" style="background:var(--gray-50);">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="faq.eyebrow">FAQ</span>
+        <h2 id="faq-title" data-i18n="faq.title">Questions, answered</h2>
+      </div>
+      <div class="faq reveal">
+        <div class="faq-item">
+          <h3><button class="faq-q" id="faq-q1" aria-expanded="false" aria-controls="faq-a1" data-i18n="faq.q1">How long does it take to get started?<span class="chev" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h3>
+          <div class="faq-a" id="faq-a1" role="region" aria-labelledby="faq-q1"><p data-i18n="faq.a1">Most teams are up and running the same day. Import your contacts from a spreadsheet, invite your team, and start logging activities in minutes — no IT project required.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" id="faq-q2" aria-expanded="false" aria-controls="faq-a2" data-i18n="faq.q2">Is my customer data secure?<span class="chev" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h3>
+          <div class="faq-a" id="faq-a2" role="region" aria-labelledby="faq-q2"><p data-i18n="faq.a2">Yes. Your data is encrypted in transit and at rest, with role-based access controls and regular backups. You own your data and can export it at any time.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" id="faq-q3" aria-expanded="false" aria-controls="faq-a3" data-i18n="faq.q3">Does Venio work on mobile?<span class="chev" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h3>
+          <div class="faq-a" id="faq-a3" role="region" aria-labelledby="faq-q3"><p data-i18n="faq.a3">Absolutely. Field reps can check in, log visits with GPS, and review their pipeline from the Venio mobile app — even offline, syncing when they reconnect.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" id="faq-q4" aria-expanded="false" aria-controls="faq-a4" data-i18n="faq.q4">Can I switch from my current CRM?<span class="chev" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h3>
+          <div class="faq-a" id="faq-a4" role="region" aria-labelledby="faq-q4"><p data-i18n="faq.a4">Yes. Our team helps you migrate contacts, deals, and history from spreadsheets or another CRM, so you start with your existing relationships intact.</p></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" id="faq-q5" aria-expanded="false" aria-controls="faq-a5" data-i18n="faq.q5">What support do I get?<span class="chev" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h3>
+          <div class="faq-a" id="faq-a5" role="region" aria-labelledby="faq-q5"><p data-i18n="faq.a5">Every plan includes onboarding guides and email support in Thai and English. Pro+ adds priority support and a dedicated success contact for your team.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEWSLETTER / CTA ============ -->
+  <section class="section" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="cta-strip reveal">
+        <h2 id="cta-title" data-i18n="cta.title">Get sales tips worth reading</h2>
+        <p data-i18n="cta.sub">Practical CRM and sales ideas in your inbox, once a month. No spam — unsubscribe anytime.</p>
+        <form class="news-form" novalidate>
+          <label for="news-email" class="sr-only" data-i18n="cta.label">Email address</label>
+          <input type="email" id="news-email" name="email" placeholder="you@company.com" autocomplete="email" required data-i18n-ph="cta.ph" />
+          <button type="submit" class="btn btn-primary" data-i18n="cta.btn">Subscribe</button>
+        </form>
+        <p class="news-note" data-i18n="cta.note">By subscribing you agree to receive Venio emails. See our Privacy Policy.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER (the one dark band) ============ -->
+<footer class="footer" aria-labelledby="footer-title">
+  <h2 id="footer-title" class="sr-only">Site footer</h2>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo" aria-label="Venio home"><span class="dot" aria-hidden="true"></span>Venio</a>
+        <p data-i18n="ft.tag">The calm CRM for Thai sales teams — contacts, activities, and deals in one place.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="ft.product">Product</h4>
+        <ul>
+          <li><a href="#features" data-i18n="ft.features">Features</a></li>
+          <li><a href="#pricing" data-i18n="ft.pricing">Pricing</a></li>
+          <li><a href="#" data-i18n="ft.mobile">Mobile app</a></li>
+          <li><a href="#" data-i18n="ft.integrations">Integrations</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="ft.solutions">Solutions</h4>
+        <ul>
+          <li><a href="#sol-b2b" data-i18n="sol.b2b">B2B sales</a></li>
+          <li><a href="#sol-service" data-i18n="sol.svc">Service teams</a></li>
+          <li><a href="#sol-agri" data-i18n="sol.agri">Agriculture</a></li>
+          <li><a href="#sol-channel" data-i18n="sol.chan">Channel sales</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="ft.resources">Resources</h4>
+        <ul>
+          <li><a href="#" data-i18n="ft.blog">Blog</a></li>
+          <li><a href="#" data-i18n="ft.guides">Guides</a></li>
+          <li><a href="#" data-i18n="ft.help">Help center</a></li>
+          <li><a href="#faq" data-i18n="ft.faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="ft.company">Company</h4>
+        <ul>
+          <li><a href="#" data-i18n="ft.about">About</a></li>
+          <li><a href="#" data-i18n="ft.careers">Careers</a></li>
+          <li><a href="#" data-i18n="ft.contact">Contact</a></li>
+          <li><a href="#" data-i18n="ft.privacy">Privacy &amp; Legal</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-fam">
+      <div class="lbl" data-i18n="ft.family">Family of products</div>
+      <ul>
+        <li><a href="#">empeo</a></li>
+        <li><a href="#">SalesBear</a></li>
+        <li><a href="#">eTaxGo</a></li>
+        <li><a href="#">IOMO</a></li>
+        <li><a href="#">Signtogo</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Venio. <span data-i18n="ft.rights">All rights reserved.</span> <span class="footer-award" data-i18n="ft.award">· Award-winning CRM</span></span>
+      <div class="footer-social" aria-label="Social media">
+        <a href="#" aria-label="Venio on Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg></a>
+        <a href="#" aria-label="Venio on LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+        <a href="#" aria-label="Venio on YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.08 0 12 0 12s0 3.92.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.92 24 12 24 12s0-3.92-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // year
+  var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+
+  /* ---------- EN / TH minimal string swap (nav + hero, real) ---------- */
+  var TH = {
+    'nav.features':'ฟีเจอร์','nav.solutions':'โซลูชัน','nav.pricing':'แพ็กเกจ','nav.resources':'แหล่งข้อมูล',
+    'nav.login':'เข้าสู่ระบบ','nav.start':'เริ่มฟรี',
+    'hero.badge':'ออกแบบมาเพื่อทีมขายไทย',
+    'hero.title1':'ทุกความสัมพันธ์กับลูกค้า','hero.title2':'จัดระเบียบอย่างเป็นระบบ',
+    'hero.sub':'Venio รวมรายชื่อ กิจกรรม และดีลไว้ในที่เดียว ทีมของคุณจะเสียเวลากับงานเอกสารน้อยลง และปิดการขายได้มากขึ้น',
+    'hero.cta1':'เริ่มฟรี','hero.cta2':'จองเดโม'
+  };
+  var EN = {}; // captured from DOM on load
+
+  var i18nNodes = document.querySelectorAll('[data-i18n]');
+  i18nNodes.forEach(function(n){ EN[n.getAttribute('data-i18n')] = n.innerHTML; });
+
+  function applyLang(lang){
+    var dict = (lang === 'th') ? TH : null;
+    document.documentElement.setAttribute('lang', lang);
+    i18nNodes.forEach(function(n){
+      var key = n.getAttribute('data-i18n');
+      if (lang === 'th' && dict && dict[key] != null){ n.innerHTML = dict[key]; }
+      else if (lang === 'en' && EN[key] != null){ n.innerHTML = EN[key]; }
+    });
+  }
+
+  document.querySelectorAll('.lang button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var lang = btn.getAttribute('data-lang');
+      document.querySelectorAll('.lang button').forEach(function(b){
+        b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+      });
+      applyLang(lang);
+    });
+  });
+
+  /* ---------- FAQ accordion (target panel by aria-controls id) ---------- */
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!panel) return;
+    btn.addEventListener('click', function(){
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      if (open){
+        panel.style.maxHeight = null; panel.classList.remove('open');
+      } else {
+        panel.classList.add('open');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* ---------- mobile nav drawer ---------- */
+  var toggle   = document.getElementById('nav-toggle');
+  var drawer   = document.getElementById('nav-drawer');
+  var backdrop = document.getElementById('nav-backdrop');
+  var closeBtn = document.getElementById('nav-drawer-close');
+  if (toggle && drawer && backdrop){
+    var lastFocused = null;
+    function focusables(){
+      return drawer.querySelectorAll('a[href], button:not([disabled])');
+    }
+    function openDrawer(){
+      lastFocused = document.activeElement;
+      drawer.classList.add('open');
+      backdrop.classList.add('open');
+      backdrop.hidden = false;
+      drawer.setAttribute('aria-hidden','false');
+      toggle.setAttribute('aria-expanded','true');
+      document.body.style.overflow = 'hidden';
+      var f = focusables(); if (f.length) f[0].focus();
+      document.addEventListener('keydown', onKeydown);
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      backdrop.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+      toggle.setAttribute('aria-expanded','false');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKeydown);
+      window.setTimeout(function(){ if (!drawer.classList.contains('open')) backdrop.hidden = true; }, 300);
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+    }
+    function onKeydown(e){
+      if (e.key === 'Escape'){ closeDrawer(); return; }
+      if (e.key === 'Tab'){
+        var f = focusables(); if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      }
+    }
+    toggle.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    drawer.querySelectorAll('.drawer-link, .drawer-actions a').forEach(function(a){
+      a.addEventListener('click', closeDrawer);
+    });
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reveals = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -40px 0px' });
+    reveals.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---------- newsletter (prevent real submit in demo) ---------- */
+  var form = document.querySelector('.news-form');
+  if (form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var input = form.querySelector('input[type="email"]');
+      if (input && input.checkValidity()){
+        input.value = '';
+        input.setAttribute('placeholder', 'Thanks — you are subscribed!');
+      } else if (input){
+        input.focus();
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
