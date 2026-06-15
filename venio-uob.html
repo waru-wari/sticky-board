@@ -19,6 +19,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Venio CRM — UOB Digital Solutions</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' rx='68' fill='%23F5F9FF'/%3E%3Cpath d='M150.996 221.396C141.035 223.213 131.572 212.344 126.387 203.32C112.559 179.209 105.147 149.824 107.11 122.051C107.783 112.529 109.131 104.355 103.858 95.7713C95.1272 81.6209 76.9631 78.8377 65.5373 91.4061C52.6174 105.615 57.0705 129.961 60.7326 146.865C65.3908 168.369 74.883 188.32 88.6233 205.547C96.6799 215.654 106.026 224.707 116.192 232.646C125.537 239.912 137.432 243.867 149.268 243.457C170.596 242.695 186.475 227.842 198.779 211.758C213.692 192.275 225.235 170.039 233.496 146.982C233.672 146.484 233.848 146.015 234.024 145.517C239.795 129.14 249.551 105.498 237.598 89.619C236.895 88.6815 236.133 87.8026 235.313 86.9823C232.998 84.6971 230.156 82.9979 227.11 81.9432C215.449 77.8709 201.856 83.3202 195.967 94.1014C191.074 103.096 189.053 113.613 186.885 123.545C183.076 140.947 180.762 159.14 176.338 176.601C173.115 189.316 169.102 206.396 159.756 216.211C156.826 219.258 153.897 220.869 150.996 221.396Z' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='150' y1='64' x2='150' y2='244' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230BB8F2'/%3E%3Cstop offset='1' stop-color='%23116DFC'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E">
 
 <!-- Gofive local fonts -->
 <style>
@@ -291,8 +292,19 @@ a,button,[tabindex]{outline:none;}
    PRODUCT HERO
    ================================================================ */
 .hero{
-  padding:56px 0 48px;
-  background:#fff;
+  padding:88px 0 80px;
+  background:linear-gradient(160deg,#F2F8FF 0%,#fff 50%);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  width:700px;height:700px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(17,109,252,.07) 0%,rgba(17,109,252,0) 70%);
+  top:-280px;right:-180px;
+  pointer-events:none;
 }
 .hero__grid{
   display:grid;
@@ -523,17 +535,21 @@ a,button,[tabindex]{outline:none;}
    SECTION SHARED
    ================================================================ */
 .section{
-  padding:72px 0;
+  padding:96px 0;
 }
 .section--alt{
   background:var(--bg-alt);
 }
 .section__title{
   text-align:center;
-  font-size:clamp(22px,3vw,28px);
+  font-size:clamp(24px,3.5vw,36px);
   font-weight:700;
-  color:var(--brand);
-  margin-bottom:40px;
+  color:var(--ink);
+  margin-bottom:8px;
+}
+.section__head{
+  text-align:center;
+  margin-bottom:52px;
 }
 /* Hidden tab panels */
 .tab-panel{display:none;}
@@ -544,32 +560,35 @@ a,button,[tabindex]{outline:none;}
    ================================================================ */
 .benefits-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:24px;
-}
-@media(max-width:900px){
-  .benefits-grid{grid-template-columns:1fr;}
-}
-@media(min-width:560px) and (max-width:900px){
-  .benefits-grid{grid-template-columns:repeat(2,1fr);}
+  grid-template-columns:1fr;
+  max-width:740px;
+  margin-inline:auto;
+  gap:16px;
 }
 
 .benefit-card{
   background:#fff;
-  border-radius:var(--r-card);
-  padding:32px 28px;
-  max-width:740px;
-  margin-inline:auto;
+  border-radius:38px;
+  padding:36px 32px;
   width:100%;
   display:flex;
-  flex-direction:column;
-  gap:16px;
-  box-shadow:0 4px 32px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
-  transition:box-shadow .2s, transform .2s;
+  flex-direction:row;
+  align-items:flex-start;
+  gap:28px;
+  box-shadow:0 2px 12px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:box-shadow 0.5s cubic-bezier(0.32,0.72,0,1),transform 0.5s cubic-bezier(0.32,0.72,0,1);
 }
 .benefit-card:hover{
-  box-shadow:0 8px 48px rgba(17,109,252,.14), 0 2px 8px rgba(17,109,252,.06);
-  transform:translateY(-2px);
+  box-shadow:0 12px 48px rgba(17,109,252,.12),0 2px 8px rgba(17,109,252,.06);
+  transform:translateY(-3px);
+}
+.card__text{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+@media(max-width:560px){
+  .benefit-card{flex-direction:column;gap:20px;}
 }
 
 /* ================================================================
@@ -589,29 +608,23 @@ a,button,[tabindex]{outline:none;}
 
 .feature-card{
   background:#fff;
-  border-radius:var(--r-card);
-  padding:28px 24px;
-  max-width:740px;
-  margin-inline:auto;
+  border-radius:38px;
+  padding:32px 24px;
   width:100%;
   text-align:center;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:14px;
-  box-shadow:0 4px 32px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
-  transition:box-shadow .2s, transform .2s;
+  box-shadow:0 2px 12px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:box-shadow 0.5s cubic-bezier(0.32,0.72,0,1),transform 0.5s cubic-bezier(0.32,0.72,0,1);
 }
 .feature-card:hover{
-  box-shadow:0 8px 48px rgba(17,109,252,.14), 0 2px 8px rgba(17,109,252,.06);
-  transform:translateY(-2px);
-}
-/* Last card (7th): center in grid */
-.feature-card--last{
-  grid-column:2;
+  box-shadow:0 12px 48px rgba(17,109,252,.12),0 2px 8px rgba(17,109,252,.06);
+  transform:translateY(-3px);
 }
 @media(max-width:900px){
-  .feature-card--last{grid-column:auto;}
+  .features-grid [style*="grid-column"]{grid-column:auto !important;}
 }
 
 /* ================================================================
@@ -654,20 +667,11 @@ a,button,[tabindex]{outline:none;}
    ================================================================ */
 .site-footer{
   background:var(--bg-dark);
-  padding:40px 0;
-  margin-top:0;
-}
-.site-footer__inner{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:16px;
-}
-.site-footer__copy{
-  font-size:var(--fs-300);
-  font-weight:400;
-  color:var(--on-dark-soft);
+  color:#A5A5B6;
   text-align:center;
+  padding:12px 40px;
+  font-size:13px;
+  font-weight:400;
 }
 
 /* Badge */
@@ -682,6 +686,111 @@ a,button,[tabindex]{outline:none;}
   border-radius:999px;
   line-height:1.4;
 }
+
+/* ================================================================
+   EYEBROW LABEL
+   ================================================================ */
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  background:var(--brand-wash);
+  color:var(--brand-ink);
+  font-size:12px;
+  font-weight:600;
+  padding:5px 14px;
+  border-radius:999px;
+  margin-bottom:12px;
+  letter-spacing:0.01em;
+}
+
+/* ================================================================
+   HERO TITLE + CTA
+   ================================================================ */
+.hero__title{
+  font-size:clamp(28px,4vw,44px);
+  font-weight:700;
+  line-height:1.15;
+  color:var(--ink);
+  margin-bottom:16px;
+}
+.hero__tagline{
+  font-size:var(--fs-400);
+  font-weight:600;
+  color:var(--ink-soft);
+  line-height:1.65;
+}
+.hero__cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin-top:32px;
+  background:var(--brand);
+  color:#fff;
+  font-family:var(--font);
+  font-size:var(--fs-400);
+  font-weight:600;
+  padding:0 8px 0 20px;
+  height:50px;
+  border-radius:var(--r-btn);
+  border:none;
+  cursor:pointer;
+  text-decoration:none;
+  transition:background 0.45s cubic-bezier(0.32,0.72,0,1),transform 0.45s cubic-bezier(0.32,0.72,0,1),box-shadow 0.45s cubic-bezier(0.32,0.72,0,1);
+  box-shadow:0 4px 20px rgba(17,109,252,.28);
+}
+.hero__cta:hover{
+  background:var(--brand-dark);
+  transform:translateY(-1px);
+  box-shadow:0 10px 32px rgba(17,109,252,.36);
+}
+.hero__cta:active{transform:scale(0.98);}
+.hero__cta-arrow{
+  width:34px;height:34px;
+  border-radius:6px;
+  background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  transition:transform 0.45s cubic-bezier(0.32,0.72,0,1);
+}
+.hero__cta:hover .hero__cta-arrow{transform:translateX(2px);}
+
+/* ================================================================
+   CARD SHELL — Double-Bezel outer wrapper
+   ================================================================ */
+.card-shell{
+  background:rgba(17,109,252,.025);
+  border:1px solid rgba(17,109,252,.09);
+  padding:4px;
+  border-radius:42px;
+  transition:border-color 0.5s cubic-bezier(0.32,0.72,0,1);
+}
+.card-shell:hover{
+  border-color:rgba(17,109,252,.18);
+}
+.feature-shell{
+  background:rgba(17,109,252,.02);
+  border:1px solid rgba(17,109,252,.07);
+  padding:4px;
+  border-radius:42px;
+  transition:border-color 0.5s cubic-bezier(0.32,0.72,0,1);
+}
+.feature-shell:hover{
+  border-color:rgba(17,109,252,.16);
+}
+
+/* ================================================================
+   SCROLL REVEAL
+   ================================================================ */
+.reveal{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity 0.75s cubic-bezier(0.32,0.72,0,1),transform 0.75s cubic-bezier(0.32,0.72,0,1);
+  will-change:transform,opacity;
+}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+.reveal--d1{transition-delay:.08s;}
+.reveal--d2{transition-delay:.18s;}
+.reveal--d3{transition-delay:.28s;}
 </style>
 </head>
 
@@ -702,6 +811,7 @@ a,button,[tabindex]{outline:none;}
       <div class="hero__grid">
         <!-- Left: logo + tagline -->
         <div>
+          <p class="eyebrow">CRM Platform สำหรับธุรกิจสมัยใหม่</p>
           <div class="hero__logo" aria-label="Venio" id="hero-heading">
             <!-- Logo-3 full wordmark — all paths use single gradient (light bg rule from CLAUDE.md) -->
             <svg width="220" height="110" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -729,11 +839,20 @@ a,button,[tabindex]{outline:none;}
               <path d="M363.012 119.055C339.227 119.055 319.879 138.407 319.879 162.197V235H349.305V162.197C349.305 154.636 355.453 148.487 363.012 148.487C370.57 148.487 376.718 154.636 376.718 162.197V235H406.145V162.197C406.145 138.407 386.796 119.055 363.012 119.055Z" fill="url(#hdr-grad)"/>
             </svg>
           </div>
+          <h1 class="hero__title">
+            บริหารงานขาย ดูแลลูกค้า<br>
+            ครบจบในแพลตฟอร์มเดียว
+          </h1>
           <p class="hero__tagline">
-            โซลูชัน CRM ครบวงจรในแพลตฟอร์มเดียว<br>
-            ที่ช่วยให้ธุรกิจบริหารสัด ติดตามดีล ดูแลลูกค้า<br>
-            และเปิดการขายได้อย่างมีประสิทธิภาพ
+            โซลูชัน CRM ครบวงจรที่ช่วยให้ธุรกิจติดตามดีล<br>
+            ดูแลลูกค้า และเปิดการขายได้อย่างมีประสิทธิภาพ
           </p>
+          <a href="#" class="hero__cta">
+            เริ่มใช้งานฟรี 14 วัน
+            <span class="hero__cta-arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
         </div>
         <!-- Right: App mockup -->
         <div class="app-mockup" role="img" aria-label="Venio CRM dashboard preview">
@@ -846,69 +965,67 @@ a,button,[tabindex]{outline:none;}
   >
     <section class="section" aria-labelledby="benefits-heading">
       <div class="container">
-        <h2 class="section__title" id="benefits-heading">สิทธิประโยชน์</h2>
+        <div class="section__head reveal">
+          <p class="eyebrow">สิทธิประโยชน์</p>
+          <h2 class="section__title" id="benefits-heading">ทำไมต้องเลือก Venio CRM</h2>
+        </div>
         <div class="benefits-grid">
 
           <!-- Card 1: Sales efficiency -->
-          <article class="benefit-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Funnel + bar chart icon -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Funnel shape -->
-                <path d="M8 10h28l-10 12v10l-8-4V22L8 10z"/>
-                <!-- Bar chart below/beside -->
-                <line x1="34" y1="30" x2="34" y2="36"/>
-                <line x1="38" y1="26" x2="38" y2="36"/>
-                <line x1="30" y1="28" x2="30" y2="36"/>
-              </svg>
-            </div>
-            <div>
-              <h3 class="card__title">จัดการงานขายอย่างมีประสิทธิภาพ</h3>
-            </div>
-            <p class="card__desc">บริหารจัด ติดตามดีล และมองเห็นภาพรวม Pipeline เพื่อเพิ่มประสิทธิภาพในการปิดการขาย</p>
-          </article>
+          <div class="card-shell reveal reveal--d1">
+            <article class="benefit-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 10h28l-10 12v10l-8-4V22L8 10z"/>
+                  <line x1="34" y1="30" x2="34" y2="36"/>
+                  <line x1="38" y1="26" x2="38" y2="36"/>
+                  <line x1="30" y1="28" x2="30" y2="36"/>
+                </svg>
+              </div>
+              <div class="card__text">
+                <h3 class="card__title">จัดการงานขายอย่างมีประสิทธิภาพ</h3>
+                <p class="card__desc">บริหารจัด ติดตามดีล และมองเห็นภาพรวม Pipeline เพื่อเพิ่มประสิทธิภาพในการปิดการขาย</p>
+              </div>
+            </article>
+          </div>
 
           <!-- Card 2: Team performance -->
-          <article class="benefit-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- 3 people + target icon -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Person center -->
-                <circle cx="22" cy="15" r="4"/>
-                <path d="M14 34c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-                <!-- Person left -->
-                <circle cx="11" cy="17" r="3"/>
-                <path d="M5 34c0-3.3 2.7-6 6-6"/>
-                <!-- Person right -->
-                <circle cx="33" cy="17" r="3"/>
-                <path d="M39 34c0-3.3-2.7-6-6-6"/>
-                <!-- Target -->
-                <circle cx="34" cy="10" r="4"/>
-                <circle cx="34" cy="10" r="1.5"/>
-              </svg>
-            </div>
-            <div>
-              <h3 class="card__title">ยกระดับการทำงานของทีมขาย</h3>
-            </div>
-            <p class="card__desc">ติดตามผลงาน ตั้งเป้าหมาย และพัฒนาศักยภาพของทีมขายได้อย่างเป็นระบบ</p>
-          </article>
+          <div class="card-shell reveal reveal--d2">
+            <article class="benefit-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="22" cy="15" r="4"/>
+                  <path d="M14 34c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+                  <circle cx="11" cy="17" r="3"/>
+                  <path d="M5 34c0-3.3 2.7-6 6-6"/>
+                  <circle cx="33" cy="17" r="3"/>
+                  <path d="M39 34c0-3.3-2.7-6-6-6"/>
+                  <circle cx="34" cy="10" r="4"/>
+                  <circle cx="34" cy="10" r="1.5"/>
+                </svg>
+              </div>
+              <div class="card__text">
+                <h3 class="card__title">ยกระดับการทำงานของทีมขาย</h3>
+                <p class="card__desc">ติดตามผลงาน ตั้งเป้าหมาย และพัฒนาศักยภาพของทีมขายได้อย่างเป็นระบบ</p>
+              </div>
+            </article>
+          </div>
 
           <!-- Card 3: Customer relationship -->
-          <article class="benefit-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Heart + chat bubbles icon -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Heart -->
-                <path d="M22 34s-12-7.5-12-15a7 7 0 0 1 12-5 7 7 0 0 1 12 5c0 7.5-12 15-12 15z"/>
-                <!-- Chat bubble top right -->
-                <path d="M30 12h6a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1l-2 2v-2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z"/>
-              </svg>
-            </div>
-            <div>
-              <h3 class="card__title">สร้างสัมพันธ์ที่ดีในทุกการดูแลลูกค้า</h3>
-            </div>
-            <p class="card__desc">เก็บครบทุกข้อมูลสำคัญของลูกค้า เพื่อการดูแลที่เข้าใจ ใส่ใจ และต่อเนื่อง</p>
-          </article>
+          <div class="card-shell reveal reveal--d3">
+            <article class="benefit-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 34s-12-7.5-12-15a7 7 0 0 1 12-5 7 7 0 0 1 12 5c0 7.5-12 15-12 15z"/>
+                  <path d="M30 12h6a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1l-2 2v-2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z"/>
+                </svg>
+              </div>
+              <div class="card__text">
+                <h3 class="card__title">สร้างสัมพันธ์ที่ดีในทุกการดูแลลูกค้า</h3>
+                <p class="card__desc">เก็บครบทุกข้อมูลสำคัญของลูกค้า เพื่อการดูแลที่เข้าใจ ใส่ใจ และต่อเนื่อง</p>
+              </div>
+            </article>
+          </div>
 
         </div>
       </div>
@@ -927,139 +1044,135 @@ a,button,[tabindex]{outline:none;}
   >
     <section class="section section--alt" aria-labelledby="features-heading">
       <div class="container">
-        <h2 class="section__title" id="features-heading">ลักษณะผลิตภัณฑ์</h2>
+        <div class="section__head reveal">
+          <p class="eyebrow">ลักษณะผลิตภัณฑ์</p>
+          <h2 class="section__title" id="features-heading">ฟีเจอร์ครบ รองรับทุกการทำงาน</h2>
+        </div>
         <div class="features-grid">
 
-          <!-- Feature 1: Customer data management -->
-          <article class="feature-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Person + database -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="17" cy="14" r="4"/>
-                <path d="M9 32c0-4.4 3.6-8 8-8h4"/>
-                <!-- Database cylinder -->
-                <ellipse cx="32" cy="22" rx="6" ry="2.5"/>
-                <path d="M26 22v8c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-8"/>
-                <path d="M26 26c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5"/>
-              </svg>
-            </div>
-            <h3 class="card__title">การจัดการข้อมูลลูกค้า</h3>
-            <p class="card__desc">ช่วยในการจัดการข้อมูลลูกค้า ตั้งแต่เรื่องการเก็บรวบรวมข้อมูลไปถึงการมอบหมายรายชื่อลูกค้าให้กับทีมขายเพื่อดำเนินต่อลูกค้าต่อไป</p>
-          </article>
+          <!-- Feature 1 -->
+          <div class="feature-shell reveal reveal--d1">
+            <article class="feature-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="17" cy="14" r="4"/>
+                  <path d="M9 32c0-4.4 3.6-8 8-8h4"/>
+                  <ellipse cx="32" cy="22" rx="6" ry="2.5"/>
+                  <path d="M26 22v8c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-8"/>
+                  <path d="M26 26c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5"/>
+                </svg>
+              </div>
+              <h3 class="card__title">การจัดการข้อมูลลูกค้า</h3>
+              <p class="card__desc">ช่วยในการจัดการข้อมูลลูกค้า ตั้งแต่เรื่องการเก็บรวบรวมข้อมูลไปถึงการมอบหมายรายชื่อลูกค้าให้กับทีมขายเพื่อดำเนินต่อลูกค้าต่อไป</p>
+            </article>
+          </div>
 
-          <!-- Feature 2: Visit planning -->
-          <article class="feature-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Calendar + location pin -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="8" y="12" width="22" height="20" rx="3"/>
-                <line x1="8" y1="18" x2="30" y2="18"/>
-                <line x1="15" y1="8" x2="15" y2="14"/>
-                <line x1="23" y1="8" x2="23" y2="14"/>
-                <!-- Location pin -->
-                <path d="M34 10c0 5-5 9-5 9s-5-4-5-9a5 5 0 0 1 10 0z"/>
-                <circle cx="29" cy="10" r="1.5"/>
-              </svg>
-            </div>
-            <h3 class="card__title">วางแผนและติดตามการเข้าพบลูกค้า</h3>
-            <p class="card__desc">จัดการวางแผนเข้าพบลูกค้า พร้อมการเช็คอินที่หน้างาน ทำให้มองเห็นภาพรวมการเข้าพบลูกค้าของทีมงานได้ทั้งหมด</p>
-          </article>
+          <!-- Feature 2 -->
+          <div class="feature-shell reveal reveal--d2">
+            <article class="feature-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="8" y="12" width="22" height="20" rx="3"/>
+                  <line x1="8" y1="18" x2="30" y2="18"/>
+                  <line x1="15" y1="8" x2="15" y2="14"/>
+                  <line x1="23" y1="8" x2="23" y2="14"/>
+                  <path d="M34 10c0 5-5 9-5 9s-5-4-5-9a5 5 0 0 1 10 0z"/>
+                  <circle cx="29" cy="10" r="1.5"/>
+                </svg>
+              </div>
+              <h3 class="card__title">วางแผนและติดตามการเข้าพบลูกค้า</h3>
+              <p class="card__desc">จัดการวางแผนเข้าพบลูกค้า พร้อมการเช็คอินที่หน้างาน ทำให้มองเห็นภาพรวมการเข้าพบลูกค้าของทีมงานได้ทั้งหมด</p>
+            </article>
+          </div>
 
-          <!-- Feature 3: Deal overview -->
-          <article class="feature-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Handshake icon -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 22l6-6h8l4 4h8l6-6"/>
-                <path d="M6 22l4 6h5l5 4 5-4h5l4-6"/>
-                <path d="M18 16l-4 4"/>
-                <path d="M24 20l4 4"/>
-              </svg>
-            </div>
-            <h3 class="card__title">มองเห็นภาพรวมดีลและโอกาสทางการขาย</h3>
-            <p class="card__desc">เห็นภาพรวมดีลและโอกาสทางการขายที่เกิดขึ้นได้อย่างชัดเจน ผ่าน deal stage และ pipeline</p>
-          </article>
+          <!-- Feature 3 -->
+          <div class="feature-shell reveal reveal--d3">
+            <article class="feature-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 22l6-6h8l4 4h8l6-6"/>
+                  <path d="M6 22l4 6h5l5 4 5-4h5l4-6"/>
+                  <path d="M18 16l-4 4"/>
+                  <path d="M24 20l4 4"/>
+                </svg>
+              </div>
+              <h3 class="card__title">มองเห็นภาพรวมดีลและโอกาสทางการขาย</h3>
+              <p class="card__desc">เห็นภาพรวมดีลและโอกาสทางการขายที่เกิดขึ้นได้อย่างชัดเจน ผ่าน deal stage และ pipeline</p>
+            </article>
+          </div>
 
-          <!-- Feature 4: Analytics -->
-          <article class="feature-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Bar chart + magnify glass -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Bar chart -->
-                <line x1="10" y1="34" x2="10" y2="24"/>
-                <line x1="16" y1="34" x2="16" y2="18"/>
-                <line x1="22" y1="34" x2="22" y2="22"/>
-                <line x1="8" y1="34" x2="24" y2="34"/>
-                <!-- Magnify glass -->
-                <circle cx="33" cy="17" r="7"/>
-                <line x1="38.5" y1="22.5" x2="42" y2="26"/>
-              </svg>
-            </div>
-            <h3 class="card__title">วิเคราะห์ข้อมูลการขายและการดูแลลูกค้า</h3>
-            <p class="card__desc">วิเคราะห์ข้อมูลการขายและลูกค้า ผ่าน report และ dashboard หลากหลายมุมมอง เสริมความแม่นยำในการตัดสินใจทางธุรกิจ</p>
-          </article>
+          <!-- Feature 4 -->
+          <div class="feature-shell reveal reveal--d1">
+            <article class="feature-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="10" y1="34" x2="10" y2="24"/>
+                  <line x1="16" y1="34" x2="16" y2="18"/>
+                  <line x1="22" y1="34" x2="22" y2="22"/>
+                  <line x1="8" y1="34" x2="24" y2="34"/>
+                  <circle cx="33" cy="17" r="7"/>
+                  <line x1="38.5" y1="22.5" x2="42" y2="26"/>
+                </svg>
+              </div>
+              <h3 class="card__title">วิเคราะห์ข้อมูลการขายและการดูแลลูกค้า</h3>
+              <p class="card__desc">วิเคราะห์ข้อมูลการขายและลูกค้า ผ่าน report และ dashboard หลากหลายมุมมอง เสริมความแม่นยำในการตัดสินใจทางธุรกิจ</p>
+            </article>
+          </div>
 
-          <!-- Feature 5: Case management -->
-          <article class="feature-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Document + chat bubble -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Document -->
-                <path d="M10 8h16l6 6v22a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/>
-                <polyline points="26,8 26,14 32,14"/>
-                <line x1="14" y1="20" x2="28" y2="20"/>
-                <line x1="14" y1="25" x2="22" y2="25"/>
-                <!-- Chat bubble -->
-                <path d="M30 20h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-1l-2 2.5V30h-5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z"/>
-              </svg>
-            </div>
-            <h3 class="card__title">จัดการเคสและข้อเสนอแนะจากลูกค้า</h3>
-            <p class="card__desc">จัดการเคสและข้อเสนอแนะอย่างเป็นระบบ ติดตามและปิดเคสได้ในระบบ เพื่อตรงตามความพึงพอใจของลูกค้า</p>
-          </article>
+          <!-- Feature 5 -->
+          <div class="feature-shell reveal reveal--d2">
+            <article class="feature-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 8h16l6 6v22a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/>
+                  <polyline points="26,8 26,14 32,14"/>
+                  <line x1="14" y1="20" x2="28" y2="20"/>
+                  <line x1="14" y1="25" x2="22" y2="25"/>
+                  <path d="M30 20h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-1l-2 2.5V30h-5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z"/>
+                </svg>
+              </div>
+              <h3 class="card__title">จัดการเคสและข้อเสนอแนะจากลูกค้า</h3>
+              <p class="card__desc">จัดการเคสและข้อเสนอแนะอย่างเป็นระบบ ติดตามและปิดเคสได้ในระบบ เพื่อตรงตามความพึงพอใจของลูกค้า</p>
+            </article>
+          </div>
 
-          <!-- Feature 6: Sales channels -->
-          <article class="feature-card">
-            <div class="icon-wrap" aria-hidden="true">
-              <!-- Megaphone + store -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Megaphone -->
-                <path d="M8 18v8h4l8 6V12l-8 6H8z"/>
-                <path d="M28 16s3 2 3 6-3 6-3 6"/>
-                <path d="M32 12s5 3 5 10-5 10-5 10"/>
-                <!-- Small store sign -->
-                <rect x="7" y="30" width="8" height="6" rx="1"/>
-              </svg>
-            </div>
-            <h3 class="card__title">เพิ่มช่องทางการขาย</h3>
-            <p class="card__desc">คัดกรองลูกค้าเข้าหมาย สร้างแคมเปญการตลาด และเปิดร้านค้าออนไลน์เฉพาะแบรนด์กับระบบ เพื่อโอกาสในการเข้าถึงลูกค้า</p>
-          </article>
+          <!-- Feature 6 -->
+          <div class="feature-shell reveal reveal--d3">
+            <article class="feature-card">
+              <div class="icon-wrap" aria-hidden="true">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 18v8h4l8 6V12l-8 6H8z"/>
+                  <path d="M28 16s3 2 3 6-3 6-3 6"/>
+                  <path d="M32 12s5 3 5 10-5 10-5 10"/>
+                  <rect x="7" y="30" width="8" height="6" rx="1"/>
+                </svg>
+              </div>
+              <h3 class="card__title">เพิ่มช่องทางการขาย</h3>
+              <p class="card__desc">คัดกรองลูกค้าเข้าหมาย สร้างแคมเปญการตลาด และเปิดร้านค้าออนไลน์เฉพาะแบรนด์กับระบบ เพื่อโอกาสในการเข้าถึงลูกค้า</p>
+            </article>
+          </div>
 
           <!-- Feature 7: AI — last card, centered -->
-          <article class="feature-card feature-card--last">
-            <div class="icon-wrap" aria-hidden="true" style="background:linear-gradient(135deg,#EEF4FF,#D8EAFF);">
-              <!-- AI chip with sparkles — filled style for "new" -->
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Chip body -->
-                <rect x="13" y="13" width="18" height="18" rx="4" fill="#E7F0FF" stroke="#116DFC"/>
-                <!-- Inner circuit -->
-                <rect x="17" y="17" width="10" height="10" rx="2" fill="#116DFC" stroke="none"/>
-                <!-- Pins left -->
-                <line x1="8" y1="18" x2="13" y2="18"/><line x1="8" y1="22" x2="13" y2="22"/><line x1="8" y1="26" x2="13" y2="26"/>
-                <!-- Pins right -->
-                <line x1="31" y1="18" x2="36" y2="18"/><line x1="31" y1="22" x2="36" y2="22"/><line x1="31" y1="26" x2="36" y2="26"/>
-                <!-- Pins top -->
-                <line x1="18" y1="8" x2="18" y2="13"/><line x1="22" y1="8" x2="22" y2="13"/><line x1="26" y1="8" x2="26" y2="13"/>
-                <!-- Sparkles -->
-                <line x1="36" y1="8" x2="36" y2="12"/><line x1="34" y1="10" x2="38" y2="10"/>
-                <line x1="6" y1="34" x2="6" y2="38"/><line x1="4" y1="36" x2="8" y2="36"/>
-              </svg>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
-              <h3 class="card__title" style="margin:0;">ยกระดับงานขายด้วย AI</h3>
-              <span class="badge-new">New!</span>
-            </div>
-            <p class="card__desc">ตัวช่วย AI สำหรับรองบอยลูกค้า สรุปงาน และคาดการณ์โอกาสการปิดดีลและยอดขาย เพื่อให้ทีมขายไม่พลัดสลิมงานขายได้อย่างเต็มที่</p>
-          </article>
+          <div class="feature-shell reveal reveal--d2" style="grid-column:2">
+            <article class="feature-card">
+              <div class="icon-wrap" aria-hidden="true" style="background:linear-gradient(135deg,#EEF4FF,#D8EAFF);">
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="13" y="13" width="18" height="18" rx="4" fill="#E7F0FF" stroke="#116DFC"/>
+                  <rect x="17" y="17" width="10" height="10" rx="2" fill="#116DFC" stroke="none"/>
+                  <line x1="8" y1="18" x2="13" y2="18"/><line x1="8" y1="22" x2="13" y2="22"/><line x1="8" y1="26" x2="13" y2="26"/>
+                  <line x1="31" y1="18" x2="36" y2="18"/><line x1="31" y1="22" x2="36" y2="22"/><line x1="31" y1="26" x2="36" y2="26"/>
+                  <line x1="18" y1="8" x2="18" y2="13"/><line x1="22" y1="8" x2="22" y2="13"/><line x1="26" y1="8" x2="26" y2="13"/>
+                  <line x1="36" y1="8" x2="36" y2="12"/><line x1="34" y1="10" x2="38" y2="10"/>
+                  <line x1="6" y1="34" x2="6" y2="38"/><line x1="4" y1="36" x2="8" y2="36"/>
+                </svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
+                <h3 class="card__title" style="margin:0;">ยกระดับงานขายด้วย AI</h3>
+                <span class="badge-new">New!</span>
+              </div>
+              <p class="card__desc">ตัวช่วย AI สำหรับรองบอยลูกค้า สรุปงาน และคาดการณ์โอกาสการปิดดีลและยอดขาย เพื่อให้ทีมขายทำงานขายได้อย่างเต็มที่</p>
+            </article>
+          </div>
 
         </div>
       </div>
@@ -1129,30 +1242,31 @@ a,button,[tabindex]{outline:none;}
 </script>
 
 <!-- ============================================================
+     SCROLL REVEAL — IntersectionObserver
+     ============================================================ -->
+<script>
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  els.forEach(function (el) { io.observe(el); });
+}());
+</script>
+
+<!-- ============================================================
      FOOTER
      ============================================================ -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="site-footer__inner">
-      <svg width="88" height="44" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venio" role="img">
-        <defs>
-          <linearGradient id="footer-grad" x1="300.494" y1="64" x2="300.494" y2="300" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#0BB8F2"/>
-            <stop offset="0.3" stop-color="#0D92F6"/>
-            <stop offset="1" stop-color="#116DFC"/>
-          </linearGradient>
-        </defs>
-        <path d="M178.605 64.0848C148.564 61.5889 144.972 113.171 140.282 150.598C135.593 188.024 117.992 220.917 91.7484 186.915C69.989 158.724 71.3271 108.782 72.4121 92.5044C72.8219 86.4515 71.1222 80.3866 67.361 75.6239C61.6469 68.3894 54.5223 67.7141 54.5223 67.7141C13.9088 65.9778 24.8307 129.003 37.7417 162.438C50.6527 195.874 82.7433 234.602 113.387 232.854C144.031 231.118 167.816 191.244 185.127 149.344C202.438 107.444 208.646 66.5807 178.605 64.0848Z" fill="url(#footer-grad)"/>
-        <path d="M440.694 80.1815C438.235 78.7588 435.511 78.0474 432.533 78.0474C429.556 78.0474 426.867 78.7588 424.468 80.1815C422.069 81.6043 420.092 83.5818 418.537 86.1139C417.115 88.5736 416.403 91.2986 416.403 94.2768C416.403 97.255 417.151 99.9438 418.634 102.536C420.056 104.996 421.997 106.973 424.468 108.469C426.867 109.891 429.556 110.603 432.533 110.603C435.511 110.603 438.235 109.855 440.694 108.372C443.154 106.877 445.095 104.936 446.529 102.536C447.952 100.137 448.663 97.3877 448.663 94.2768C448.663 91.166 447.952 88.5736 446.529 86.1139C445.034 83.5818 443.093 81.6164 440.694 80.1815Z" fill="url(#footer-grad)"/>
-        <path d="M418.176 235H446.83V118.946L418.176 119.055V235Z" fill="url(#footer-grad)"/>
-        <path d="M557.894 134.887C546.863 123.854 532.192 117.777 516.581 117.777C500.97 117.777 486.311 123.854 475.268 134.887C464.238 145.919 458.162 160.593 458.162 176.208C458.162 191.822 464.238 206.484 475.268 217.529C486.299 228.562 500.97 234.639 516.581 234.639C532.192 234.639 546.851 228.562 557.894 217.529C568.924 206.496 575 191.822 575 176.208C575 160.593 568.924 145.931 557.894 134.887ZM516.581 206.737C499.752 206.737 486.058 193.04 486.058 176.208C486.058 159.375 499.752 145.678 516.581 145.678C533.41 145.678 547.105 159.375 547.105 176.208C547.105 193.04 533.41 206.737 516.581 206.737Z" fill="url(#footer-grad)"/>
-        <path d="M249.537 117.994C233.938 117.994 219.267 124.071 208.224 135.103C197.194 146.136 191.118 160.81 191.118 176.424C191.118 192.039 197.194 206.701 208.224 217.746C219.255 228.778 233.926 234.855 249.537 234.855C263.834 234.855 277.336 229.755 287.993 220.41L271.779 197.405C266.197 203.325 258.289 207.027 249.501 207.027C233.697 207.027 220.689 195.053 219.062 179.68H279.94H307.86C307.92 178.631 307.956 177.534 307.956 176.437C307.956 160.834 301.88 146.16 290.85 135.115C279.819 124.083 265.148 118.006 249.537 118.006V117.994ZM224.378 159.038C229.899 151.14 239.049 145.967 249.417 145.967C259.784 145.967 268.934 151.14 274.455 159.038H224.378Z" fill="url(#footer-grad)"/>
-        <path d="M363.012 119.055C339.227 119.055 319.879 138.407 319.879 162.197V235H349.305V162.197C349.305 154.636 355.453 148.487 363.012 148.487C370.57 148.487 376.718 154.636 376.718 162.197V235H406.145V162.197C406.145 138.407 386.796 119.055 363.012 119.055Z" fill="url(#footer-grad)"/>
-      </svg>
-      <p class="site-footer__copy">Copyright &copy; 2026 Gofive Co.,Ltd. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+<footer class="site-footer">Copyright &copy; 2026 Gofive Co.,Ltd. All rights reserved.</footer>
 
 </body>
 </html>
