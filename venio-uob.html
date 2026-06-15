@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<!--
+  venio-uob.html
+  Venio CRM product page embedded in UOB bank website simulation.
+
+  ## Assumptions
+  - UOB chrome (top bar + nav) is purely decorative/static; links are non-functional placeholders.
+  - Venio product content uses the full Gofive DS token set as defined in CLAUDE.md.
+  - Style: Swiss Minimalism / Enterprise Gateway (clean, high contrast, grid-based).
+  - Color palette: UOB maroon #4A0000 / #0060A9 for bank chrome; Venio #116DFC for product content.
+  - Font: Gofive (local woff2, 4 weights). No Google Fonts.
+  - Responsive breakpoints: 375px / 768px / 1200px.
+  - Tab switching via vanilla JS; no framework.
+  - All SVG icons are hand-drawn in Lucide/Heroicons stroke style (1.8px, fill:none, stroke:#116DFC).
+  - App mockup is pure HTML/CSS — no images.
+-->
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Venio CRM — UOB Digital Solutions</title>
+
+<!-- Gofive local fonts -->
+<style>
+@font-face{font-family:'Gofive';font-style:normal;font-weight:400;font-display:swap;
+  src:url('fonts/Gofive-Text.woff2') format('woff2');}
+@font-face{font-family:'Gofive';font-style:normal;font-weight:500;font-display:swap;
+  src:url('fonts/Gofive-Medium.woff2') format('woff2');}
+@font-face{font-family:'Gofive';font-style:normal;font-weight:600;font-display:swap;
+  src:url('fonts/Gofive-Semi_Bold.woff2') format('woff2');}
+@font-face{font-family:'Gofive';font-style:normal;font-weight:700;font-display:swap;
+  src:url('fonts/Gofive-Bold.woff2') format('woff2');}
+</style>
+
+<style>
+/* ================================================================
+   DESIGN TOKENS — Gofive Design System (from CLAUDE.md)
+   ================================================================ */
+:root {
+  --font:'Gofive',system-ui,-apple-system,sans-serif;
+
+  /* Natural */
+  --bg:#FFFFFF;
+  --bg-alt:#F6F6F8;
+  --ink:#1C1C22;
+  --ink-soft:#525260;
+  --ink-faint:#838395;
+  --line:#ECECF1;
+  --line-mid:#DFDFE8;
+
+  /* Venio brand blues */
+  --brand:#116DFC;
+  --brand-dark:#035CE6;
+  --brand-ink:#035CE6;
+  --brand-wash:#E7F0FF;
+  --brand-ghost:#F5F9FF;
+
+  /* Status */
+  --notification:#F02848;
+
+  /* Radius */
+  --r-card:40px;
+  --r-sm:8px;
+  --r-btn:10px;
+
+  /* Type scale */
+  --fs-300:0.875rem;
+  --fs-400:1rem;
+
+  /* UOB chrome colors */
+  --uob-maroon:#4A0000;
+  --uob-blue:#0060A9;
+  --uob-nav-text:#374151;
+
+  /* Layout */
+  --maxw:1200px;
+  --gutter:clamp(16px, 3vw, 40px);
+}
+
+/* ================================================================
+   RESET + BASE
+   ================================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+body{
+  font-family:var(--font);
+  font-size:var(--fs-400);
+  line-height:1.6;
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+h1,h2,h3,h4{font-family:var(--font);font-weight:700;line-height:1.2;}
+p{margin:0;}
+
+/* Focus states — WCAG AA */
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{
+  outline:3px solid var(--brand);
+  outline-offset:3px;
+  border-radius:var(--r-sm);
+}
+a,button,[tabindex]{outline:none;}
+
+/* Skip link */
+.skip-link{
+  position:absolute;left:16px;top:-60px;z-index:9999;
+  background:var(--ink);color:#fff;padding:10px 16px;
+  border-radius:var(--r-sm);font-weight:600;
+  transition:top .15s ease;
+}
+.skip-link:focus{top:8px;}
+
+/* Container */
+.container{
+  max-width:var(--maxw);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+/* ================================================================
+   UOB TOP UTILITY BAR
+   ================================================================ */
+.uob-utility{
+  background:var(--uob-maroon);
+  padding:7px 0;
+}
+.uob-utility__inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+.uob-utility__left,
+.uob-utility__right{
+  display:flex;
+  align-items:center;
+  gap:0;
+}
+.uob-utility__link{
+  color:#fff;
+  font-size:12px;
+  font-weight:400;
+  padding:0 12px;
+  opacity:0.9;
+  cursor:pointer;
+  transition:opacity .15s;
+  border-right:1px solid rgba(255,255,255,.25);
+}
+.uob-utility__link:last-child{border-right:none;}
+.uob-utility__link:first-child{padding-left:0;}
+.uob-utility__right .uob-utility__link:last-child{padding-right:0;}
+.uob-utility__link:hover{opacity:1;}
+.uob-utility__ext{font-size:11px;margin-left:2px;opacity:0.7;}
+
+/* ================================================================
+   UOB MAIN NAVIGATION
+   ================================================================ */
+.uob-nav{
+  background:#fff;
+  border-bottom:1px solid #E5E7EB;
+  padding:0;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.uob-nav__inner{
+  display:flex;
+  align-items:center;
+  gap:0;
+  height:64px;
+}
+/* UOB Logo */
+.uob-logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-right:32px;
+  flex-shrink:0;
+  cursor:pointer;
+}
+.uob-logo__grid{
+  display:grid;
+  grid-template-columns:repeat(4,7px);
+  grid-template-rows:repeat(4,7px);
+  gap:2px;
+}
+.uob-logo__dot{
+  width:7px;height:7px;
+  border-radius:1px;
+  background:var(--uob-blue);
+}
+.uob-logo__text{
+  font-size:22px;
+  font-weight:700;
+  color:var(--uob-blue);
+  letter-spacing:0.02em;
+  font-family:var(--font);
+}
+/* Nav items */
+.uob-nav__items{
+  display:flex;
+  align-items:center;
+  gap:0;
+  flex:1;
+}
+.uob-nav__item{
+  padding:0 14px;
+  height:64px;
+  display:flex;
+  align-items:center;
+  font-size:13.5px;
+  font-weight:500;
+  color:var(--uob-nav-text);
+  cursor:pointer;
+  white-space:nowrap;
+  transition:color .15s;
+  border-bottom:3px solid transparent;
+  margin-bottom:-1px;
+}
+.uob-nav__item:hover{color:var(--uob-blue);}
+.uob-nav__item--active{
+  color:var(--uob-blue);
+  border-bottom-color:var(--uob-blue);
+  font-weight:600;
+}
+/* Nav right icons */
+.uob-nav__actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-left:auto;
+}
+.uob-nav__icon{
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  cursor:pointer;
+  transition:background .15s;
+}
+.uob-nav__icon:hover{background:#F3F4F6;}
+
+/* Mobile: hide some nav items */
+@media(max-width:768px){
+  .uob-nav__items{display:none;}
+  .uob-logo{margin-right:auto;}
+}
+
+/* ================================================================
+   BREADCRUMB
+   ================================================================ */
+.breadcrumb{
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+  background:#fff;
+}
+.breadcrumb__list{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:4px;
+  font-size:13px;
+  color:#6B7280;
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+.breadcrumb__list li{
+  list-style:none;
+}
+.breadcrumb__item a{
+  color:#6B7280;
+  transition:color .15s;
+}
+.breadcrumb__item a:hover{color:var(--brand-ink);}
+.breadcrumb__sep{
+  color:#D1D5DB;
+  font-size:12px;
+  user-select:none;
+}
+.breadcrumb__item--current{
+  color:var(--ink-soft);
+  font-weight:600;
+}
+
+/* ================================================================
+   PRODUCT HERO
+   ================================================================ */
+.hero{
+  padding:56px 0 48px;
+  background:#fff;
+}
+.hero__grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  align-items:center;
+}
+@media(max-width:768px){
+  .hero__grid{
+    grid-template-columns:1fr;
+    gap:36px;
+  }
+}
+
+/* Venio logo mark */
+.hero__logo{
+  margin-bottom:20px;
+  display:block;
+  line-height:0;
+}
+.hero__tagline{
+  font-size:var(--fs-400);
+  font-weight:600;
+  color:var(--ink-soft);
+  line-height:1.65;
+}
+
+/* ================================================================
+   APP MOCKUP — pure HTML/CSS dashboard illustration
+   ================================================================ */
+.app-mockup{
+  background:#F0F6FF;
+  border-radius:16px;
+  box-shadow:0 8px 40px rgba(17,109,252,.12),0 2px 8px rgba(17,109,252,.06);
+  min-height:320px;
+  overflow:hidden;
+  position:relative;
+}
+/* Mock top bar */
+.mock-topbar{
+  background:var(--brand);
+  height:44px;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  gap:10px;
+}
+.mock-topbar__title{
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+}
+.mock-topbar__spacer{flex:1;}
+.mock-topbar__avatar{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:rgba(255,255,255,.25);
+}
+.mock-topbar__bell{
+  width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;
+}
+/* Mock body */
+.mock-body{
+  display:flex;
+  gap:0;
+  height:calc(100% - 44px);
+  min-height:276px;
+}
+/* Mock sidebar */
+.mock-sidebar{
+  width:52px;
+  background:#0A5BD4;
+  flex-shrink:0;
+  padding:12px 0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:center;
+}
+.mock-sidebar__item{
+  width:32px;height:32px;
+  border-radius:8px;
+  background:rgba(255,255,255,.15);
+}
+.mock-sidebar__item--active{
+  background:rgba(255,255,255,.3);
+}
+/* Mock content */
+.mock-content{
+  flex:1;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.mock-content__row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.mock-card{
+  background:#fff;
+  border-radius:10px;
+  padding:12px 14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.mock-card__label{
+  font-size:10px;
+  color:var(--ink-faint);
+  font-weight:600;
+  margin-bottom:4px;
+}
+.mock-card__value{
+  font-size:16px;
+  font-weight:700;
+  color:var(--brand-ink);
+  font-family:var(--font);
+}
+.mock-card__sub{
+  font-size:9px;
+  color:var(--ink-faint);
+  margin-top:2px;
+}
+/* Mock pipeline bar */
+.mock-pipeline{
+  background:#fff;
+  border-radius:10px;
+  padding:12px 14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.mock-pipeline__title{
+  font-size:10px;
+  font-weight:600;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.mock-bar-track{
+  height:8px;
+  background:#E7F0FF;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:6px;
+}
+.mock-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,#116DFC,#35A7FF);
+  border-radius:999px;
+}
+.mock-pipeline__row{
+  display:flex;
+  justify-content:space-between;
+  font-size:9px;
+  color:var(--ink-faint);
+}
+/* Mock chart dots */
+.mock-chart{
+  background:#fff;
+  border-radius:10px;
+  padding:12px 14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+  flex:1;
+}
+.mock-chart__title{
+  font-size:10px;
+  font-weight:600;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.mock-chart__bars{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  height:48px;
+}
+.mock-bar{
+  flex:1;
+  background:var(--brand-wash);
+  border-radius:4px 4px 0 0;
+  transition:background .2s;
+}
+.mock-bar--hi{background:var(--brand);}
+.mock-row2{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:10px;
+}
+
+/* ================================================================
+   TAB NAVIGATION
+   ================================================================ */
+.tab-nav{
+  border-bottom:2px solid var(--line);
+  background:#fff;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.tab-nav__inner{
+  display:flex;
+  justify-content:center;
+  gap:0;
+}
+.tab-btn{
+  padding:16px 32px;
+  font-size:var(--fs-400);
+  font-weight:600;
+  font-family:var(--font);
+  color:var(--ink-soft);
+  background:transparent;
+  border:none;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;
+  cursor:pointer;
+  transition:color .15s, border-color .15s;
+  white-space:nowrap;
+}
+.tab-btn:hover{color:var(--brand);}
+.tab-btn--active{
+  color:var(--brand);
+  border-bottom-color:var(--brand);
+}
+@media(max-width:480px){
+  .tab-btn{padding:14px 20px;font-size:14px;}
+}
+
+/* ================================================================
+   SECTION SHARED
+   ================================================================ */
+.section{
+  padding:72px 0;
+}
+.section--alt{
+  background:var(--bg-alt);
+}
+.section__title{
+  text-align:center;
+  font-size:clamp(22px,3vw,28px);
+  font-weight:700;
+  color:var(--brand);
+  margin-bottom:40px;
+}
+/* Hidden tab panels */
+.tab-panel{display:none;}
+.tab-panel--active{display:block;}
+
+/* ================================================================
+   BENEFITS SECTION
+   ================================================================ */
+.benefits-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+@media(max-width:900px){
+  .benefits-grid{grid-template-columns:1fr;}
+}
+@media(min-width:560px) and (max-width:900px){
+  .benefits-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+.benefit-card{
+  background:#fff;
+  border-radius:var(--r-card);
+  padding:32px 28px;
+  max-width:740px;
+  margin-inline:auto;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  box-shadow:0 4px 32px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+  transition:box-shadow .2s, transform .2s;
+}
+.benefit-card:hover{
+  box-shadow:0 8px 48px rgba(17,109,252,.14), 0 2px 8px rgba(17,109,252,.06);
+  transform:translateY(-2px);
+}
+
+/* ================================================================
+   FEATURES SECTION
+   ================================================================ */
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+@media(max-width:900px){
+  .features-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:560px){
+  .features-grid{grid-template-columns:1fr;}
+}
+
+.feature-card{
+  background:#fff;
+  border-radius:var(--r-card);
+  padding:28px 24px;
+  max-width:740px;
+  margin-inline:auto;
+  width:100%;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  box-shadow:0 4px 32px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+  transition:box-shadow .2s, transform .2s;
+}
+.feature-card:hover{
+  box-shadow:0 8px 48px rgba(17,109,252,.14), 0 2px 8px rgba(17,109,252,.06);
+  transform:translateY(-2px);
+}
+/* Last card (7th): center in grid */
+.feature-card--last{
+  grid-column:2;
+}
+@media(max-width:900px){
+  .feature-card--last{grid-column:auto;}
+}
+
+/* ================================================================
+   ICON WRAP
+   ================================================================ */
+.icon-wrap{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#E7F0FF,#D0E4FF);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.icon-wrap svg{
+  width:44px;
+  height:44px;
+}
+
+/* ================================================================
+   CARD TYPOGRAPHY
+   ================================================================ */
+.card__title{
+  font-size:var(--fs-400);
+  font-weight:700;
+  color:var(--ink);
+  line-height:1.4;
+}
+.card__desc{
+  font-size:var(--fs-400);
+  font-weight:600;
+  color:var(--ink-soft);
+  line-height:1.65;
+  max-width:480px;
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.site-footer{
+  background:var(--bg-dark);
+  padding:40px 0;
+  margin-top:0;
+}
+.site-footer__inner{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+}
+.site-footer__copy{
+  font-size:var(--fs-300);
+  font-weight:400;
+  color:var(--on-dark-soft);
+  text-align:center;
+}
+
+/* Badge */
+.badge-new{
+  display:inline-flex;
+  align-items:center;
+  background:var(--notification);
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  padding:2px 10px;
+  border-radius:999px;
+  line-height:1.4;
+}
+</style>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
+
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main id="main-content">
+
+  <!-- ============================================================
+       4. PRODUCT HERO
+       ============================================================ -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container">
+      <div class="hero__grid">
+        <!-- Left: logo + tagline -->
+        <div>
+          <div class="hero__logo" aria-label="Venio" id="hero-heading">
+            <!-- Logo-3 full wordmark — all paths use single gradient (light bg rule from CLAUDE.md) -->
+            <svg width="220" height="110" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="hdr-grad" x1="300.494" y1="64" x2="300.494" y2="300" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0BB8F2"/>
+                  <stop offset="0.06" stop-color="#0BAFF3"/>
+                  <stop offset="0.3" stop-color="#0D92F6"/>
+                  <stop offset="0.54" stop-color="#0F7DF9"/>
+                  <stop offset="0.78" stop-color="#1071FB"/>
+                  <stop offset="1" stop-color="#116DFC"/>
+                </linearGradient>
+              </defs>
+              <!-- V mark -->
+              <path d="M178.605 64.0848C148.564 61.5889 144.972 113.171 140.282 150.598C135.593 188.024 117.992 220.917 91.7484 186.915C69.989 158.724 71.3271 108.782 72.4121 92.5044C72.8219 86.4515 71.1222 80.3866 67.361 75.6239C61.6469 68.3894 54.5223 67.7141 54.5223 67.7141C13.9088 65.9778 24.8307 129.003 37.7417 162.438C50.6527 195.874 82.7433 234.602 113.387 232.854C144.031 231.118 167.816 191.244 185.127 149.344C202.438 107.444 208.646 66.5807 178.605 64.0848Z" fill="url(#hdr-grad)"/>
+              <!-- i dot -->
+              <path d="M440.694 80.1815C438.235 78.7588 435.511 78.0474 432.533 78.0474C429.556 78.0474 426.867 78.7588 424.468 80.1815C422.069 81.6043 420.092 83.5818 418.537 86.1139C417.115 88.5736 416.403 91.2986 416.403 94.2768C416.403 97.255 417.151 99.9438 418.634 102.536C420.056 104.996 421.997 106.973 424.468 108.469C426.867 109.891 429.556 110.603 432.533 110.603C435.511 110.603 438.235 109.855 440.694 108.372C443.154 106.877 445.095 104.936 446.529 102.536C447.952 100.137 448.663 97.3877 448.663 94.2768C448.663 91.166 447.952 88.5736 446.529 86.1139C445.034 83.5818 443.093 81.6164 440.694 80.1815Z" fill="url(#hdr-grad)"/>
+              <!-- i stem -->
+              <path d="M418.176 235H446.83V118.946L418.176 119.055V235Z" fill="url(#hdr-grad)"/>
+              <!-- o -->
+              <path d="M557.894 134.887C546.863 123.854 532.192 117.777 516.581 117.777C500.97 117.777 486.311 123.854 475.268 134.887C464.238 145.919 458.162 160.593 458.162 176.208C458.162 191.822 464.238 206.484 475.268 217.529C486.299 228.562 500.97 234.639 516.581 234.639C532.192 234.639 546.851 228.562 557.894 217.529C568.924 206.496 575 191.822 575 176.208C575 160.593 568.924 145.931 557.894 134.887ZM516.581 206.737C499.752 206.737 486.058 193.04 486.058 176.208C486.058 159.375 499.752 145.678 516.581 145.678C533.41 145.678 547.105 159.375 547.105 176.208C547.105 193.04 533.41 206.737 516.581 206.737Z" fill="url(#hdr-grad)"/>
+              <!-- e -->
+              <path d="M249.537 117.994C233.938 117.994 219.267 124.071 208.224 135.103C197.194 146.136 191.118 160.81 191.118 176.424C191.118 192.039 197.194 206.701 208.224 217.746C219.255 228.778 233.926 234.855 249.537 234.855C263.834 234.855 277.336 229.755 287.993 220.41L271.779 197.405C266.197 203.325 258.289 207.027 249.501 207.027C233.697 207.027 220.689 195.053 219.062 179.68H279.94C279.94 179.68 279.94 179.704 279.94 179.716H307.86C307.92 178.631 307.956 177.534 307.956 176.437C307.956 160.834 301.88 146.16 290.85 135.115C279.819 124.083 265.148 118.006 249.537 118.006V117.994ZM224.378 159.038C229.899 151.14 239.049 145.967 249.417 145.967C259.784 145.967 268.934 151.14 274.455 159.038H224.378Z" fill="url(#hdr-grad)"/>
+              <!-- n -->
+              <path d="M363.012 119.055C339.227 119.055 319.879 138.407 319.879 162.197V235H349.305V162.197C349.305 154.636 355.453 148.487 363.012 148.487C370.57 148.487 376.718 154.636 376.718 162.197V235H406.145V162.197C406.145 138.407 386.796 119.055 363.012 119.055Z" fill="url(#hdr-grad)"/>
+            </svg>
+          </div>
+          <p class="hero__tagline">
+            โซลูชัน CRM ครบวงจรในแพลตฟอร์มเดียว<br>
+            ที่ช่วยให้ธุรกิจบริหารสัด ติดตามดีล ดูแลลูกค้า<br>
+            และเปิดการขายได้อย่างมีประสิทธิภาพ
+          </p>
+        </div>
+        <!-- Right: App mockup -->
+        <div class="app-mockup" role="img" aria-label="Venio CRM dashboard preview">
+          <!-- Top bar -->
+          <div class="mock-topbar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            <span class="mock-topbar__title">Venio CRM</span>
+            <div class="mock-topbar__spacer"></div>
+            <div class="mock-topbar__bell" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-linecap="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </div>
+            <div class="mock-topbar__avatar" aria-hidden="true"></div>
+          </div>
+          <!-- Body -->
+          <div class="mock-body">
+            <!-- Sidebar -->
+            <div class="mock-sidebar" aria-hidden="true">
+              <div class="mock-sidebar__item mock-sidebar__item--active"></div>
+              <div class="mock-sidebar__item"></div>
+              <div class="mock-sidebar__item"></div>
+              <div class="mock-sidebar__item"></div>
+              <div class="mock-sidebar__item"></div>
+            </div>
+            <!-- Content -->
+            <div class="mock-content" aria-hidden="true">
+              <!-- Stat cards row -->
+              <div class="mock-content__row">
+                <div class="mock-card">
+                  <div class="mock-card__label">ยอดขายรวม</div>
+                  <div class="mock-card__value">฿1.2M</div>
+                  <div class="mock-card__sub">+12% จากเดือนก่อน</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card__label">ดีลใหม่</div>
+                  <div class="mock-card__value">฿356K</div>
+                  <div class="mock-card__sub">24 รายการ</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card__label">Pipeline</div>
+                  <div class="mock-card__value">฿459M</div>
+                  <div class="mock-card__sub">Q2 forecast</div>
+                </div>
+              </div>
+              <!-- Second row: pipeline + chart -->
+              <div class="mock-row2">
+                <div class="mock-pipeline">
+                  <div class="mock-pipeline__title">Pipeline Progress</div>
+                  <div class="mock-bar-track"><div class="mock-bar-fill" style="width:68%"></div></div>
+                  <div class="mock-pipeline__row"><span>68% of target</span><span>฿312K</span></div>
+                </div>
+                <div class="mock-chart">
+                  <div class="mock-chart__title">Monthly Sales</div>
+                  <div class="mock-chart__bars">
+                    <div class="mock-bar" style="height:55%"></div>
+                    <div class="mock-bar" style="height:70%"></div>
+                    <div class="mock-bar" style="height:45%"></div>
+                    <div class="mock-bar mock-bar--hi" style="height:88%"></div>
+                    <div class="mock-bar" style="height:65%"></div>
+                    <div class="mock-bar" style="height:78%"></div>
+                    <div class="mock-bar mock-bar--hi" style="height:100%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5. TAB NAVIGATION
+       ============================================================ -->
+  <div class="tab-nav" role="tablist" aria-label="เนื้อหาผลิตภัณฑ์">
+    <div class="container">
+      <div class="tab-nav__inner">
+        <button
+          class="tab-btn tab-btn--active"
+          id="tab-benefits"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-benefits"
+          tabindex="0"
+        >สิทธิประโยชน์</button>
+        <button
+          class="tab-btn"
+          id="tab-features"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-features"
+          tabindex="-1"
+        >ลักษณะผลิตภัณฑ์</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       6. BENEFITS PANEL
+       ============================================================ -->
+  <div
+    id="panel-benefits"
+    class="tab-panel tab-panel--active"
+    role="tabpanel"
+    aria-labelledby="tab-benefits"
+  >
+    <section class="section" aria-labelledby="benefits-heading">
+      <div class="container">
+        <h2 class="section__title" id="benefits-heading">สิทธิประโยชน์</h2>
+        <div class="benefits-grid">
+
+          <!-- Card 1: Sales efficiency -->
+          <article class="benefit-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Funnel + bar chart icon -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Funnel shape -->
+                <path d="M8 10h28l-10 12v10l-8-4V22L8 10z"/>
+                <!-- Bar chart below/beside -->
+                <line x1="34" y1="30" x2="34" y2="36"/>
+                <line x1="38" y1="26" x2="38" y2="36"/>
+                <line x1="30" y1="28" x2="30" y2="36"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="card__title">จัดการงานขายอย่างมีประสิทธิภาพ</h3>
+            </div>
+            <p class="card__desc">บริหารจัด ติดตามดีล และมองเห็นภาพรวม Pipeline เพื่อเพิ่มประสิทธิภาพในการปิดการขาย</p>
+          </article>
+
+          <!-- Card 2: Team performance -->
+          <article class="benefit-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- 3 people + target icon -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Person center -->
+                <circle cx="22" cy="15" r="4"/>
+                <path d="M14 34c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+                <!-- Person left -->
+                <circle cx="11" cy="17" r="3"/>
+                <path d="M5 34c0-3.3 2.7-6 6-6"/>
+                <!-- Person right -->
+                <circle cx="33" cy="17" r="3"/>
+                <path d="M39 34c0-3.3-2.7-6-6-6"/>
+                <!-- Target -->
+                <circle cx="34" cy="10" r="4"/>
+                <circle cx="34" cy="10" r="1.5"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="card__title">ยกระดับการทำงานของทีมขาย</h3>
+            </div>
+            <p class="card__desc">ติดตามผลงาน ตั้งเป้าหมาย และพัฒนาศักยภาพของทีมขายได้อย่างเป็นระบบ</p>
+          </article>
+
+          <!-- Card 3: Customer relationship -->
+          <article class="benefit-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Heart + chat bubbles icon -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Heart -->
+                <path d="M22 34s-12-7.5-12-15a7 7 0 0 1 12-5 7 7 0 0 1 12 5c0 7.5-12 15-12 15z"/>
+                <!-- Chat bubble top right -->
+                <path d="M30 12h6a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1l-2 2v-2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="card__title">สร้างสัมพันธ์ที่ดีในทุกการดูแลลูกค้า</h3>
+            </div>
+            <p class="card__desc">เก็บครบทุกข้อมูลสำคัญของลูกค้า เพื่อการดูแลที่เข้าใจ ใส่ใจ และต่อเนื่อง</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       7. FEATURES PANEL
+       ============================================================ -->
+  <div
+    id="panel-features"
+    class="tab-panel"
+    role="tabpanel"
+    aria-labelledby="tab-features"
+    hidden
+  >
+    <section class="section section--alt" aria-labelledby="features-heading">
+      <div class="container">
+        <h2 class="section__title" id="features-heading">ลักษณะผลิตภัณฑ์</h2>
+        <div class="features-grid">
+
+          <!-- Feature 1: Customer data management -->
+          <article class="feature-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Person + database -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="17" cy="14" r="4"/>
+                <path d="M9 32c0-4.4 3.6-8 8-8h4"/>
+                <!-- Database cylinder -->
+                <ellipse cx="32" cy="22" rx="6" ry="2.5"/>
+                <path d="M26 22v8c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-8"/>
+                <path d="M26 26c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5"/>
+              </svg>
+            </div>
+            <h3 class="card__title">การจัดการข้อมูลลูกค้า</h3>
+            <p class="card__desc">ช่วยในการจัดการข้อมูลลูกค้า ตั้งแต่เรื่องการเก็บรวบรวมข้อมูลไปถึงการมอบหมายรายชื่อลูกค้าให้กับทีมขายเพื่อดำเนินต่อลูกค้าต่อไป</p>
+          </article>
+
+          <!-- Feature 2: Visit planning -->
+          <article class="feature-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Calendar + location pin -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="8" y="12" width="22" height="20" rx="3"/>
+                <line x1="8" y1="18" x2="30" y2="18"/>
+                <line x1="15" y1="8" x2="15" y2="14"/>
+                <line x1="23" y1="8" x2="23" y2="14"/>
+                <!-- Location pin -->
+                <path d="M34 10c0 5-5 9-5 9s-5-4-5-9a5 5 0 0 1 10 0z"/>
+                <circle cx="29" cy="10" r="1.5"/>
+              </svg>
+            </div>
+            <h3 class="card__title">วางแผนและติดตามการเข้าพบลูกค้า</h3>
+            <p class="card__desc">จัดการวางแผนเข้าพบลูกค้า พร้อมการเช็คอินที่หน้างาน ทำให้มองเห็นภาพรวมการเข้าพบลูกค้าของทีมงานได้ทั้งหมด</p>
+          </article>
+
+          <!-- Feature 3: Deal overview -->
+          <article class="feature-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Handshake icon -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 22l6-6h8l4 4h8l6-6"/>
+                <path d="M6 22l4 6h5l5 4 5-4h5l4-6"/>
+                <path d="M18 16l-4 4"/>
+                <path d="M24 20l4 4"/>
+              </svg>
+            </div>
+            <h3 class="card__title">มองเห็นภาพรวมดีลและโอกาสทางการขาย</h3>
+            <p class="card__desc">เห็นภาพรวมดีลและโอกาสทางการขายที่เกิดขึ้นได้อย่างชัดเจน ผ่าน deal stage และ pipeline</p>
+          </article>
+
+          <!-- Feature 4: Analytics -->
+          <article class="feature-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Bar chart + magnify glass -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Bar chart -->
+                <line x1="10" y1="34" x2="10" y2="24"/>
+                <line x1="16" y1="34" x2="16" y2="18"/>
+                <line x1="22" y1="34" x2="22" y2="22"/>
+                <line x1="8" y1="34" x2="24" y2="34"/>
+                <!-- Magnify glass -->
+                <circle cx="33" cy="17" r="7"/>
+                <line x1="38.5" y1="22.5" x2="42" y2="26"/>
+              </svg>
+            </div>
+            <h3 class="card__title">วิเคราะห์ข้อมูลการขายและการดูแลลูกค้า</h3>
+            <p class="card__desc">วิเคราะห์ข้อมูลการขายและลูกค้า ผ่าน report และ dashboard หลากหลายมุมมอง เสริมความแม่นยำในการตัดสินใจทางธุรกิจ</p>
+          </article>
+
+          <!-- Feature 5: Case management -->
+          <article class="feature-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Document + chat bubble -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Document -->
+                <path d="M10 8h16l6 6v22a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/>
+                <polyline points="26,8 26,14 32,14"/>
+                <line x1="14" y1="20" x2="28" y2="20"/>
+                <line x1="14" y1="25" x2="22" y2="25"/>
+                <!-- Chat bubble -->
+                <path d="M30 20h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-1l-2 2.5V30h-5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z"/>
+              </svg>
+            </div>
+            <h3 class="card__title">จัดการเคสและข้อเสนอแนะจากลูกค้า</h3>
+            <p class="card__desc">จัดการเคสและข้อเสนอแนะอย่างเป็นระบบ ติดตามและปิดเคสได้ในระบบ เพื่อตรงตามความพึงพอใจของลูกค้า</p>
+          </article>
+
+          <!-- Feature 6: Sales channels -->
+          <article class="feature-card">
+            <div class="icon-wrap" aria-hidden="true">
+              <!-- Megaphone + store -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Megaphone -->
+                <path d="M8 18v8h4l8 6V12l-8 6H8z"/>
+                <path d="M28 16s3 2 3 6-3 6-3 6"/>
+                <path d="M32 12s5 3 5 10-5 10-5 10"/>
+                <!-- Small store sign -->
+                <rect x="7" y="30" width="8" height="6" rx="1"/>
+              </svg>
+            </div>
+            <h3 class="card__title">เพิ่มช่องทางการขาย</h3>
+            <p class="card__desc">คัดกรองลูกค้าเข้าหมาย สร้างแคมเปญการตลาด และเปิดร้านค้าออนไลน์เฉพาะแบรนด์กับระบบ เพื่อโอกาสในการเข้าถึงลูกค้า</p>
+          </article>
+
+          <!-- Feature 7: AI — last card, centered -->
+          <article class="feature-card feature-card--last">
+            <div class="icon-wrap" aria-hidden="true" style="background:linear-gradient(135deg,#EEF4FF,#D8EAFF);">
+              <!-- AI chip with sparkles — filled style for "new" -->
+              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Chip body -->
+                <rect x="13" y="13" width="18" height="18" rx="4" fill="#E7F0FF" stroke="#116DFC"/>
+                <!-- Inner circuit -->
+                <rect x="17" y="17" width="10" height="10" rx="2" fill="#116DFC" stroke="none"/>
+                <!-- Pins left -->
+                <line x1="8" y1="18" x2="13" y2="18"/><line x1="8" y1="22" x2="13" y2="22"/><line x1="8" y1="26" x2="13" y2="26"/>
+                <!-- Pins right -->
+                <line x1="31" y1="18" x2="36" y2="18"/><line x1="31" y1="22" x2="36" y2="22"/><line x1="31" y1="26" x2="36" y2="26"/>
+                <!-- Pins top -->
+                <line x1="18" y1="8" x2="18" y2="13"/><line x1="22" y1="8" x2="22" y2="13"/><line x1="26" y1="8" x2="26" y2="13"/>
+                <!-- Sparkles -->
+                <line x1="36" y1="8" x2="36" y2="12"/><line x1="34" y1="10" x2="38" y2="10"/>
+                <line x1="6" y1="34" x2="6" y2="38"/><line x1="4" y1="36" x2="8" y2="36"/>
+              </svg>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
+              <h3 class="card__title" style="margin:0;">ยกระดับงานขายด้วย AI</h3>
+              <span class="badge-new">New!</span>
+            </div>
+            <p class="card__desc">ตัวช่วย AI สำหรับรองบอยลูกค้า สรุปงาน และคาดการณ์โอกาสการปิดดีลและยอดขาย เพื่อให้ทีมขายไม่พลัดสลิมงานขายได้อย่างเต็มที่</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     TAB SWITCHING — Vanilla JS
+     ============================================================ -->
+<script>
+(function () {
+  var tabs = document.querySelectorAll('[role="tab"]');
+  var panels = document.querySelectorAll('[role="tabpanel"]');
+
+  function activateTab(selectedTab) {
+    tabs.forEach(function (tab) {
+      var isSelected = tab === selectedTab;
+      tab.setAttribute('aria-selected', String(isSelected));
+      tab.classList.toggle('tab-btn--active', isSelected);
+      tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+    });
+
+    var targetId = selectedTab.getAttribute('aria-controls');
+    panels.forEach(function (panel) {
+      var isActive = panel.id === targetId;
+      panel.classList.toggle('tab-panel--active', isActive);
+      if (isActive) {
+        panel.removeAttribute('hidden');
+      } else {
+        panel.setAttribute('hidden', '');
+      }
+    });
+  }
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      activateTab(tab);
+    });
+
+    // Keyboard: arrow keys for tab switching (ARIA pattern)
+    tab.addEventListener('keydown', function (e) {
+      var idx = Array.from(tabs).indexOf(tab);
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        var next = tabs[(idx + 1) % tabs.length];
+        next.focus();
+        activateTab(next);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var prev = tabs[(idx - 1 + tabs.length) % tabs.length];
+        prev.focus();
+        activateTab(prev);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        tabs[0].focus();
+        activateTab(tabs[0]);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        tabs[tabs.length - 1].focus();
+        activateTab(tabs[tabs.length - 1]);
+      }
+    });
+  });
+}());
+</script>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+      <svg width="88" height="44" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venio" role="img">
+        <defs>
+          <linearGradient id="footer-grad" x1="300.494" y1="64" x2="300.494" y2="300" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0BB8F2"/>
+            <stop offset="0.3" stop-color="#0D92F6"/>
+            <stop offset="1" stop-color="#116DFC"/>
+          </linearGradient>
+        </defs>
+        <path d="M178.605 64.0848C148.564 61.5889 144.972 113.171 140.282 150.598C135.593 188.024 117.992 220.917 91.7484 186.915C69.989 158.724 71.3271 108.782 72.4121 92.5044C72.8219 86.4515 71.1222 80.3866 67.361 75.6239C61.6469 68.3894 54.5223 67.7141 54.5223 67.7141C13.9088 65.9778 24.8307 129.003 37.7417 162.438C50.6527 195.874 82.7433 234.602 113.387 232.854C144.031 231.118 167.816 191.244 185.127 149.344C202.438 107.444 208.646 66.5807 178.605 64.0848Z" fill="url(#footer-grad)"/>
+        <path d="M440.694 80.1815C438.235 78.7588 435.511 78.0474 432.533 78.0474C429.556 78.0474 426.867 78.7588 424.468 80.1815C422.069 81.6043 420.092 83.5818 418.537 86.1139C417.115 88.5736 416.403 91.2986 416.403 94.2768C416.403 97.255 417.151 99.9438 418.634 102.536C420.056 104.996 421.997 106.973 424.468 108.469C426.867 109.891 429.556 110.603 432.533 110.603C435.511 110.603 438.235 109.855 440.694 108.372C443.154 106.877 445.095 104.936 446.529 102.536C447.952 100.137 448.663 97.3877 448.663 94.2768C448.663 91.166 447.952 88.5736 446.529 86.1139C445.034 83.5818 443.093 81.6164 440.694 80.1815Z" fill="url(#footer-grad)"/>
+        <path d="M418.176 235H446.83V118.946L418.176 119.055V235Z" fill="url(#footer-grad)"/>
+        <path d="M557.894 134.887C546.863 123.854 532.192 117.777 516.581 117.777C500.97 117.777 486.311 123.854 475.268 134.887C464.238 145.919 458.162 160.593 458.162 176.208C458.162 191.822 464.238 206.484 475.268 217.529C486.299 228.562 500.97 234.639 516.581 234.639C532.192 234.639 546.851 228.562 557.894 217.529C568.924 206.496 575 191.822 575 176.208C575 160.593 568.924 145.931 557.894 134.887ZM516.581 206.737C499.752 206.737 486.058 193.04 486.058 176.208C486.058 159.375 499.752 145.678 516.581 145.678C533.41 145.678 547.105 159.375 547.105 176.208C547.105 193.04 533.41 206.737 516.581 206.737Z" fill="url(#footer-grad)"/>
+        <path d="M249.537 117.994C233.938 117.994 219.267 124.071 208.224 135.103C197.194 146.136 191.118 160.81 191.118 176.424C191.118 192.039 197.194 206.701 208.224 217.746C219.255 228.778 233.926 234.855 249.537 234.855C263.834 234.855 277.336 229.755 287.993 220.41L271.779 197.405C266.197 203.325 258.289 207.027 249.501 207.027C233.697 207.027 220.689 195.053 219.062 179.68H279.94H307.86C307.92 178.631 307.956 177.534 307.956 176.437C307.956 160.834 301.88 146.16 290.85 135.115C279.819 124.083 265.148 118.006 249.537 118.006V117.994ZM224.378 159.038C229.899 151.14 239.049 145.967 249.417 145.967C259.784 145.967 268.934 151.14 274.455 159.038H224.378Z" fill="url(#footer-grad)"/>
+        <path d="M363.012 119.055C339.227 119.055 319.879 138.407 319.879 162.197V235H349.305V162.197C349.305 154.636 355.453 148.487 363.012 148.487C370.57 148.487 376.718 154.636 376.718 162.197V235H406.145V162.197C406.145 138.407 386.796 119.055 363.012 119.055Z" fill="url(#footer-grad)"/>
+      </svg>
+      <p class="site-footer__copy">Copyright &copy; 2026 Gofive Co.,Ltd. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
