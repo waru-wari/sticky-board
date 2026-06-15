@@ -14,57 +14,69 @@
 <meta name="description" content="Venio CRM by Gofive: a Thai B2B sales CRM for SME to enterprise teams. 360° customer view, AI deal scoring, mobile-native, real-time analytics." />
 
 <!-- ============================================================
-  TYPOGRAPHY
-  Display: Plus Jakarta Sans  |  Body: Inter  (Google Fonts)
-  NOTE: Gofive is the official brand font (not bundled here).
-  To swap it into the display face later, add an @font-face for
-  "Gofive" and prepend it to --font-display below, e.g.:
-    @font-face { font-family:"Gofive"; src:url('Gofive.woff2') format('woff2'); font-weight:400 700; font-display:swap; }
-    --font-display: "Gofive", "Plus Jakarta Sans", system-ui, sans-serif;
+  TYPOGRAPHY — Gofive brand font (local, 4 weights)
   ============================================================ -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+@font-face{font-family:'Gofive';font-style:normal;font-weight:400;font-display:swap;
+  src:url('fonts/Gofive-Text.woff2') format('woff2');}
+@font-face{font-family:'Gofive';font-style:normal;font-weight:500;font-display:swap;
+  src:url('fonts/Gofive-Medium.woff2') format('woff2');}
+@font-face{font-family:'Gofive';font-style:normal;font-weight:600;font-display:swap;
+  src:url('fonts/Gofive-Semi_Bold.woff2') format('woff2');}
+@font-face{font-family:'Gofive';font-style:normal;font-weight:700;font-display:swap;
+  src:url('fonts/Gofive-Bold.woff2') format('woff2');}
+</style>
 
 <style>
 /* =========================================================
-   DESIGN TOKENS  — Swiss Modernism 2.0 + Editorial accents
+   DESIGN TOKENS — Gofive Design System
    ========================================================= */
 :root{
-  /* Type */
-  --font-display:"Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-body:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Type — Gofive brand font */
+  --font-display:"Gofive", system-ui, -apple-system, sans-serif;
+  --font-body:"Gofive", system-ui, -apple-system, sans-serif;
 
-  /* Type scale ~1.25 (major third), body 17px */
-  --fs-300:0.85rem;   /* 13.6 small label */
-  --fs-400:1.0625rem; /* 17   body */
-  --fs-500:1.33rem;   /* 21.3 lead */
-  --fs-600:clamp(1.5rem, 1.2rem + 1.4vw, 2rem);      /* H3 */
-  --fs-700:clamp(2rem, 1.4rem + 2.6vw, 2.9rem);      /* H2 */
-  --fs-800:clamp(2.75rem, 1.6rem + 5.4vw, 4.5rem);   /* H1 / display */
-  --fs-900:clamp(3rem, 1rem + 9vw, 7rem);            /* big-number band */
+  /* Type scale — 14px eyebrow/label | 16px body/description | headers: bold, context-sized */
+  --fs-300:0.875rem;   /* 14px — eyebrow, label, uppercase tag */
+  --fs-400:1rem;       /* 16px — body, description, subheader (semi-bold) */
+  --fs-500:1.25rem;    /* 20px — lead / large body */
+  --fs-600:clamp(1.25rem, 1rem + 1.2vw, 1.75rem);   /* H3 */
+  --fs-700:clamp(1.75rem, 1.2rem + 2.4vw, 2.5rem);  /* H2 */
+  --fs-800:clamp(2.5rem, 1.5rem + 5vw, 4rem);       /* H1 / display */
+  --fs-900:clamp(2.75rem, 1rem + 8.5vw, 6.5rem);    /* big-number band */
 
-  /* Color — restraint: white, one near-white, near-black text, ONE brand blue */
-  --bg:#FFFFFF;
-  --bg-alt:#F7F8FA;            /* the single near-white section bg */
-  --bg-dark:#141518;          /* dark anchor (CTA card, metric card) */
-  --ink:#1A1A1A;              /* near-black text */
-  --ink-soft:#54595F;         /* muted body / captions — 7.0:1 on white, AA pass */
-  --ink-faint:#5A5F66;        /* smallest labels — 6.3:1 on white, AA pass at small sizes */
-  --on-dark-soft:#C9CDD3;     /* muted text on dark bg */
-  --line:#E6E8EC;             /* hairlines / borders */
-  --line-strong:#D4D8DE;
+  /* Gofive Natural Color System */
+  --bg:#FFFFFF;              /* White (1) */
+  --bg-alt:#F6F6F8;          /* Soft Cloud (2) */
+  --bg-dark:#1C1C22;         /* Charcoal (12) */
+  --ink:#1C1C22;             /* Charcoal (12) — primary text */
+  --ink-soft:#525260;        /* Lead (10) — muted body / captions */
+  --ink-faint:#838395;       /* Porpoise (8) — smallest labels */
+  --on-dark-soft:#A5A5B6;    /* Pewter (7) — muted text on dark bg */
+  --line:#ECECF1;            /* Cloud (3) — hairlines / borders */
+  --line-mid:#DFDFE8;        /* Smoke (4) — button borders */
+  --line-strong:#D2D2DA;     /* Silver (5) — strong borders */
 
-  /* --brand: unconfirmed — replace with Venio brand hex */
-  --brand:#1A6CF6;
-  --brand-ink:#0E4FBF;        /* darker brand for text-on-light AA */
-  --brand-wash:#EAF1FE;       /* subtle brand tint (accent, used sparingly) */
+  /* Venio Accent Color System — Brand Blues */
+  --brand:#116DFC;           /* Bluetiful — primary */
+  --brand-dark:#035CE6;      /* Cobalt — darker shade */
+  --brand-ink:#035CE6;       /* Cobalt — brand text on light bg (AA contrast) */
+  --brand-mid:#418AFD;       /* United Blue */
+  --brand-light:#70A7FD;     /* Malibu */
+  --brand-wash:#E7F0FF;      /* Zircon — subtle tint */
+  --brand-ghost:#F5F9FF;     /* Ghost White — lightest */
   --on-brand:#FFFFFF;
 
-  /* Geometry — ONE radius system: 14px cards, pill buttons */
+  /* Status / semantic */
+  --success:#21CE9B;         /* Shamrock */
+  --error:#DE3A45;           /* Mandy */
+  --notification:#F02848;    /* Notification */
+
+  /* Geometry */
   --r-card:14px;
-  --r-sm:10px;
-  --r-pill:999px;
+  --r-sm:8px;
+  --r-btn:10px;              /* buttons: round radius */
+  --r-pill:999px;            /* kept only for lang toggle */
 
   /* Elevation */
   --shadow-frame:0 8px 32px rgba(0,0,0,.08);
@@ -88,6 +100,7 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
 body{
   margin:0;
+  padding-top:68px; /* offset for fixed header */
   font-family:var(--font-body);
   font-size:var(--fs-400);
   line-height:1.6;
@@ -100,6 +113,7 @@ img,svg{display:block;max-width:100%;}
 a{color:inherit;text-decoration:none;}
 ul{margin:0;padding:0;list-style:none;}
 h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin:0;}
+p{font-size:var(--fs-400);}
 
 /* Focus — visible ring on everything interactive */
 a,button,input,[tabindex]{outline:none;}
@@ -130,33 +144,36 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 
 /* Section header */
 .eyebrow{
-  font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
-  letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink);
-  display:inline-block;margin-bottom:14px;
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-300); /* 14px */
+  color:var(--brand-ink);display:inline-block;margin-bottom:14px;
 }
 .section-head{max-width:62ch;margin-bottom:clamp(36px,5vw,64px);}
-.section-head h2{font-size:var(--fs-700);}
-.section-head p{color:var(--ink-soft);font-size:var(--fs-500);margin:18px 0 0;line-height:1.5;}
+.section-head h2{font-size:var(--fs-700);font-weight:700;}
+.section-head p{color:var(--ink-soft);font-size:var(--fs-400);font-weight:600;margin:18px 0 0;line-height:1.6;} /* 16px semi-bold description */
 
 /* =========================================================
-   BUTTONS — pill geometry, 44px+ targets
+   BUTTONS — round radius (10px), NOT pill. 44px+ targets
    ========================================================= */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   font-family:var(--font-display);font-weight:600;font-size:var(--fs-400);
-  min-height:48px;padding:0 26px;border-radius:var(--r-pill);
+  line-height:1.5;
+  height:44px;padding:0 16px;border-radius:var(--r-btn);
   border:1.5px solid transparent;cursor:pointer;
-  transition:background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease;
-  white-space:nowrap;
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease;
+  white-space:nowrap;text-decoration:none;
 }
-.btn--primary{background:var(--brand);color:var(--on-brand);}
-.btn--primary:hover{background:var(--brand-ink);}
-.btn--secondary{background:transparent;color:var(--ink);border-color:var(--line-strong);}
-.btn--secondary:hover{border-color:var(--ink);background:#fff;}
-.btn--ghost{background:transparent;color:var(--ink);min-height:44px;padding:0 14px;}
+.btn--primary{background:var(--brand);color:#fff;}
+.btn--primary:hover{background:var(--brand-dark);}
+.btn--secondary{background:transparent;color:var(--ink-soft);border-color:var(--line-mid);}
+.btn--secondary:hover{background:var(--bg-alt);border-color:var(--line-mid);color:var(--ink-soft);}
+.btn--ghost{background:transparent;color:var(--ink);border-color:transparent;}
 .btn--ghost:hover{color:var(--brand-ink);}
-.btn--sm{min-height:40px;padding:0 18px;font-size:var(--fs-300);}
-.btn--block{width:100%;}
+/* Sizes — Figma spec */
+.btn--md{height:40px;}
+.btn--sm{height:36px;padding:0 14px;font-size:var(--fs-300);}
+.btn--xs{height:32px;padding:0 12px;font-size:var(--fs-300);}
+.btn--block{width:100%;height:auto;min-height:44px;padding-top:10px;padding-bottom:10px;}
 
 .link-arrow{
   display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);
@@ -187,63 +204,98 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .ph--solid{background:#fff;box-shadow:var(--shadow-frame);border:1px solid var(--line);}
 
 /* =========================================================
-   HEADER
+   HEADER — matching veniocrm.com structure
    ========================================================= */
 .site-header{
-  position:sticky;top:0;z-index:var(--z-header);
-  background:rgba(255,255,255,.86);
-  backdrop-filter:saturate(180%) blur(12px);
-  -webkit-backdrop-filter:saturate(180%) blur(12px);
+  position:fixed;top:0;left:0;right:0;z-index:var(--z-header);
+  background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
   border-bottom:1px solid var(--line);
+  transform:translateY(0);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
 }
-.header-inner{display:flex;align-items:center;gap:24px;min-height:68px;}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);
-  font-weight:800;font-size:var(--fs-500);letter-spacing:-0.03em;color:var(--ink);}
-.brand .mark{width:28px;height:28px;border-radius:var(--r-sm);background:var(--brand);
-  display:grid;place-items:center;color:#fff;font-size:var(--fs-400);}
+.site-header.header--hidden{transform:translateY(-100%);}
+.header-inner{display:flex;align-items:center;gap:20px;min-height:68px;}
 
+/* Logo */
+.brand{display:flex;align-items:center;gap:8px;flex-shrink:0;text-decoration:none;}
+.brand-logo{height:28px;width:auto;display:block;flex-shrink:0;}
+
+/* Desktop nav */
 .primary-nav{display:none;}
-.primary-nav ul{display:flex;align-items:center;gap:4px;}
-.primary-nav a{
-  display:inline-flex;align-items:center;min-height:44px;padding:0 14px;
-  font-family:var(--font-display);font-weight:500;font-size:var(--fs-400);
-  color:var(--ink);border-radius:var(--r-sm);transition:background-color .2s ease,color .2s ease;
+.primary-nav>ul{display:flex;align-items:center;gap:2px;}
+.primary-nav>ul>li{position:relative;}
+.primary-nav>ul>li>a{
+  display:inline-flex;align-items:center;gap:4px;padding:6px 12px;
+  font-family:var(--font-display);font-weight:500;font-size:var(--fs-300); /* 14px nav links */
+  color:var(--ink);border-radius:var(--r-sm);
+  transition:background-color .2s ease,color .2s ease;white-space:nowrap;
 }
-.primary-nav a:hover{color:var(--brand-ink);background:var(--brand-wash);}
+.primary-nav>ul>li>a:hover{color:var(--brand-ink);background:var(--brand-wash);}
+.primary-nav>ul>li>a svg{width:13px;height:13px;flex-shrink:0;
+  transition:transform .2s ease,color .2s ease;color:var(--ink-faint);}
+.primary-nav>ul>li>a:hover svg{color:var(--brand-ink);}
+.primary-nav>ul>li:hover>a svg{transform:rotate(180deg);}
 
-.header-actions{margin-left:auto;display:flex;align-items:center;gap:10px;}
+/* Dropdown */
+.nav-dropdown{
+  display:none;position:absolute;top:calc(100% + 6px);left:50%;
+  transform:translateX(-50%);
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-card);
+  box-shadow:0 12px 40px rgba(0,0,0,.1);padding:8px;min-width:200px;
+  z-index:var(--z-overlay);
+}
+.primary-nav>ul>li:hover .nav-dropdown,
+.primary-nav>ul>li:focus-within .nav-dropdown{display:block;}
+.nav-dropdown a{
+  display:flex;align-items:center;min-height:38px;padding:6px 12px;
+  font-family:var(--font-display);font-weight:500;font-size:var(--fs-300); /* 14px */
+  color:var(--ink);border-radius:var(--r-sm);
+  transition:background-color .15s ease,color .15s ease;
+}
+.nav-dropdown a:hover{background:var(--brand-wash);color:var(--brand-ink);}
+.nav-dropdown-divider{height:1px;background:var(--line);margin:6px 4px;}
 
-/* EN/TH toggle — visual only */
+/* Right-side actions */
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:8px;}
+
+/* TH/EN language toggle */
 .lang-toggle{display:inline-flex;background:var(--bg-alt);border:1px solid var(--line);
   border-radius:var(--r-pill);padding:3px;gap:2px;}
 .lang-toggle button{
   font-family:var(--font-display);font-weight:600;font-size:var(--fs-300);
-  min-height:36px;min-width:42px;padding:0 12px;border:0;border-radius:var(--r-pill);
-  background:transparent;color:var(--ink-soft);cursor:pointer;transition:background-color .2s ease,color .2s ease;}
+  min-height:32px;min-width:38px;padding:0 10px;border:0;border-radius:var(--r-pill);
+  background:transparent;color:var(--ink-soft);cursor:pointer;
+  transition:background-color .2s ease,color .2s ease;}
 .lang-toggle button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:var(--shadow-sm);}
 
 .login-link{display:none;}
 
-/* Mobile nav */
+/* Mobile hamburger */
 .nav-toggle{
   display:inline-flex;align-items:center;justify-content:center;
-  width:48px;height:48px;border:1px solid var(--line);border-radius:var(--r-sm);
+  width:44px;height:44px;border:1px solid var(--line);border-radius:var(--r-sm);
   background:#fff;cursor:pointer;color:var(--ink);
 }
-.nav-toggle svg{width:24px;height:24px;}
+.nav-toggle svg{width:22px;height:22px;}
 .mobile-nav{display:none;border-top:1px solid var(--line);background:#fff;}
 .mobile-nav.open{display:block;}
 .mobile-nav ul{padding:8px var(--gutter) 16px;}
-.mobile-nav a{display:flex;align-items:center;min-height:52px;
-  font-family:var(--font-display);font-weight:600;font-size:var(--fs-500);
+.mobile-nav a{display:flex;align-items:center;min-height:50px;
+  font-family:var(--font-display);font-weight:600;font-size:var(--fs-400); /* 16px mobile nav */
   border-bottom:1px solid var(--line);}
-.mobile-nav .mobile-cta{display:flex;flex-direction:column;gap:10px;padding:16px var(--gutter) 8px;}
+.mobile-nav .mobile-cta{display:flex;flex-direction:column;gap:10px;padding:16px var(--gutter) 16px;}
 
 @media (min-width:980px){
   .primary-nav{display:block;}
-  .login-link{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;
-    font-family:var(--font-display);font-weight:500;color:var(--ink);}
-  .login-link:hover{color:var(--brand-ink);}
+  .login-link{
+    display:inline-flex;align-items:center;min-height:40px;padding:0 12px;
+    font-family:var(--font-display);font-weight:600;font-size:var(--fs-300); /* 14px */
+    color:var(--ink);border-radius:var(--r-sm);
+    transition:color .2s ease,background-color .2s ease;
+  }
+  .login-link:hover{color:var(--brand-ink);background:var(--brand-wash);}
   .nav-toggle{display:none;}
 }
 
@@ -253,9 +305,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .hero{padding-block:clamp(48px,7vw,96px) var(--section-y);}
 .hero-grid{display:grid;gap:clamp(40px,5vw,56px);align-items:center;}
 .hero-copy{max-width:60ch;}
-.hero h1{font-size:var(--fs-800);font-weight:800;}
+.hero h1{font-size:var(--fs-800);font-weight:700;}
 .hero h1 em{font-style:normal;color:var(--brand);}
-.hero .lead{font-size:var(--fs-500);color:var(--ink-soft);line-height:1.5;margin:24px 0 0;max-width:52ch;}
+.hero .lead{font-size:var(--fs-400);font-weight:600;color:var(--ink-soft);line-height:1.6;margin:24px 0 0;max-width:52ch;} /* 16px semi-bold description */
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;}
 .trust-line{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin-top:30px;
   color:var(--ink-soft);font-size:var(--fs-300);}
@@ -312,7 +364,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .pillar__index{font-family:var(--font-display);font-weight:700;font-size:var(--fs-300);
   letter-spacing:.16em;color:var(--brand-ink);text-transform:uppercase;margin-bottom:14px;}
 .pillar h3,.pillar-card h3{font-size:var(--fs-600);}
-.pillar__benefit{font-size:var(--fs-400);color:var(--ink-soft);line-height:1.55;margin:14px 0 22px;max-width:46ch;}
+.pillar__benefit{font-size:var(--fs-400);font-weight:600;color:var(--ink-soft);line-height:1.6;margin:14px 0 22px;max-width:46ch;} /* 16px semi-bold */
 .pillar__feats{display:grid;gap:12px;margin-bottom:24px;}
 .pillar__feats li{display:flex;gap:12px;align-items:flex-start;font-size:var(--fs-400);}
 .pillar__feats svg{flex:none;width:22px;height:22px;color:var(--brand);margin-top:1px;}
@@ -355,7 +407,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
   width:48px;height:48px;border-radius:var(--r-sm);background:var(--brand-wash);
   display:grid;place-items:center;margin-bottom:18px;}
 .step h3{font-size:var(--fs-600);}
-.step p{color:var(--ink-soft);margin:10px 0 0;font-size:var(--fs-400);line-height:1.55;}
+.step p{color:var(--ink-soft);margin:10px 0 0;font-size:var(--fs-400);font-weight:600;line-height:1.6;} /* 16px semi-bold */
 @media (min-width:600px){.steps{grid-template-columns:repeat(2,1fr);}}
 @media (min-width:1000px){.steps{grid-template-columns:repeat(4,1fr);}}
 
@@ -503,44 +555,92 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 <!-- ============================ HEADER ============================ -->
 <header class="site-header">
   <div class="container header-inner">
+
+    <!-- Logo — V mark asset + Gofive wordmark text -->
     <a class="brand" href="#" aria-label="Venio CRM home">
-      <span class="mark" aria-hidden="true">V</span>Venio
+      <svg class="brand-logo" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venio">
+        <defs>
+          <linearGradient id="hdr-grad" x1="300.494" y1="104.731" x2="300.494" y2="486.822" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0BB8F2"/><stop offset="0.06" stop-color="#0BAFF3"/>
+            <stop offset="0.3" stop-color="#0D92F6"/><stop offset="0.54" stop-color="#0F7DF9"/>
+            <stop offset="0.78" stop-color="#1071FB"/><stop offset="1" stop-color="#116DFC"/>
+          </linearGradient>
+        </defs>
+        <path d="M178.605 64.0848C148.564 61.5889 144.972 113.171 140.282 150.598C135.593 188.024 117.992 220.917 91.7484 186.915C69.989 158.724 71.3271 108.782 72.4121 92.5044C72.8219 86.4515 71.1222 80.3866 67.361 75.6239C61.6469 68.3894 54.5223 67.7141 54.5223 67.7141C13.9088 65.9778 24.8307 129.003 37.7417 162.438C50.6527 195.874 82.7433 234.602 113.387 232.854C144.031 231.118 167.816 191.244 185.127 149.344C202.438 107.444 208.646 66.5807 178.605 64.0848Z" fill="url(#hdr-grad)"/>
+        <path d="M440.694 80.1815C438.235 78.7588 435.511 78.0474 432.533 78.0474C429.556 78.0474 426.867 78.7588 424.468 80.1815C422.069 81.6043 420.092 83.5818 418.537 86.1139C417.115 88.5736 416.403 91.2986 416.403 94.2768C416.403 97.255 417.151 99.9438 418.634 102.536C420.056 104.996 421.997 106.973 424.468 108.469C426.867 109.891 429.556 110.603 432.533 110.603C435.511 110.603 438.235 109.855 440.694 108.372C443.154 106.877 445.095 104.936 446.529 102.536C447.952 100.137 448.663 97.3877 448.663 94.2768C448.663 91.166 447.952 88.5736 446.529 86.1139C445.034 83.5818 443.093 81.6164 440.694 80.1815Z" fill="url(#hdr-grad)"/>
+        <path d="M418.176 235H446.83V118.946L418.176 119.055V235Z" fill="url(#hdr-grad)"/>
+        <path d="M557.894 134.887C546.863 123.854 532.192 117.777 516.581 117.777C500.97 117.777 486.311 123.854 475.268 134.887C464.238 145.919 458.162 160.593 458.162 176.208C458.162 191.822 464.238 206.484 475.268 217.529C486.299 228.562 500.97 234.639 516.581 234.639C532.192 234.639 546.851 228.562 557.894 217.529C568.924 206.496 575 191.822 575 176.208C575 160.593 568.924 145.931 557.894 134.887ZM516.581 206.737C499.752 206.737 486.058 193.04 486.058 176.208C486.058 159.375 499.752 145.678 516.581 145.678C533.41 145.678 547.105 159.375 547.105 176.208C547.105 193.04 533.41 206.737 516.581 206.737Z" fill="url(#hdr-grad)"/>
+        <path d="M249.537 117.994C233.938 117.994 219.267 124.071 208.224 135.103C197.194 146.136 191.118 160.81 191.118 176.424C191.118 192.039 197.194 206.701 208.224 217.746C219.255 228.778 233.926 234.855 249.537 234.855C263.834 234.855 277.336 229.755 287.993 220.41L271.779 197.405C266.197 203.325 258.289 207.027 249.501 207.027C233.697 207.027 220.689 195.053 219.062 179.68H307.86C307.92 178.631 307.956 177.534 307.956 176.437C307.956 160.834 301.88 146.16 290.85 135.115C279.819 124.083 265.148 118.006 249.537 118.006V117.994ZM224.378 159.038C229.899 151.14 239.049 145.967 249.417 145.967C259.784 145.967 268.934 151.14 274.455 159.038H224.378Z" fill="url(#hdr-grad)"/>
+        <path d="M363.012 119.055C339.227 119.055 319.879 138.407 319.879 162.197V235H349.305V162.197C349.305 154.636 355.453 148.487 363.012 148.487C370.57 148.487 376.718 154.636 376.718 162.197V235H406.145V162.197C406.145 138.407 386.796 119.055 363.012 119.055Z" fill="url(#hdr-grad)"/>
+      </svg>
     </a>
 
+    <!-- Desktop nav — matching veniocrm.com -->
     <nav class="primary-nav" aria-label="Primary">
       <ul>
-        <li><a href="#features" data-i18n data-en="Features" data-th="ฟีเจอร์">Features</a></li>
-        <li><a href="#solutions" data-i18n data-en="Solutions" data-th="โซลูชัน">Solutions</a></li>
+        <li>
+          <a href="#features" data-i18n data-en="Features" data-th="ฟีเจอร์">
+            Features
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown">
+            <a href="#">CRM</a>
+            <a href="#">Sales Assistant</a>
+            <a href="#">Marketing</a>
+            <a href="#">Mobility</a>
+          </div>
+        </li>
+        <li>
+          <a href="#solutions" data-i18n data-en="Solutions" data-th="โซลูชัน">
+            Solutions
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown">
+            <a href="#">B2B Business</a>
+            <a href="#">Service Business</a>
+            <a href="#">Agriculture Business</a>
+            <a href="#">Channel Management</a>
+          </div>
+        </li>
         <li><a href="#pricing" data-i18n data-en="Pricing" data-th="ราคา">Pricing</a></li>
-        <li><a href="#resources" data-i18n data-en="Resources" data-th="แหล่งความรู้">Resources</a></li>
-        <li><a href="#about" data-i18n data-en="About" data-th="เกี่ยวกับเรา">About</a></li>
+        <li><a href="#resources" data-i18n data-en="Blog" data-th="บล็อก">Blog</a></li>
+        <li>
+          <a href="#about" data-i18n data-en="About" data-th="เกี่ยวกับเรา">
+            About
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown">
+            <a href="#">About Us</a>
+            <a href="#">Partners</a>
+          </div>
+        </li>
+        <li><a href="#" data-i18n data-en="Contact Us" data-th="ติดต่อเรา">Contact Us</a></li>
       </ul>
     </nav>
 
+    <!-- Right-side actions -->
     <div class="header-actions">
-      <div class="lang-toggle" role="group" aria-label="Language">
-        <button type="button" aria-pressed="true" data-lang="en">EN</button>
-        <button type="button" aria-pressed="false" data-lang="th">TH</button>
-      </div>
-      <a class="login-link" href="#" data-i18n data-en="Login" data-th="เข้าสู่ระบบ">Login</a>
-      <a class="btn btn--primary btn--sm" href="#" data-i18n data-en="Start free trial" data-th="ทดลองใช้ฟรี">Start free trial</a>
+      <a class="login-link" href="#">เข้าสู่ระบบ</a>
+      <a class="btn btn--primary btn--sm" href="#" data-i18n data-en="เริ่มใช้ฟรี 14 วัน" data-th="เริ่มใช้ฟรี 14 วัน">เริ่มใช้ฟรี 14 วัน</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
       </button>
     </div>
   </div>
 
+  <!-- Mobile nav -->
   <div class="mobile-nav" id="mobile-nav">
     <ul>
       <li><a href="#features" data-i18n data-en="Features" data-th="ฟีเจอร์">Features</a></li>
       <li><a href="#solutions" data-i18n data-en="Solutions" data-th="โซลูชัน">Solutions</a></li>
       <li><a href="#pricing" data-i18n data-en="Pricing" data-th="ราคา">Pricing</a></li>
-      <li><a href="#resources" data-i18n data-en="Resources" data-th="แหล่งความรู้">Resources</a></li>
+      <li><a href="#resources" data-i18n data-en="Blog" data-th="บล็อก">Blog</a></li>
       <li><a href="#about" data-i18n data-en="About" data-th="เกี่ยวกับเรา">About</a></li>
+      <li><a href="#" data-i18n data-en="Contact Us" data-th="ติดต่อเรา">Contact Us</a></li>
     </ul>
     <div class="mobile-cta">
-      <a class="btn btn--secondary btn--block" href="#" data-i18n data-en="Login" data-th="เข้าสู่ระบบ">Login</a>
-      <a class="btn btn--primary btn--block" href="#" data-i18n data-en="Start free trial" data-th="ทดลองใช้ฟรี">Start free trial</a>
+      <a class="btn btn--secondary btn--block" href="#">เข้าสู่ระบบ</a>
+      <a class="btn btn--primary btn--block" href="#" data-i18n data-en="เริ่มใช้ฟรี 14 วัน" data-th="เริ่มใช้ฟรี 14 วัน">เริ่มใช้ฟรี 14 วัน</a>
     </div>
   </div>
 </header>
@@ -903,7 +1003,23 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <a class="brand" href="#" aria-label="Venio CRM home"><span class="mark" aria-hidden="true">V</span>Venio</a>
+        <a class="brand" href="#" aria-label="Venio CRM home" style="margin-bottom:16px;display:inline-flex;">
+          <svg class="brand-logo" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Venio">
+            <defs>
+              <linearGradient id="footer-logo-grad" x1="300.494" y1="104.731" x2="300.494" y2="486.822" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#0BB8F2"/><stop offset="0.06" stop-color="#0BAFF3"/>
+                <stop offset="0.3" stop-color="#0D92F6"/><stop offset="0.54" stop-color="#0F7DF9"/>
+                <stop offset="0.78" stop-color="#1071FB"/><stop offset="1" stop-color="#116DFC"/>
+              </linearGradient>
+            </defs>
+            <path d="M178.605 64.0848C148.564 61.5889 144.972 113.171 140.282 150.598C135.593 188.024 117.992 220.917 91.7484 186.915C69.989 158.724 71.3271 108.782 72.4121 92.5044C72.8219 86.4515 71.1222 80.3866 67.361 75.6239C61.6469 68.3894 54.5223 67.7141 54.5223 67.7141C13.9088 65.9778 24.8307 129.003 37.7417 162.438C50.6527 195.874 82.7433 234.602 113.387 232.854C144.031 231.118 167.816 191.244 185.127 149.344C202.438 107.444 208.646 66.5807 178.605 64.0848Z" fill="url(#footer-logo-grad)"/>
+            <path d="M440.694 80.1815C438.235 78.7588 435.511 78.0474 432.533 78.0474C429.556 78.0474 426.867 78.7588 424.468 80.1815C422.069 81.6043 420.092 83.5818 418.537 86.1139C417.115 88.5736 416.403 91.2986 416.403 94.2768C416.403 97.255 417.151 99.9438 418.634 102.536C420.056 104.996 421.997 106.973 424.468 108.469C426.867 109.891 429.556 110.603 432.533 110.603C435.511 110.603 438.235 109.855 440.694 108.372C443.154 106.877 445.095 104.936 446.529 102.536C447.952 100.137 448.663 97.3877 448.663 94.2768C448.663 91.166 447.952 88.5736 446.529 86.1139C445.034 83.5818 443.093 81.6164 440.694 80.1815Z" fill="url(#hdr-grad)"/>
+            <path d="M418.176 235H446.83V118.946L418.176 119.055V235Z" fill="url(#hdr-grad)"/>
+            <path d="M557.894 134.887C546.863 123.854 532.192 117.777 516.581 117.777C500.97 117.777 486.311 123.854 475.268 134.887C464.238 145.919 458.162 160.593 458.162 176.208C458.162 191.822 464.238 206.484 475.268 217.529C486.299 228.562 500.97 234.639 516.581 234.639C532.192 234.639 546.851 228.562 557.894 217.529C568.924 206.496 575 191.822 575 176.208C575 160.593 568.924 145.931 557.894 134.887ZM516.581 206.737C499.752 206.737 486.058 193.04 486.058 176.208C486.058 159.375 499.752 145.678 516.581 145.678C533.41 145.678 547.105 159.375 547.105 176.208C547.105 193.04 533.41 206.737 516.581 206.737Z" fill="url(#hdr-grad)"/>
+            <path d="M249.537 117.994C233.938 117.994 219.267 124.071 208.224 135.103C197.194 146.136 191.118 160.81 191.118 176.424C191.118 192.039 197.194 206.701 208.224 217.746C219.255 228.778 233.926 234.855 249.537 234.855C263.834 234.855 277.336 229.755 287.993 220.41L271.779 197.405C266.197 203.325 258.289 207.027 249.501 207.027C233.697 207.027 220.689 195.053 219.062 179.68H279.94H307.86C307.92 178.631 307.956 177.534 307.956 176.437C307.956 160.834 301.88 146.16 290.85 135.115C279.819 124.083 265.148 118.006 249.537 118.006V117.994ZM224.378 159.038C229.899 151.14 239.049 145.967 249.417 145.967C259.784 145.967 268.934 151.14 274.455 159.038H224.378Z" fill="url(#hdr-grad)"/>
+            <path d="M363.012 119.055C339.227 119.055 319.879 138.407 319.879 162.197V235H349.305V162.197C349.305 154.636 355.453 148.487 363.012 148.487C370.57 148.487 376.718 154.636 376.718 162.197V235H406.145V162.197C406.145 138.407 386.796 119.055 363.012 119.055Z" fill="url(#hdr-grad)"/>
+          </svg>
+        </a>
         <p>The most usable B2B sales CRM, built by Gofive for teams across Thailand and beyond.</p>
         <p class="footer-awards">ICT Award 2019 · MarTech Gold 2026</p>
       </div>
@@ -975,6 +1091,26 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 
 <script>
 (function(){
+  /* Header hide-on-scroll-down / show-on-scroll-up */
+  var header=document.querySelector('.site-header');
+  var lastY=window.scrollY;
+  var ticking=false;
+  window.addEventListener('scroll',function(){
+    if(!ticking){
+      requestAnimationFrame(function(){
+        var y=window.scrollY;
+        if(y>lastY&&y>80){
+          header.classList.add('header--hidden');
+        } else {
+          header.classList.remove('header--hidden');
+        }
+        lastY=y;
+        ticking=false;
+      });
+      ticking=true;
+    }
+  },{passive:true});
+
   /* Mobile nav toggle */
   var toggle=document.querySelector('.nav-toggle');
   var nav=document.getElementById('mobile-nav');

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ลงทะเบียนรับสิทธิพิเศษ สำหรับลูกค้า UOB — Venio CRM</title>
+  <style>
+    /* ── Fonts ── */
+    @font-face{font-family:'Gofive';font-weight:400;font-display:swap;src:url('../fonts/Gofive-Text.woff2') format('woff2');}
+    @font-face{font-family:'Gofive';font-weight:500;font-display:swap;src:url('../fonts/Gofive-Medium.woff2') format('woff2');}
+    @font-face{font-family:'Gofive';font-weight:600;font-display:swap;src:url('../fonts/Gofive-Semi_Bold.woff2') format('woff2');}
+    @font-face{font-family:'Gofive';font-weight:700;font-display:swap;src:url('../fonts/Gofive-Bold.woff2') format('woff2');}
+
+    /* ── Tokens ── */
+    :root{
+      --font:'Gofive',system-ui,sans-serif;
+      --ink:#1C1C22;
+      --ink-soft:#525260;
+      --ink-faint:#838395;
+      --ink-anchor:#6A6A7C;
+      --ink-placeholder:#BCBCC8;
+      --bg:#FFFFFF;
+      --bg-alt:#F6F6F8;
+      --bg-dark:#1C1C22;
+      --brand:#116DFC;
+      --brand-dark:#035CE6;
+      --brand-ghost:#F5F9FF;
+      --line:#ECECF1;
+      --line-mid:#DFDFE8;
+      --line-strong:#D2D2DA;
+      --success:#21CE9B;
+      --r-card:16px;
+      --r-field:8px;
+      --r-btn:10px;
+    }
+
+    /* ── Reset ── */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:var(--font);font-size:14px;line-height:1.5;
+      color:var(--ink);background:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      min-height:100vh;display:flex;flex-direction:column;
+    }
+
+    /* ── Main ── */
+    .reg-main{
+      flex:1;
+      background:linear-gradient(145deg,#D6E9FF 0%,#E8F3FF 35%,#EFF6FF 65%,#F5F9FF 100%);
+      padding:60px 40px;
+      display:flex;justify-content:center;
+    }
+    .reg-container{
+      display:grid;
+      grid-template-columns:1fr 740px;
+      gap:60px;
+      max-width:1280px;
+      width:100%;
+      align-items:start;
+    }
+
+    /* ── Left: Content ── */
+    .reg-content{display:flex;flex-direction:column;gap:28px;position:sticky;top:80px;}
+
+    .uob-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:#fff;border:1px solid var(--line);
+      border-radius:999px;padding:6px 14px 6px 10px;
+      width:fit-content;
+    }
+    .uob-badge-label{font-size:13px;font-weight:500;color:var(--ink-soft);}
+    .uob-logo-pill{
+      display:inline-flex;align-items:center;gap:5px;
+      background:#1A3E6F;border-radius:4px;
+      padding:3px 8px;
+    }
+    .uob-logo-bars{display:flex;gap:2px;align-items:flex-end;}
+    .uob-logo-bars span{display:block;width:3px;background:#fff;border-radius:1px;}
+    .uob-logo-bars span:nth-child(1){height:8px;}
+    .uob-logo-bars span:nth-child(2){height:11px;}
+    .uob-logo-bars span:nth-child(3){height:6px;}
+    .uob-logo-bars span:nth-child(4){height:11px;}
+    .uob-logo-text{font-size:12px;font-weight:700;color:#fff;letter-spacing:.04em;}
+
+    .reg-headline{display:flex;flex-direction:column;gap:4px;}
+    .reg-headline h1{
+      font-size:clamp(2rem,3.5vw,2.75rem);
+      font-weight:700;line-height:1.2;color:var(--ink);
+    }
+    .reg-headline .accent{
+      background:linear-gradient(90deg,#0BB8F2,#116DFC);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .reg-sub{font-size:16px;font-weight:600;color:var(--ink-soft);}
+
+    .reg-checklist{display:flex;flex-direction:column;gap:14px;}
+    .reg-check-item{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:500;color:var(--ink);}
+    .check-icon{
+      width:22px;height:22px;flex-shrink:0;border-radius:50%;
+      background:var(--success);display:flex;align-items:center;justify-content:center;
+    }
+    .check-icon svg{width:12px;height:12px;}
+
+    .reg-cta-text{font-size:15px;font-weight:600;color:var(--ink);}
+    .reg-cta-text .highlight{color:var(--brand);}
+
+    /* ── Right: Card ── */
+    .reg-card{
+      background:#fff;border-radius:40px;
+      box-shadow:0 4px 40px rgba(17,109,252,.1),0 1px 4px rgba(0,0,0,.06);
+      padding:40px 130px;
+    }
+
+    .form-title{
+      font-size:22px;font-weight:700;color:var(--ink);
+      text-align:center;line-height:1.35;margin-bottom:24px;
+    }
+
+    /* Type tabs */
+    .type-tabs{display:flex;gap:10px;margin-bottom:24px;}
+    .type-tab{
+      flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+      padding:11px 12px;border-radius:var(--r-field);border:1px solid var(--line-mid);
+      background:transparent;cursor:pointer;
+      font-family:var(--font);font-size:14px;font-weight:600;color:var(--ink-soft);
+      transition:all .18s ease;
+    }
+    .type-tab.active{
+      background:var(--brand-ghost);border-color:var(--brand);color:var(--brand);
+    }
+    .type-tab svg{width:16px;height:16px;flex-shrink:0;}
+
+    /* Fields */
+    .field-group{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+    .field{
+      display:flex;align-items:center;gap:8px;
+      background:#fff;border:1px solid var(--line-strong);
+      border-radius:var(--r-field);padding:11px 12px;
+      transition:border-color .15s ease;
+    }
+    .field:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(17,109,252,.1);}
+    .field input,.field select{
+      flex:1;border:none;outline:none;background:transparent;
+      font-family:var(--font);font-size:14px;font-weight:500;color:var(--ink);
+      min-width:0;
+    }
+    .field input::placeholder,.field select:invalid{color:var(--ink-placeholder);}
+    .field select{cursor:pointer;}
+    .field-icon{width:16px;height:16px;flex-shrink:0;color:var(--ink-faint);}
+
+    .phone-prefix{
+      display:flex;align-items:center;gap:4px;padding-right:8px;
+      border-right:1px solid var(--line);margin-right:4px;flex-shrink:0;
+    }
+    .phone-flag{width:20px;height:14px;border-radius:2px;overflow:hidden;font-size:14px;line-height:1;}
+    .phone-code{font-size:14px;font-weight:500;color:var(--ink);}
+
+    /* Checkbox */
+    .consent-block{display:flex;gap:10px;align-items:flex-start;margin-bottom:20px;}
+    .consent-block input[type="checkbox"]{
+      width:16px;height:16px;flex-shrink:0;margin-top:2px;
+      accent-color:var(--brand);cursor:pointer;
+    }
+    .consent-block label{font-size:13px;font-weight:500;color:var(--ink-soft);line-height:1.55;cursor:pointer;}
+    .consent-block label a{color:var(--brand);text-decoration:underline;}
+
+    .consent-detail{
+      font-size:12px;color:var(--ink-anchor);line-height:1.65;margin-bottom:20px;
+    }
+    .consent-detail a{color:var(--brand);text-decoration:underline;}
+
+    /* Submit */
+    .btn-submit{
+      width:100%;height:48px;border:none;cursor:pointer;
+      background:var(--brand);color:#fff;
+      border-radius:var(--r-btn);
+      font-family:var(--font);font-size:16px;font-weight:600;
+      transition:background .2s ease;
+    }
+    .btn-submit:hover{background:var(--brand-dark);}
+
+    /* ── Footer ── */
+    .reg-footer{
+      background:var(--bg-dark);color:#A5A5B6;
+      text-align:center;padding:12px 40px;
+      font-size:13px;font-weight:400;
+    }
+
+    /* ── Hidden form panel ── */
+    .form-panel{display:none;}
+    .form-panel.active{display:block;}
+
+    /* ── Responsive ── */
+    @media(max-width:900px){
+      .reg-container{grid-template-columns:1fr;gap:40px;}
+      .reg-main{padding:40px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<!-- Main -->
+<main class="reg-main">
+  <div class="reg-container">
+
+    <!-- Left: Marketing content -->
+    <div class="reg-content">
+
+      <div class="uob-badge">
+        <span class="uob-badge-label">สิทธิพิเศษสำหรับลูกค้า</span>
+        <div class="uob-logo-pill">
+          <div class="uob-logo-bars">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <span class="uob-logo-text">UOB</span>
+        </div>
+      </div>
+
+      <div class="reg-headline">
+        <h1>ยกระดับทีมขายด้วย</h1>
+        <h1><span class="accent">Venio CRM ✦</span></h1>
+        <h1>ในยุคของ AI</h1>
+      </div>
+
+      <p class="reg-sub">ระบบ Sales CRM สำหรับธุรกิจ B2B ที่จะช่วยคุณ</p>
+
+      <div class="reg-checklist">
+        <div class="reg-check-item">
+          <div class="check-icon">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          จัดการลูกค้าอย่างเป็นระบบ
+        </div>
+        <div class="reg-check-item">
+          <div class="check-icon">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          ติดตามดีลได้ทุกขั้นตอน
+        </div>
+        <div class="reg-check-item">
+          <div class="check-icon">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          วางแผนและบริหารทีมขาย
+        </div>
+        <div class="reg-check-item">
+          <div class="check-icon">
+            <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          วิเคราะห์ข้อมูลการขายด้วย AI
+        </div>
+      </div>
+
+      <p class="reg-cta-text"><span class="highlight">ฟรี!</span> ทดลองประสบการณ์ใหม่ในการทำงานขายได้แล้ววันนี้</p>
+
+    </div>
+
+    <!-- Right: Form card -->
+    <div class="reg-card">
+      <p class="form-title">ลงทะเบียนรับสิทธิพิเศษสำหรับลูกค้า UOB</p>
+
+      <!-- Type tabs -->
+      <div class="type-tabs">
+        <button class="type-tab active" data-tab="juristic" type="button">
+          <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="6" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 6V4a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="7" y="10" width="4" height="2.5" rx=".5" fill="currentColor" opacity=".5"/></svg>
+          นิติบุคคล
+        </button>
+        <button class="type-tab" data-tab="individual" type="button">
+          <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M3 16c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          บุคคลธรรมดา
+        </button>
+      </div>
+
+      <form>
+        <!-- นิติบุคคล form -->
+        <div class="form-panel active" id="panel-juristic">
+          <div class="field-group">
+            <div class="field">
+              <input type="text" placeholder="ชื่อ-นามสกุล ผู้ติดต่อ *" required>
+            </div>
+            <div class="field">
+              <input type="text" placeholder="ชื่อนิติบุคคล *" required>
+            </div>
+            <div class="field">
+              <input type="email" placeholder="อีเมล *" required>
+            </div>
+            <div class="field">
+              <div class="phone-prefix">
+                <span class="phone-flag">🇹🇭</span>
+                <span class="phone-code">+66</span>
+                <svg viewBox="0 0 10 10" fill="none" width="10" height="10" style="margin-left:2px;color:#838395"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <input type="tel" placeholder="หมายเลขโทรศัพท์ *" required style="padding-left:4px;">
+            </div>
+            <div class="field">
+              <select required>
+                <option value="" disabled selected hidden></option>
+                <option>1–5 คน</option>
+                <option>6–20 คน</option>
+                <option>21–50 คน</option>
+                <option>51–100 คน</option>
+                <option>มากกว่า 100 คน</option>
+              </select>
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="field">
+              <input type="text" placeholder="เลขทะเบียนนิติบุคคล *" required>
+            </div>
+          </div>
+
+          <div class="consent-block">
+            <input type="checkbox" id="consent-j" required>
+            <label for="consent-j">ฉันได้อ่าน รับทราบ และตกลงผูกพันตาม <a href="#">เงื่อนไขการรับสิทธิพิเศษทุกประการ</a></label>
+          </div>
+
+          <p class="consent-detail">
+            เนื่องจากใช้ข้อมูลสร้างขึ้นโดยไฟฟ้า อำเภอ "บริษัท" ท่านรับรองว่าตนเองเป็นลูกค้าที่ต้องการ และเป็นปัจจุบัน ทุกประการ และมาเราแมปให้กับบริวาร ไม่ยอมรับ ข้อมูลดังกล่าวไว้ในกลยุทธ์ดูไลย์ อำเภอ (นายหน้า) ("ธนาคาร") เพื่อการดำเนินการขอรับสิทธิพิเศษการใช้งานโปรแกรมจัดการรายงานขาย (แผนฟอร์ม Venio) ให้แก่ท่าน โปรดอ่านเพิ่มเติมเกี่ยวกับประกาศนโยบายความเป็นส่วนตัวของบริษัทและธนาคารอย่างละเอียด เพื่อทำให้เข้าใจเกี่ยวกับการรับรวบรวม ใช้ และเปิดเผยข้อมูลส่วนตัวของท่านและผลสิทธิตามท่านได้ที่ <a href="https://www.veniocrm.com/privacy-policy" target="_blank">https://www.veniocrm.com/privacy-policy</a> และ <a href="https://www.uob.co.th/investor/privacy-notice.page" target="_blank">https://www.uob.co.th/investor/privacy-notice.page</a> และหากท่านให้ข้อมูลส่วนบุคคลของท่านแก่เรา จะถือว่าท่านได้ให้ความยินยอมกับเราตามนโยบายความเป็นส่วนตัวด้วย
+          </p>
+
+          <button type="submit" class="btn-submit">ยืนยันลงทะเบียนรับสิทธิ</button>
+        </div>
+
+        <!-- บุคคลธรรมดา form -->
+        <div class="form-panel" id="panel-individual">
+          <div class="field-group">
+            <div class="field-row">
+              <div class="field">
+                <input type="text" placeholder="ชื่อ *" required>
+              </div>
+              <div class="field">
+                <input type="text" placeholder="นามสกุล *" required>
+              </div>
+            </div>
+            <div class="field">
+              <input type="email" placeholder="อีเมล *" required>
+            </div>
+            <div class="field">
+              <div class="phone-prefix">
+                <span class="phone-flag">🇹🇭</span>
+                <span class="phone-code">+66</span>
+                <svg viewBox="0 0 10 10" fill="none" width="10" height="10" style="margin-left:2px;color:#838395"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <input type="tel" placeholder="หมายเลขโทรศัพท์ *" required style="padding-left:4px;">
+            </div>
+            <div class="field">
+              <select required>
+                <option value="" disabled selected hidden></option>
+                <option>เจ้าของกิจการ</option>
+                <option>พนักงานขาย</option>
+                <option>ผู้บริหาร</option>
+                <option>อื่นๆ</option>
+              </select>
+              <svg class="field-icon" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+
+          <div class="consent-block">
+            <input type="checkbox" id="consent-i" required>
+            <label for="consent-i">ฉันได้อ่าน รับทราบ และตกลงผูกพันตาม <a href="#">เงื่อนไขการรับสิทธิพิเศษทุกประการ</a></label>
+          </div>
+
+          <p class="consent-detail">
+            เนื่องจากใช้ข้อมูลสร้างขึ้นโดยไฟฟ้า อำเภอ "บริษัท" ท่านรับรองว่าตนเองเป็นลูกค้าที่ต้องการ และเป็นปัจจุบัน ทุกประการ โปรดอ่านเพิ่มเติมเกี่ยวกับประกาศนโยบายความเป็นส่วนตัวของบริษัทได้ที่ <a href="https://www.veniocrm.com/privacy-policy" target="_blank">https://www.veniocrm.com/privacy-policy</a>
+          </p>
+
+          <button type="submit" class="btn-submit">ยืนยันลงทะเบียนรับสิทธิ</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="reg-footer">
+  Copyright © 2026 Gofive Co.,Ltd. All rights reserved.
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.type-tab');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = tab.dataset.tab;
+      document.querySelectorAll('.form-panel').forEach(function(p){ p.classList.remove('active'); });
+      document.getElementById('panel-' + target).classList.add('active');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
