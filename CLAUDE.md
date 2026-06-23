@@ -1,14 +1,17 @@
-# Venio CRM — Homepage Project
+# Venio CRM — Project Guide
 
 Single-file HTML project สำหรับ Venio CRM landing page โดย Gofive.
 
 ## Files
 
 ```
-venio-home.html      ← ไฟล์หลัก (production)
-venio-home-v2.html   ← draft เก่า ไม่ใช้แล้ว
-fonts/               ← Gofive font files (woff2)
-asset/logo/          ← Venio logo SVGs
+venio-home.html        ← homepage (production)
+venio-uob.html         ← UOB partnership page
+venio-home-v2.html     ← draft เก่า ไม่ใช้แล้ว
+register/uob.html      ← UOB registration form
+fonts/                 ← Gofive font files (woff2)
+asset/logo/            ← Venio logo SVGs
+DESIGN.md              ← Design system reference (อ่านก่อนแตะ UI)
 ```
 
 ## Stack
@@ -17,104 +20,34 @@ asset/logo/          ← Venio logo SVGs
 - ไม่มี framework, ไม่มี Tailwind
 - Dev server: `npx serve -p 4200 .` → เปิด `http://localhost:4200/venio-home.html`
 
-## Design System
+> Design system รายละเอียดเต็มอยู่ใน `DESIGN.md`
 
-### Font — Gofive (local woff2)
-
-| Weight | File | CSS |
-|--------|------|-----|
-| 400 | `fonts/Gofive-Text.woff2` | regular body |
-| 500 | `fonts/Gofive-Medium.woff2` | medium |
-| 600 | `fonts/Gofive-Semi_Bold.woff2` | semi-bold descriptions |
-| 700 | `fonts/Gofive-Bold.woff2` | bold headers |
-
-ห้ามใช้ Google Fonts หรือ font อื่น ทุก element ใช้ "Gofive" เท่านั้น
-
-### Typography Rules
-
-- **14px** (`--fs-300`, weight 600) — eyebrow, label (ไม่ uppercase ไม่ letter-spacing)
-- **16px** (`--fs-400`, weight 600) — description, subheader, body text
-- **Header** — weight 700 (Bold), ขนาดปรับตาม context ด้วย `clamp()`
-
-### Color Tokens
-
-**Natural (Gofive DS):**
-
-```css
---bg:           #FFFFFF   /* White (1) */
---bg-alt:       #F6F6F8   /* Soft Cloud (2) — section bg */
---bg-dark:      #1C1C22   /* Charcoal (12) — dark CTA sections */
---ink:          #1C1C22   /* primary text */
---ink-soft:     #525260   /* Lead (10) — muted descriptions */
---ink-faint:    #838395   /* Porpoise (8) — smallest labels */
---on-dark-soft: #A5A5B6   /* Pewter (7) — text on dark bg */
---line:         #ECECF1   /* Cloud (3) — borders */
---line-strong:  #D2D2DA   /* Silver (5) */
-```
-
-**Accent (Venio Brand):**
-
-```css
---brand:        #116DFC   /* Bluetiful — primary */
---brand-dark:   #035CE6   /* Cobalt — hover state */
---brand-ink:    #035CE6   /* Cobalt — brand text on light */
---brand-wash:   #E7F0FF   /* Zircon — subtle tint */
---brand-ghost:  #F5F9FF   /* Ghost White — lightest */
-```
-
-**Status:**
-
-```css
---success:      #21CE9B
---error:        #DE3A45
---notification: #F02848
-```
-
-### Logo (asset/logo/)
-
-| File | ใช้เมื่อ |
-|------|---------|
-| `Logo-1.svg` | V mark อย่างเดียว, gradient (light bg) |
-| `Logo-2.svg` | Full wordmark, all white (dark bg) |
-| `Logo-3.svg` | Full wordmark, V gradient + white text (dark bg) |
-
-**สำหรับ light background header/footer:** inline SVG จาก Logo-3 — **ทุก path ใช้ `fill="url(#hdr-grad)"` เหมือนกันหมด** (V + enio) ไม่เปลี่ยน text เป็น `var(--ink)` — ผลลัพธ์คือ wordmark gradient ฟ้าทั้งคำ
-- CSS: `.brand-logo { height:28px; width:auto; }`
-- ไม่มี `<span class="brand-name">` แยก
+## Critical Rules
 
 ### Buttons
+- **ห้ามสร้าง custom button class** เช่น `.btn-submit` — ใช้ DS classes เท่านั้น
+- Primary full-width: `class="btn btn--block"`
+- อ่าน sizing/variant เพิ่มเติมใน DESIGN.md
 
-```css
---r-btn: 10px   /* round radius — ไม่ใช่ pill */
-```
+### Fields (register pages)
+- **Border: `1px`** — ห้ามใช้ `1.5px`
+- **Fixed height: `48px`** — ห้ามใช้ padding แทน height
+- **Equal columns:** `grid-template-columns: 1fr 1fr` + `min-width: 0`
+- **อย่าเปลี่ยน field pairing** เพื่อแก้ปัญหา visual — แก้ CSS เท่านั้น
+- **Picker UI:** option > 4 ตัว → ใช้ `<select>` ไม่ใช้ chip/card picker
 
-**Sizes (Figma spec):**
-| Class | Height | Padding |
-|-------|--------|---------|
-| `.btn` (base/Large) | 44px | `0 16px` |
-| `.btn--md` | 40px | — |
-| `.btn--sm` | 36px | `0 14px`, 14px font |
-| `.btn--xs` | 32px | `0 12px`, 14px font |
-| `.btn--block` | auto, min 44px | full width |
+### Page Background
+- ใช้ subtle gradient เดียวกันทุกหน้า: `linear-gradient(160deg, #F2F8FF 0%, #fff 50%)`
+- ห้ามใช้สีเข้มกว่า `#F2F8FF` เป็น gradient start
 
-**Variants:**
-- Primary: `background: var(--brand)`, white text
-- Secondary default: `color: var(--ink-soft)`, `border: var(--line-mid)` (#DFDFE8), transparent bg
-- Secondary hover: เพิ่มแค่ `background: var(--bg-alt)` — border/text คงเดิม
-- ห้ามใช้ `border-radius: 999px` กับ button
+### Icons / Buttons with arrows
+- **ห้ามใส่ box/frame รอบ icon** — ไม่มี background, ไม่มี border-radius บน icon container
+- Arrow icon แสดงเปล่าๆ ไม่มีกล่อง
 
-### Radius System
-
-```css
---r-card: 14px   /* cards */
---r-sm:   8px    /* small elements, badges */
---r-btn:  10px   /* buttons */
---r-pill: 999px  /* lang toggle เท่านั้น */
-```
+### Content
+- **ห้ามเปลี่ยนหรือตัด text content เดิม** (headings, taglines, descriptions) เมื่อทำ visual upgrade — CSS/structure only
 
 ## Navigation (ตาม veniocrm.com)
-
-โครงสร้าง desktop nav:
 
 ```
 [Logo] Features▾  Solutions▾  Pricing  Blog  About▾  Contact Us  |  TH  EN  |  Login  [เริ่มใช้ฟรี 14 วัน]
@@ -125,30 +58,33 @@ Dropdown items:
 - **Solutions**: B2B Business, Service Business, Agriculture Business, Channel Management
 - **About**: About Us, Partners
 
-CTA button text: `เริ่มใช้ฟรี 14 วัน`
-
 ## i18n
 
 ทุก text element รองรับ EN/TH ผ่าน `data-i18n`, `data-en="..."`, `data-th="..."` attributes
 
 ## Register Pages (`register/`)
 
-### Form Field Rules
+### Form Layout — `register/uob.html`
 
-- **Fixed height:** ทุก `.field` ใช้ `height: 48px` เท่ากันหมด — ห้ามใช้ padding แทน height
-- **Equal columns:** ใช้ `grid-template-columns: 1fr 1fr` + `min-width: 0` บน `.field` บังคับ column เท่ากัน
-- **อย่าเปลี่ยน field pairing** เพื่อแก้ปัญหา visual — ถ้า field ดูไม่เท่ากัน ให้แก้ CSS เท่านั้น
-- **Picker UI:** ไม่ใช้ card/chip picker เมื่อ option มีเกิน 4 ตัว — ให้ใช้ `<select>` dropdown แทน
-
-### Form Layout — `register/uob.html` (นิติบุคคล)
-
+**นิติบุคคล:**
 ```
-[ชื่อ-นามสกุล ผู้ติดต่อ          — full width]
+[ชื่อ-นามสกุล ผู้ติดต่อ              — full width]
 [ชื่อนิติบุคคล    ] [เลขทะเบียนนิติบุคคล]
-[อีเมล            ] [🇹🇭 +66 | เบอร์โทร ]
-[จำนวนผู้ใช้      — full width dropdown  ]
+[อีเมล            ] [🇹🇭 +66 ∨ | เบอร์โทร]
+[จำนวนผู้ใช้ ∨    ] [                    ]  ← half width
+```
+
+**บุคคลธรรมดา:**
+```
+[ชื่อ             ] [นามสกุล             ]
+[อีเมล            ] [🇹🇭 +66 ∨ | เบอร์โทร]
+[จำนวนผู้ใช้ ∨    ] [                    ]  ← half width
 ```
 
 ### Tab Selector
 
 ใช้ pill chip (`border-radius: 999px`) ไม่ใช่ full-width button tabs — size compact `padding: 6px 14px`
+
+### Phone Country Dropdown
+
+DS-spec: white card, `border-radius: 10px`, shadow `0 0 12px rgba(0,0,0,.12)`, hover `var(--brand)` blue

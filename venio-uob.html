@@ -1,19 +1,4 @@
 <!DOCTYPE html>
-<!--
-  venio-uob.html
-  Venio CRM product page embedded in UOB bank website simulation.
-
-  ## Assumptions
-  - UOB chrome (top bar + nav) is purely decorative/static; links are non-functional placeholders.
-  - Venio product content uses the full Gofive DS token set as defined in CLAUDE.md.
-  - Style: Swiss Minimalism / Enterprise Gateway (clean, high contrast, grid-based).
-  - Color palette: UOB maroon #4A0000 / #0060A9 for bank chrome; Venio #116DFC for product content.
-  - Font: Gofive (local woff2, 4 weights). No Google Fonts.
-  - Responsive breakpoints: 375px / 768px / 1200px.
-  - Tab switching via vanilla JS; no framework.
-  - All SVG icons are hand-drawn in Lucide/Heroicons stroke style (1.8px, fill:none, stroke:#116DFC).
-  - App mockup is pure HTML/CSS — no images.
--->
 <html lang="th">
 <head>
 <meta charset="UTF-8" />
@@ -21,7 +6,6 @@
 <title>Venio CRM — UOB Digital Solutions</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' rx='68' fill='%23F5F9FF'/%3E%3Cpath d='M150.996 221.396C141.035 223.213 131.572 212.344 126.387 203.32C112.559 179.209 105.147 149.824 107.11 122.051C107.783 112.529 109.131 104.355 103.858 95.7713C95.1272 81.6209 76.9631 78.8377 65.5373 91.4061C52.6174 105.615 57.0705 129.961 60.7326 146.865C65.3908 168.369 74.883 188.32 88.6233 205.547C96.6799 215.654 106.026 224.707 116.192 232.646C125.537 239.912 137.432 243.867 149.268 243.457C170.596 242.695 186.475 227.842 198.779 211.758C213.692 192.275 225.235 170.039 233.496 146.982C233.672 146.484 233.848 146.015 234.024 145.517C239.795 129.14 249.551 105.498 237.598 89.619C236.895 88.6815 236.133 87.8026 235.313 86.9823C232.998 84.6971 230.156 82.9979 227.11 81.9432C215.449 77.8709 201.856 83.3202 195.967 94.1014C191.074 103.096 189.053 113.613 186.885 123.545C183.076 140.947 180.762 159.14 176.338 176.601C173.115 189.316 169.102 206.396 159.756 216.211C156.826 219.258 153.897 220.869 150.996 221.396Z' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='150' y1='64' x2='150' y2='244' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230BB8F2'/%3E%3Cstop offset='1' stop-color='%23116DFC'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E">
 
-<!-- Gofive local fonts -->
 <style>
 @font-face{font-family:'Gofive';font-style:normal;font-weight:400;font-display:swap;
   src:url('fonts/Gofive-Text.woff2') format('woff2');}
@@ -35,47 +19,35 @@
 
 <style>
 /* ================================================================
-   DESIGN TOKENS — Gofive Design System (from CLAUDE.md)
+   DESIGN TOKENS
    ================================================================ */
-:root {
+:root{
   --font:'Gofive',system-ui,-apple-system,sans-serif;
-
-  /* Natural */
   --bg:#FFFFFF;
-  --bg-alt:#F6F6F8;
-  --ink:#1C1C22;
-  --ink-soft:#525260;
-  --ink-faint:#838395;
-  --line:#ECECF1;
-  --line-mid:#DFDFE8;
-
-  /* Venio brand blues */
+  --bg-alt:#F5F5F7;
+  --bg-dark:#1D1D1F;
+  --ink:#1D1D1F;
+  --ink-soft:#6E6E73;
+  --ink-faint:#8A8A8E;
+  --line:#D2D2D7;
+  --line-mid:#C7C7CC;
   --brand:#116DFC;
   --brand-dark:#035CE6;
   --brand-ink:#035CE6;
   --brand-wash:#E7F0FF;
   --brand-ghost:#F5F9FF;
-
-  /* Status */
-  --notification:#F02848;
-
-  /* Radius */
-  --r-card:40px;
+  --notification:#FF3B30;
+  --success:#30D158;
+  --r-card:20px;
   --r-sm:8px;
   --r-btn:10px;
-
-  /* Type scale */
   --fs-300:0.875rem;
   --fs-400:1rem;
-
-  /* UOB chrome colors */
   --uob-maroon:#4A0000;
   --uob-blue:#0060A9;
   --uob-nav-text:#374151;
-
-  /* Layout */
   --maxw:1200px;
-  --gutter:clamp(16px, 3vw, 40px);
+  --gutter:clamp(20px,4vw,48px);
 }
 
 /* ================================================================
@@ -83,7 +55,10 @@
    ================================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{transition-duration:.01ms !important;animation-duration:.01ms !important;}
+}
 body{
   font-family:var(--font);
   font-size:var(--fs-400);
@@ -96,156 +71,68 @@ body{
 img,svg{display:block;max-width:100%;}
 a{color:inherit;text-decoration:none;}
 ul{list-style:none;}
-h1,h2,h3,h4{font-family:var(--font);font-weight:700;line-height:1.2;}
+h1,h2,h3,h4{font-family:var(--font);font-weight:700;line-height:1.15;}
 p{margin:0;}
+button{font-family:var(--font);}
 
-/* Focus states — WCAG AA */
 a:focus-visible,button:focus-visible,[tabindex]:focus-visible{
-  outline:3px solid var(--brand);
-  outline-offset:3px;
-  border-radius:var(--r-sm);
+  outline:3px solid var(--brand);outline-offset:3px;border-radius:var(--r-sm);
 }
 a,button,[tabindex]{outline:none;}
 
-/* Skip link */
 .skip-link{
   position:absolute;left:16px;top:-60px;z-index:9999;
   background:var(--ink);color:#fff;padding:10px 16px;
-  border-radius:var(--r-sm);font-weight:600;
-  transition:top .15s ease;
+  border-radius:var(--r-sm);font-weight:600;transition:top .15s ease;
 }
 .skip-link:focus{top:8px;}
 
-/* Container */
 .container{
-  max-width:var(--maxw);
-  margin-inline:auto;
-  padding-inline:var(--gutter);
+  max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter);
 }
 
 /* ================================================================
-   UOB TOP UTILITY BAR
+   UOB UTILITY BAR
    ================================================================ */
-.uob-utility{
-  background:var(--uob-maroon);
-  padding:7px 0;
-}
-.uob-utility__inner{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-}
-.uob-utility__left,
-.uob-utility__right{
-  display:flex;
-  align-items:center;
-  gap:0;
-}
+.uob-utility{background:var(--uob-maroon);padding:7px 0;}
+.uob-utility__inner{display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.uob-utility__left,.uob-utility__right{display:flex;align-items:center;gap:0;}
 .uob-utility__link{
-  color:#fff;
-  font-size:12px;
-  font-weight:400;
-  padding:0 12px;
-  opacity:0.9;
-  cursor:pointer;
-  transition:opacity .15s;
-  border-right:1px solid rgba(255,255,255,.25);
+  color:#fff;font-size:12px;font-weight:400;padding:0 12px;opacity:.9;
+  cursor:pointer;transition:opacity .15s;border-right:1px solid rgba(255,255,255,.25);
 }
 .uob-utility__link:last-child{border-right:none;}
 .uob-utility__link:first-child{padding-left:0;}
 .uob-utility__right .uob-utility__link:last-child{padding-right:0;}
 .uob-utility__link:hover{opacity:1;}
-.uob-utility__ext{font-size:11px;margin-left:2px;opacity:0.7;}
+.uob-utility__ext{font-size:11px;margin-left:2px;opacity:.7;}
 
 /* ================================================================
-   UOB MAIN NAVIGATION
+   UOB NAV
    ================================================================ */
 .uob-nav{
-  background:#fff;
-  border-bottom:1px solid #E5E7EB;
-  padding:0;
-  position:sticky;
-  top:0;
-  z-index:100;
+  background:#fff;border-bottom:1px solid #E5E7EB;
+  position:sticky;top:0;z-index:100;
 }
-.uob-nav__inner{
-  display:flex;
-  align-items:center;
-  gap:0;
-  height:64px;
-}
-/* UOB Logo */
-.uob-logo{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-right:32px;
-  flex-shrink:0;
-  cursor:pointer;
-}
-.uob-logo__grid{
-  display:grid;
-  grid-template-columns:repeat(4,7px);
-  grid-template-rows:repeat(4,7px);
-  gap:2px;
-}
-.uob-logo__dot{
-  width:7px;height:7px;
-  border-radius:1px;
-  background:var(--uob-blue);
-}
-.uob-logo__text{
-  font-size:22px;
-  font-weight:700;
-  color:var(--uob-blue);
-  letter-spacing:0.02em;
-  font-family:var(--font);
-}
-/* Nav items */
-.uob-nav__items{
-  display:flex;
-  align-items:center;
-  gap:0;
-  flex:1;
-}
+.uob-nav__inner{display:flex;align-items:center;gap:0;height:64px;}
+.uob-logo{display:flex;align-items:center;gap:8px;margin-right:32px;flex-shrink:0;cursor:pointer;}
+.uob-logo__grid{display:grid;grid-template-columns:repeat(4,7px);grid-template-rows:repeat(4,7px);gap:2px;}
+.uob-logo__dot{width:7px;height:7px;border-radius:1px;background:var(--uob-blue);}
+.uob-logo__text{font-size:22px;font-weight:700;color:var(--uob-blue);letter-spacing:.02em;font-family:var(--font);}
+.uob-nav__items{display:flex;align-items:center;gap:0;flex:1;}
 .uob-nav__item{
-  padding:0 14px;
-  height:64px;
-  display:flex;
-  align-items:center;
-  font-size:13.5px;
-  font-weight:500;
-  color:var(--uob-nav-text);
-  cursor:pointer;
-  white-space:nowrap;
-  transition:color .15s;
-  border-bottom:3px solid transparent;
-  margin-bottom:-1px;
+  padding:0 14px;height:64px;display:flex;align-items:center;font-size:13.5px;font-weight:500;
+  color:var(--uob-nav-text);cursor:pointer;white-space:nowrap;transition:color .15s;
+  border-bottom:3px solid transparent;margin-bottom:-1px;
 }
 .uob-nav__item:hover{color:var(--uob-blue);}
-.uob-nav__item--active{
-  color:var(--uob-blue);
-  border-bottom-color:var(--uob-blue);
-  font-weight:600;
-}
-/* Nav right icons */
-.uob-nav__actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-left:auto;
-}
+.uob-nav__item--active{color:var(--uob-blue);border-bottom-color:var(--uob-blue);font-weight:600;}
+.uob-nav__actions{display:flex;align-items:center;gap:8px;margin-left:auto;}
 .uob-nav__icon{
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:50%;
-  cursor:pointer;
-  transition:background .15s;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;cursor:pointer;transition:background .15s;
 }
 .uob-nav__icon:hover{background:#F3F4F6;}
-
-/* Mobile: hide some nav items */
 @media(max-width:768px){
   .uob-nav__items{display:none;}
   .uob-logo{margin-right:auto;}
@@ -254,42 +141,19 @@ a,button,[tabindex]{outline:none;}
 /* ================================================================
    BREADCRUMB
    ================================================================ */
-.breadcrumb{
-  padding:12px 0;
-  border-bottom:1px solid var(--line);
-  background:#fff;
-}
+.breadcrumb{padding:12px 0;border-bottom:1px solid var(--line);background:#fff;}
 .breadcrumb__list{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:4px;
-  font-size:13px;
-  color:#6B7280;
-  list-style:none;
-  padding:0;
-  margin:0;
+  display:flex;align-items:center;flex-wrap:wrap;gap:4px;
+  font-size:13px;color:#6B7280;list-style:none;padding:0;margin:0;
 }
-.breadcrumb__list li{
-  list-style:none;
-}
-.breadcrumb__item a{
-  color:#6B7280;
-  transition:color .15s;
-}
+.breadcrumb__list li{list-style:none;}
+.breadcrumb__item a{color:#6B7280;transition:color .15s;}
 .breadcrumb__item a:hover{color:var(--brand-ink);}
-.breadcrumb__sep{
-  color:#D1D5DB;
-  font-size:12px;
-  user-select:none;
-}
-.breadcrumb__item--current{
-  color:var(--ink-soft);
-  font-weight:600;
-}
+.breadcrumb__sep{color:#D1D5DB;font-size:12px;user-select:none;}
+.breadcrumb__item--current{color:var(--ink-soft);font-weight:600;}
 
 /* ================================================================
-   PRODUCT HERO
+   HERO
    ================================================================ */
 .hero{
   padding:88px 0 80px;
@@ -313,399 +177,9 @@ a,button,[tabindex]{outline:none;}
   align-items:center;
 }
 @media(max-width:768px){
-  .hero__grid{
-    grid-template-columns:1fr;
-    gap:36px;
-  }
+  .hero__grid{grid-template-columns:1fr;gap:36px;}
 }
-
-/* Venio logo mark */
-.hero__logo{
-  margin-bottom:20px;
-  display:block;
-  line-height:0;
-}
-.hero__tagline{
-  font-size:var(--fs-400);
-  font-weight:600;
-  color:var(--ink-soft);
-  line-height:1.65;
-}
-
-/* ================================================================
-   APP MOCKUP — pure HTML/CSS dashboard illustration
-   ================================================================ */
-.app-mockup{
-  background:#F0F6FF;
-  border-radius:16px;
-  box-shadow:0 8px 40px rgba(17,109,252,.12),0 2px 8px rgba(17,109,252,.06);
-  min-height:320px;
-  overflow:hidden;
-  position:relative;
-}
-/* Mock top bar */
-.mock-topbar{
-  background:var(--brand);
-  height:44px;
-  display:flex;
-  align-items:center;
-  padding:0 16px;
-  gap:10px;
-}
-.mock-topbar__title{
-  color:#fff;
-  font-size:13px;
-  font-weight:600;
-}
-.mock-topbar__spacer{flex:1;}
-.mock-topbar__avatar{
-  width:28px;height:28px;
-  border-radius:50%;
-  background:rgba(255,255,255,.25);
-}
-.mock-topbar__bell{
-  width:28px;height:28px;
-  display:flex;align-items:center;justify-content:center;
-}
-/* Mock body */
-.mock-body{
-  display:flex;
-  gap:0;
-  height:calc(100% - 44px);
-  min-height:276px;
-}
-/* Mock sidebar */
-.mock-sidebar{
-  width:52px;
-  background:#0A5BD4;
-  flex-shrink:0;
-  padding:12px 0;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  align-items:center;
-}
-.mock-sidebar__item{
-  width:32px;height:32px;
-  border-radius:8px;
-  background:rgba(255,255,255,.15);
-}
-.mock-sidebar__item--active{
-  background:rgba(255,255,255,.3);
-}
-/* Mock content */
-.mock-content{
-  flex:1;
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.mock-content__row{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-.mock-card{
-  background:#fff;
-  border-radius:10px;
-  padding:12px 14px;
-  box-shadow:0 1px 4px rgba(0,0,0,.06);
-}
-.mock-card__label{
-  font-size:10px;
-  color:var(--ink-faint);
-  font-weight:600;
-  margin-bottom:4px;
-}
-.mock-card__value{
-  font-size:16px;
-  font-weight:700;
-  color:var(--brand-ink);
-  font-family:var(--font);
-}
-.mock-card__sub{
-  font-size:9px;
-  color:var(--ink-faint);
-  margin-top:2px;
-}
-/* Mock pipeline bar */
-.mock-pipeline{
-  background:#fff;
-  border-radius:10px;
-  padding:12px 14px;
-  box-shadow:0 1px 4px rgba(0,0,0,.06);
-}
-.mock-pipeline__title{
-  font-size:10px;
-  font-weight:600;
-  color:var(--ink-soft);
-  margin-bottom:8px;
-}
-.mock-bar-track{
-  height:8px;
-  background:#E7F0FF;
-  border-radius:999px;
-  overflow:hidden;
-  margin-bottom:6px;
-}
-.mock-bar-fill{
-  height:100%;
-  background:linear-gradient(90deg,#116DFC,#35A7FF);
-  border-radius:999px;
-}
-.mock-pipeline__row{
-  display:flex;
-  justify-content:space-between;
-  font-size:9px;
-  color:var(--ink-faint);
-}
-/* Mock chart dots */
-.mock-chart{
-  background:#fff;
-  border-radius:10px;
-  padding:12px 14px;
-  box-shadow:0 1px 4px rgba(0,0,0,.06);
-  flex:1;
-}
-.mock-chart__title{
-  font-size:10px;
-  font-weight:600;
-  color:var(--ink-soft);
-  margin-bottom:8px;
-}
-.mock-chart__bars{
-  display:flex;
-  align-items:flex-end;
-  gap:6px;
-  height:48px;
-}
-.mock-bar{
-  flex:1;
-  background:var(--brand-wash);
-  border-radius:4px 4px 0 0;
-  transition:background .2s;
-}
-.mock-bar--hi{background:var(--brand);}
-.mock-row2{
-  display:grid;
-  grid-template-columns:1fr 1.2fr;
-  gap:10px;
-}
-
-/* ================================================================
-   TAB NAVIGATION
-   ================================================================ */
-.tab-nav{
-  border-bottom:2px solid var(--line);
-  background:#fff;
-  position:sticky;
-  top:0;
-  z-index:50;
-}
-.tab-nav__inner{
-  display:flex;
-  justify-content:center;
-  gap:0;
-}
-.tab-btn{
-  padding:16px 32px;
-  font-size:var(--fs-400);
-  font-weight:600;
-  font-family:var(--font);
-  color:var(--ink-soft);
-  background:transparent;
-  border:none;
-  border-bottom:3px solid transparent;
-  margin-bottom:-2px;
-  cursor:pointer;
-  transition:color .15s, border-color .15s;
-  white-space:nowrap;
-}
-.tab-btn:hover{color:var(--brand);}
-.tab-btn--active{
-  color:var(--brand);
-  border-bottom-color:var(--brand);
-}
-@media(max-width:480px){
-  .tab-btn{padding:14px 20px;font-size:14px;}
-}
-
-/* ================================================================
-   SECTION SHARED
-   ================================================================ */
-.section{
-  padding:96px 0;
-}
-.section--alt{
-  background:var(--bg-alt);
-}
-.section__title{
-  text-align:center;
-  font-size:clamp(24px,3.5vw,36px);
-  font-weight:700;
-  color:var(--ink);
-  margin-bottom:8px;
-}
-.section__head{
-  text-align:center;
-  margin-bottom:52px;
-}
-/* Hidden tab panels */
-.tab-panel{display:none;}
-.tab-panel--active{display:block;}
-
-/* ================================================================
-   BENEFITS SECTION
-   ================================================================ */
-.benefits-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  max-width:740px;
-  margin-inline:auto;
-  gap:16px;
-}
-
-.benefit-card{
-  background:#fff;
-  border-radius:38px;
-  padding:36px 32px;
-  width:100%;
-  display:flex;
-  flex-direction:row;
-  align-items:flex-start;
-  gap:28px;
-  box-shadow:0 2px 12px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.9);
-  transition:box-shadow 0.5s cubic-bezier(0.32,0.72,0,1),transform 0.5s cubic-bezier(0.32,0.72,0,1);
-}
-.benefit-card:hover{
-  box-shadow:0 12px 48px rgba(17,109,252,.12),0 2px 8px rgba(17,109,252,.06);
-  transform:translateY(-3px);
-}
-.card__text{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-@media(max-width:560px){
-  .benefit-card{flex-direction:column;gap:20px;}
-}
-
-/* ================================================================
-   FEATURES SECTION
-   ================================================================ */
-.features-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-}
-@media(max-width:900px){
-  .features-grid{grid-template-columns:repeat(2,1fr);}
-}
-@media(max-width:560px){
-  .features-grid{grid-template-columns:1fr;}
-}
-
-.feature-card{
-  background:#fff;
-  border-radius:38px;
-  padding:32px 24px;
-  width:100%;
-  text-align:center;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:14px;
-  box-shadow:0 2px 12px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.9);
-  transition:box-shadow 0.5s cubic-bezier(0.32,0.72,0,1),transform 0.5s cubic-bezier(0.32,0.72,0,1);
-}
-.feature-card:hover{
-  box-shadow:0 12px 48px rgba(17,109,252,.12),0 2px 8px rgba(17,109,252,.06);
-  transform:translateY(-3px);
-}
-@media(max-width:900px){
-  .features-grid [style*="grid-column"]{grid-column:auto !important;}
-}
-
-/* ================================================================
-   ICON WRAP
-   ================================================================ */
-.icon-wrap{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#E7F0FF,#D0E4FF);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-}
-.icon-wrap svg{
-  width:44px;
-  height:44px;
-}
-
-/* ================================================================
-   CARD TYPOGRAPHY
-   ================================================================ */
-.card__title{
-  font-size:var(--fs-400);
-  font-weight:700;
-  color:var(--ink);
-  line-height:1.4;
-}
-.card__desc{
-  font-size:var(--fs-400);
-  font-weight:600;
-  color:var(--ink-soft);
-  line-height:1.65;
-  max-width:480px;
-}
-
-/* ================================================================
-   FOOTER
-   ================================================================ */
-.site-footer{
-  background:var(--bg-dark);
-  color:#A5A5B6;
-  text-align:center;
-  padding:12px 40px;
-  font-size:13px;
-  font-weight:400;
-}
-
-/* Badge */
-.badge-new{
-  display:inline-flex;
-  align-items:center;
-  background:var(--notification);
-  color:#fff;
-  font-size:12px;
-  font-weight:700;
-  padding:2px 10px;
-  border-radius:999px;
-  line-height:1.4;
-}
-
-/* ================================================================
-   EYEBROW LABEL
-   ================================================================ */
-.eyebrow{
-  display:inline-flex;
-  align-items:center;
-  background:var(--brand-wash);
-  color:var(--brand-ink);
-  font-size:12px;
-  font-weight:600;
-  padding:5px 14px;
-  border-radius:999px;
-  margin-bottom:12px;
-  letter-spacing:0.01em;
-}
-
-/* ================================================================
-   HERO TITLE + CTA
-   ================================================================ */
+.hero__logo{margin-bottom:20px;display:block;line-height:0;}
 .hero__title{
   font-size:clamp(28px,4vw,44px);
   font-weight:700;
@@ -735,108 +209,484 @@ a,button,[tabindex]{outline:none;}
   border:none;
   cursor:pointer;
   text-decoration:none;
-  transition:background 0.45s cubic-bezier(0.32,0.72,0,1),transform 0.45s cubic-bezier(0.32,0.72,0,1),box-shadow 0.45s cubic-bezier(0.32,0.72,0,1);
+  transition:background .45s cubic-bezier(.32,.72,0,1),transform .45s cubic-bezier(.32,.72,0,1),box-shadow .45s cubic-bezier(.32,.72,0,1);
   box-shadow:0 4px 20px rgba(17,109,252,.28);
 }
-.hero__cta:hover{
-  background:var(--brand-dark);
-  transform:translateY(-1px);
-  box-shadow:0 10px 32px rgba(17,109,252,.36);
-}
+.hero__cta:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 10px 32px rgba(17,109,252,.36);}
 .hero__cta:active{transform:scale(0.98);}
 .hero__cta-arrow{
+  width:34px;height:34px;
+  border-radius:6px;
+  background:rgba(255,255,255,.18);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
-  transition:transform 0.45s cubic-bezier(0.32,0.72,0,1);
+  transition:transform .45s cubic-bezier(.32,.72,0,1);
 }
 .hero__cta:hover .hero__cta-arrow{transform:translateX(2px);}
+.hero__visual{position:relative;display:flex;align-items:center;justify-content:center;}
+.hero__visual img{width:100%;max-width:560px;height:auto;display:block;object-fit:contain;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
 /* ================================================================
-   CARD SHELL — Double-Bezel outer wrapper
+   APP MOCKUP
    ================================================================ */
-.card-shell{
-  background:rgba(17,109,252,.025);
-  border:1px solid rgba(17,109,252,.09);
-  padding:4px;
-  border-radius:42px;
-  transition:border-color 0.5s cubic-bezier(0.32,0.72,0,1);
+.app-mockup{
+  background:#F0F6FF;border-radius:16px;
+  box-shadow:0 20px 60px rgba(17,109,252,.14),0 4px 16px rgba(17,109,252,.07);
+  min-height:320px;overflow:hidden;position:relative;
 }
-.card-shell:hover{
-  border-color:rgba(17,109,252,.18);
+.mock-topbar{
+  background:#1A2033;height:44px;display:flex;align-items:center;padding:0 16px;gap:10px;
 }
-.feature-shell{
-  background:rgba(17,109,252,.02);
-  border:1px solid rgba(17,109,252,.07);
-  padding:4px;
-  border-radius:42px;
-  transition:border-color 0.5s cubic-bezier(0.32,0.72,0,1);
+.mock-topbar__title{color:#fff;font-size:13px;font-weight:600;}
+.mock-topbar__spacer{flex:1;}
+.mock-topbar__avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.25);}
+.mock-topbar__bell{width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
+.mock-body{display:flex;height:calc(100% - 44px);min-height:276px;}
+.mock-sidebar{
+  width:52px;background:#253050;flex-shrink:0;
+  padding:12px 0;display:flex;flex-direction:column;gap:6px;align-items:center;
 }
-.feature-shell:hover{
-  border-color:rgba(17,109,252,.16);
+.mock-sidebar__item{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.15);}
+.mock-sidebar__item--active{background:rgba(255,255,255,.3);}
+.mock-content{flex:1;padding:16px;background:#EFF1F6;display:flex;flex-direction:column;gap:12px;}
+.mock-content__row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.mock-card{background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.mock-card__label{font-size:10px;color:var(--ink-faint);font-weight:600;margin-bottom:4px;}
+.mock-card__value{font-size:16px;font-weight:700;color:var(--brand-ink);font-family:var(--font);}
+.mock-card__sub{font-size:9px;color:var(--ink-faint);margin-top:2px;}
+.mock-pipeline{background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.mock-pipeline__title{font-size:10px;font-weight:600;color:var(--ink-soft);margin-bottom:8px;}
+.mock-bar-track{height:8px;background:#E7F0FF;border-radius:999px;overflow:hidden;margin-bottom:6px;}
+.mock-bar-fill{height:100%;background:linear-gradient(90deg,#116DFC,#35A7FF);border-radius:999px;}
+.mock-pipeline__row{display:flex;justify-content:space-between;font-size:9px;color:var(--ink-faint);}
+.mock-chart{background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.06);flex:1;}
+.mock-chart__title{font-size:10px;font-weight:600;color:var(--ink-soft);margin-bottom:8px;}
+.mock-chart__bars{display:flex;align-items:flex-end;gap:6px;height:48px;}
+.mock-bar{flex:1;background:#C0C7D8;border-radius:4px 4px 0 0;}
+.mock-bar--hi{background:var(--brand);}
+.mock-row2{display:grid;grid-template-columns:1fr 1.2fr;gap:10px;}
+
+/* ================================================================
+   CAROUSEL SYSTEM
+   ================================================================ */
+.cs-section{
+  padding:96px 0 72px;
+  overflow:hidden;
 }
+/* Benefits: white bg */
+/* Features: Ghost White bg — color contrast instead of shadow */
+.cs-section--feat{background:var(--brand-ghost);}
+
+/* Section header row */
+.cs-header{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;margin-bottom:40px;
+}
+.cs-title{
+  font-size:40px;font-weight:700;
+  color:var(--ink);line-height:1.08;letter-spacing:-.025em;
+  margin-bottom:0;
+}
+
+/* Arrow buttons */
+.cs-arrows{display:flex;gap:12px;flex-shrink:0;align-items:center;padding-bottom:4px;}
+.c-arrow{
+  width:36px;height:36px;border-radius:18px;
+  background:#E8E8ED;border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink);
+  transition:background .2s,opacity .2s;
+}
+.c-arrow:hover{background:#D1D1D8;}
+.c-arrow:disabled{opacity:.42;cursor:default;}
+
+/* Track: negative margin for edge bleed/peek */
+.cs-track-wrap{margin-inline:calc(-1 * var(--gutter));}
+.cs-track{
+  display:flex;gap:24px;
+  overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  padding:12px var(--gutter) 32px;
+  scroll-padding-left:var(--gutter);
+}
+.cs-track::-webkit-scrollbar{display:none;}
+
+/* Benefits static 3-col — right bleed to viewport edge */
+.ben-bleed-wrap{
+  padding-inline-start:max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+  padding-inline-end:0;
+}
+.cs-track--static{
+  overflow:visible;
+  scroll-snap-type:none;
+  padding:12px 0 32px;
+}
+.cs-track--static .cs-item{
+  flex:1;
+  min-width:0;
+  scroll-snap-align:none;
+}
+
+/* Card item sizes */
+/* Features: ~3 visible + peek at 4th */
+.cs-item{
+  flex:0 0 clamp(300px,38vw,520px);
+  scroll-snap-align:start;
+  display:flex;
+}
+/* Features: show ~3 cards + peek at 4th */
+.cs-track--feat .cs-item{
+  flex:0 0 384px;
+}
+
+/* ================================================================
+   BENEFIT CARDS — image area on top, text below, no frame
+   ================================================================ */
+.ben-card{
+  display:flex;flex-direction:column;gap:20px;width:100%;
+}
+.ben-card__img{
+  width:100%;height:400px;
+  background:var(--brand-wash);
+  border-radius:28px;
+  flex-shrink:0;overflow:hidden;
+}
+.ben-card__title{
+  font-size:26px;font-weight:600;
+  color:var(--ink);line-height:1.38;letter-spacing:-.02em;
+}
+.ben-card__desc{
+  font-size:16px;font-weight:500;
+  color:var(--ink-soft);line-height:1.5;
+  margin-top:8px;
+}
+
+/* ================================================================
+   FEATURE CARDS — white card on ghost-blue bg, no shadow
+   ================================================================ */
+.feat-card{
+  background:#fff;
+  border-radius:28px;
+  width:100%;
+  min-height:516px;
+  display:flex;flex-direction:column;
+}
+.feat-card__body{
+  padding:32px 32px 20px;
+  display:flex;flex-direction:column;
+}
+.feat-card__label{
+  display:block;
+  font-size:17px;font-weight:400;
+  color:var(--brand);
+  letter-spacing:-.022em;line-height:1.235;
+  margin-bottom:8px;
+}
+.feat-card__title{
+  font-size:26px;font-weight:700;
+  color:var(--ink);line-height:1.38;
+  margin-bottom:12px;
+}
+.feat-card__desc{
+  font-size:16px;font-weight:500;
+  color:var(--ink-soft);line-height:1.5;
+}
+.feat-card__img{
+  flex:1;
+  background:#EFF3FB;
+  min-height:180px;
+}
+/* AI dark card */
+.feat-card--dark{background:var(--bg-dark);}
+.feat-card--dark .feat-card__label{color:rgba(255,255,255,.45);}
+.feat-card--dark .feat-card__title{color:#fff;}
+.feat-card--dark .feat-card__desc{color:rgba(255,255,255,.55);}
+.feat-card--dark .feat-card__img{background:rgba(255,255,255,.06);}
+
+/* Badge */
+.badge-new{
+  display:inline-flex;align-items:center;
+  background:var(--notification);color:#fff;
+  font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;
+  line-height:1.4;letter-spacing:.02em;
+  vertical-align:middle;margin-left:8px;
+}
+
+/* ================================================================
+   FEATURES CAROUSEL
+================================================================ */
+/* Card — full 516px always visible */
+.fmc{
+  width:100%;
+  height:516px;
+  background:#F5F9FF;border-radius:28px;
+  padding:32px 32px 0;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:box-shadow .3s ease,transform .35s cubic-bezier(0.32,0.72,0,1);
+}
+.fmc:hover{
+  box-shadow:0 12px 40px rgba(0,0,0,.11);
+  transform:translateY(-6px);
+}
+.fmc__label{
+  display:block;font-size:17px;font-weight:500;
+  color:var(--brand);letter-spacing:-.01em;
+  margin-bottom:8px;
+}
+.fmc__title{font-size:26px;font-weight:700;color:rgba(0,0,0,.88);line-height:1.38;margin:0 0 12px;}
+.fmc__expand{display:contents;}
+.fmc__expand-inner{display:contents;}
+.fmc__desc{
+  font-size:16px;font-weight:400;
+  color:rgba(0,0,0,.88);line-height:1.5;
+  margin:0 0 20px;
+}
+/* Image area — overflow-clip container for floating mock card */
+.fmc__img{
+  flex:1;min-height:0;
+  position:relative;
+  overflow:hidden;
+}
+/* Floating white mock card inside image area */
+.fmc__mock{
+  position:absolute;
+  bottom:-20px;right:-17px;
+  width:357px;
+  top:0;
+  background:#fff;
+  border-radius:9px;
+  box-shadow:0 4px 14px rgba(0,0,0,.10);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+/* Mini tab bar */
+.fmk-bar{
+  height:12px;background:#fafafb;border-bottom:1px solid #f0f0f5;
+  display:flex;align-items:center;padding:0 8px;gap:3px;flex-shrink:0;
+}
+.fmk-dot{width:5px;height:5px;border-radius:50%;}
+.fmk-dot--r{background:#f02848;}
+.fmk-dot--y{background:#ffb800;}
+.fmk-dot--g{background:#34c759;}
+/* Header row */
+.fmk-head{
+  padding:6px 10px 4px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid #f0f0f5;flex-shrink:0;
+}
+.fmk-head__title{font-size:6px;font-weight:700;color:#1c1c22;}
+.fmk-head__badge{font-size:5px;padding:1px 6px;border-radius:10px;background:var(--brand-wash);color:var(--brand);font-weight:600;}
+/* Row list */
+.fmk-rows{flex:1;overflow:hidden;padding:4px 0;}
+.fmk-row{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:0;
+}
+.fmk-row:nth-child(odd){background:#fafafc;}
+.fmk-av{
+  width:16px;height:16px;border-radius:50%;
+  flex-shrink:0;background:var(--brand-wash);
+  display:flex;align-items:center;justify-content:center;
+  font-size:5px;font-weight:700;color:var(--brand);
+}
+.fmk-info{flex:1;min-width:0;}
+.fmk-name{height:5px;border-radius:3px;background:#1c1c22;margin-bottom:2px;opacity:.75;}
+.fmk-sub{height:4px;border-radius:2px;background:#d1d1da;width:60%;}
+.fmk-status{
+  font-size:5px;padding:1px 5px;border-radius:10px;
+  white-space:nowrap;font-weight:600;flex-shrink:0;
+}
+.fmk-status--blue{background:#E7F0FF;color:#116DFC;}
+.fmk-status--green{background:#E6F9F0;color:#1A8A4A;}
+.fmk-status--amber{background:#FFF3E0;color:#B35900;}
+.fmk-status--gray{background:#F0F0F5;color:#838395;}
+/* Bar chart variant */
+.fmk-chart{flex:1;padding:8px 10px;display:flex;flex-direction:column;gap:6px;}
+.fmk-chart__title{font-size:5px;font-weight:700;color:#1c1c22;margin-bottom:4px;}
+.fmk-bars{display:flex;align-items:flex-end;gap:5px;height:50px;}
+.fmk-bar-item{flex:1;border-radius:3px 3px 0 0;background:var(--brand);opacity:.85;}
+.fmk-bar-item:nth-child(1){height:60%;}
+.fmk-bar-item:nth-child(2){height:80%;}
+.fmk-bar-item:nth-child(3){height:45%;}
+.fmk-bar-item:nth-child(4){height:100%;}
+.fmk-bar-item:nth-child(5){height:70%;}
+.fmk-bar-item:nth-child(6){height:55%;opacity:.5;}
+.fmk-metrics{display:flex;gap:6px;margin-top:8px;}
+.fmk-metric{flex:1;background:#f7f8fc;border-radius:5px;padding:4px 6px;}
+.fmk-metric__val{font-size:8px;font-weight:700;color:var(--brand);}
+.fmk-metric__lbl{font-size:4px;color:#838395;margin-top:1px;}
+/* Pipeline variant */
+.fmk-pipe{flex:1;padding:6px 8px;display:flex;gap:5px;}
+.fmk-stage{flex:1;display:flex;flex-direction:column;gap:3px;}
+.fmk-stage__head{height:5px;border-radius:2px;background:var(--brand-wash);margin-bottom:3px;}
+.fmk-card{background:#fff;border-radius:4px;padding:4px;box-shadow:0 1px 3px rgba(0,0,0,.07);}
+.fmk-card__line{height:4px;border-radius:2px;background:#d1d1da;margin-bottom:2px;width:80%;}
+.fmk-card__line2{height:3px;border-radius:2px;background:#e5e7ef;width:50%;}
+.fmk-card__tag{display:inline-block;height:5px;width:24px;border-radius:2px;background:#E7F0FF;}
+/* Chat variant (AI dark) */
+.fmk-chat{flex:1;padding:8px 10px;display:flex;flex-direction:column;gap:6px;}
+.fmk-bubble{max-width:80%;border-radius:8px;padding:5px 7px;}
+.fmk-bubble--ai{background:rgba(255,255,255,.12);align-self:flex-start;}
+.fmk-bubble--user{background:#116DFC;align-self:flex-end;}
+.fmk-bubble__line{height:4px;border-radius:2px;margin-bottom:2px;}
+.fmk-bubble--ai .fmk-bubble__line{background:rgba(255,255,255,.4);}
+.fmk-bubble--user .fmk-bubble__line{background:rgba(255,255,255,.6);}
+.fmk-bubble__line2{height:3px;border-radius:2px;width:60%;}
+.fmk-bubble--ai .fmk-bubble__line2{background:rgba(255,255,255,.2);}
+.fmk-bubble--user .fmk-bubble__line2{background:rgba(255,255,255,.35);}
+/* Dark (AI) */
+.fmc--dark{background:#1A2535;}
+.fmc--dark .fmc__label{color:rgba(255,255,255,.5);}
+.fmc--dark .fmc__title{color:#fff;}
+.fmc--dark .fmc__desc{color:rgba(255,255,255,.6);}
+.fmc--dark .fmc__mock{background:#0E1620;box-shadow:0 4px 14px rgba(0,0,0,.4);}
+.fmc--dark .fmk-bar{background:#0E1620;border-bottom-color:rgba(255,255,255,.06);}
+.fmc--dark .fmk-head{border-bottom-color:rgba(255,255,255,.06);}
+.fmc--dark .fmk-head__title{color:#fff;}
+@media(max-width:768px){
+  .feat-marquee{padding:72px 0 60px;}
+  .cs-track--feat .cs-item{flex:0 0 min(300px,82vw);}
+  .fmc{height:440px;padding:24px 24px 0;}
+  .fmc__title{font-size:20px;}
+  .fmc__mock{width:90%;}
+}
+
+/* Dot navigation */
+.cs-dots{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding-top:8px;
+}
+.dot{
+  width:8px;height:8px;border-radius:999px;
+  background:var(--line-mid);border:none;
+  cursor:pointer;padding:0;flex-shrink:0;
+  transition:width .3s cubic-bezier(0.32,0.72,0,1),background .3s ease;
+}
+.dot--active{width:22px;background:var(--brand);}
 
 /* ================================================================
    SCROLL REVEAL
    ================================================================ */
 .reveal{
-  opacity:0;
-  transform:translateY(22px);
-  transition:opacity 0.75s cubic-bezier(0.32,0.72,0,1),transform 0.75s cubic-bezier(0.32,0.72,0,1);
+  opacity:0;transform:translateY(18px);
+  transition:opacity .7s cubic-bezier(0.32,0.72,0,1),transform .7s cubic-bezier(0.32,0.72,0,1);
   will-change:transform,opacity;
 }
 .reveal.is-visible{opacity:1;transform:translateY(0);}
-.reveal--d1{transition-delay:.08s;}
-.reveal--d2{transition-delay:.18s;}
-.reveal--d3{transition-delay:.28s;}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.site-footer{
+  background:var(--bg-dark);color:rgba(255,255,255,.5);
+  text-align:center;padding:20px 40px;font-size:13px;font-weight:400;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media(max-width:768px){
+  .cs-header{flex-direction:column;align-items:flex-start;gap:16px;}
+  .cs-arrows{align-self:flex-start;}
+  .cs-item{flex:0 0 min(300px,82vw);}
+  .cs-track--feat .cs-item{flex:0 0 min(280px,80vw);}
+  .cs-title{letter-spacing:-.015em;}
+  .ben-card__img{height:220px;}
+}
+@media(max-width:480px){
+  .cs-section{padding:72px 0 56px;}
+  .cs-item{flex:0 0 82vw;}
+  .cs-track--feat .cs-item{flex:0 0 80vw;}
+}
 </style>
 </head>
 
 <body>
 <a href="#main-content" class="skip-link">ข้ามไปยังเนื้อหาหลัก</a>
 
+<!-- UOB Utility Bar -->
+<div class="uob-utility" role="banner">
+  <div class="container">
+    <div class="uob-utility__inner">
+      <div class="uob-utility__left">
+        <span class="uob-utility__link">Personal Banking</span>
+        <span class="uob-utility__link">Business Banking</span>
+        <span class="uob-utility__link">Wealth Management</span>
+        <span class="uob-utility__link">About UOB</span>
+      </div>
+      <div class="uob-utility__right">
+        <span class="uob-utility__link">ภาษาไทย</span>
+        <span class="uob-utility__link">EN</span>
+        <span class="uob-utility__link">Help &amp; Support</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- ============================================================
-     MAIN CONTENT
-     ============================================================ -->
+<!-- UOB Main Nav -->
+<nav class="uob-nav" aria-label="UOB main navigation">
+  <div class="container">
+    <div class="uob-nav__inner">
+      <div class="uob-logo" aria-label="UOB">
+        <div class="uob-logo__grid" aria-hidden="true">
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+          <div class="uob-logo__dot"></div><div class="uob-logo__dot"></div>
+        </div>
+        <span class="uob-logo__text">UOB</span>
+      </div>
+      <ul class="uob-nav__items" role="list">
+        <li><span class="uob-nav__item">Accounts &amp; Deposits</span></li>
+        <li><span class="uob-nav__item">Loans</span></li>
+        <li><span class="uob-nav__item">Cards</span></li>
+        <li><span class="uob-nav__item uob-nav__item--active">Digital Solutions</span></li>
+        <li><span class="uob-nav__item">Insurance</span></li>
+        <li><span class="uob-nav__item">Investments</span></li>
+      </ul>
+      <div class="uob-nav__actions">
+        <button class="uob-nav__icon" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="uob-nav__icon" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Breadcrumb -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <ol class="breadcrumb__list">
+      <li class="breadcrumb__item"><a href="#">หน้าหลัก</a></li>
+      <li class="breadcrumb__sep" aria-hidden="true">›</li>
+      <li class="breadcrumb__item"><a href="#">Digital Solutions</a></li>
+      <li class="breadcrumb__sep" aria-hidden="true">›</li>
+      <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Venio CRM</li>
+    </ol>
+  </div>
+</nav>
+
 <main id="main-content">
 
   <!-- ============================================================
-       4. PRODUCT HERO
+       HERO
        ============================================================ -->
   <section class="hero" aria-labelledby="hero-heading">
     <div class="container">
       <div class="hero__grid">
-        <!-- Left: logo + tagline -->
-        <div>
+        <!-- Left: eyebrow + headline + CTA -->
+        <div class="reveal">
           <p class="eyebrow">CRM Platform สำหรับธุรกิจสมัยใหม่</p>
-          <div class="hero__logo" aria-label="Venio" id="hero-heading">
-            <!-- Logo-3 full wordmark — all paths use single gradient (light bg rule from CLAUDE.md) -->
-            <svg width="220" height="110" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-              <defs>
-                <linearGradient id="hdr-grad" x1="300.494" y1="64" x2="300.494" y2="300" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#0BB8F2"/>
-                  <stop offset="0.06" stop-color="#0BAFF3"/>
-                  <stop offset="0.3" stop-color="#0D92F6"/>
-                  <stop offset="0.54" stop-color="#0F7DF9"/>
-                  <stop offset="0.78" stop-color="#1071FB"/>
-                  <stop offset="1" stop-color="#116DFC"/>
-                </linearGradient>
-              </defs>
-              <!-- V mark -->
-              <path d="M178.605 64.0848C148.564 61.5889 144.972 113.171 140.282 150.598C135.593 188.024 117.992 220.917 91.7484 186.915C69.989 158.724 71.3271 108.782 72.4121 92.5044C72.8219 86.4515 71.1222 80.3866 67.361 75.6239C61.6469 68.3894 54.5223 67.7141 54.5223 67.7141C13.9088 65.9778 24.8307 129.003 37.7417 162.438C50.6527 195.874 82.7433 234.602 113.387 232.854C144.031 231.118 167.816 191.244 185.127 149.344C202.438 107.444 208.646 66.5807 178.605 64.0848Z" fill="url(#hdr-grad)"/>
-              <!-- i dot -->
-              <path d="M440.694 80.1815C438.235 78.7588 435.511 78.0474 432.533 78.0474C429.556 78.0474 426.867 78.7588 424.468 80.1815C422.069 81.6043 420.092 83.5818 418.537 86.1139C417.115 88.5736 416.403 91.2986 416.403 94.2768C416.403 97.255 417.151 99.9438 418.634 102.536C420.056 104.996 421.997 106.973 424.468 108.469C426.867 109.891 429.556 110.603 432.533 110.603C435.511 110.603 438.235 109.855 440.694 108.372C443.154 106.877 445.095 104.936 446.529 102.536C447.952 100.137 448.663 97.3877 448.663 94.2768C448.663 91.166 447.952 88.5736 446.529 86.1139C445.034 83.5818 443.093 81.6164 440.694 80.1815Z" fill="url(#hdr-grad)"/>
-              <!-- i stem -->
-              <path d="M418.176 235H446.83V118.946L418.176 119.055V235Z" fill="url(#hdr-grad)"/>
-              <!-- o -->
-              <path d="M557.894 134.887C546.863 123.854 532.192 117.777 516.581 117.777C500.97 117.777 486.311 123.854 475.268 134.887C464.238 145.919 458.162 160.593 458.162 176.208C458.162 191.822 464.238 206.484 475.268 217.529C486.299 228.562 500.97 234.639 516.581 234.639C532.192 234.639 546.851 228.562 557.894 217.529C568.924 206.496 575 191.822 575 176.208C575 160.593 568.924 145.931 557.894 134.887ZM516.581 206.737C499.752 206.737 486.058 193.04 486.058 176.208C486.058 159.375 499.752 145.678 516.581 145.678C533.41 145.678 547.105 159.375 547.105 176.208C547.105 193.04 533.41 206.737 516.581 206.737Z" fill="url(#hdr-grad)"/>
-              <!-- e -->
-              <path d="M249.537 117.994C233.938 117.994 219.267 124.071 208.224 135.103C197.194 146.136 191.118 160.81 191.118 176.424C191.118 192.039 197.194 206.701 208.224 217.746C219.255 228.778 233.926 234.855 249.537 234.855C263.834 234.855 277.336 229.755 287.993 220.41L271.779 197.405C266.197 203.325 258.289 207.027 249.501 207.027C233.697 207.027 220.689 195.053 219.062 179.68H279.94C279.94 179.68 279.94 179.704 279.94 179.716H307.86C307.92 178.631 307.956 177.534 307.956 176.437C307.956 160.834 301.88 146.16 290.85 135.115C279.819 124.083 265.148 118.006 249.537 118.006V117.994ZM224.378 159.038C229.899 151.14 239.049 145.967 249.417 145.967C259.784 145.967 268.934 151.14 274.455 159.038H224.378Z" fill="url(#hdr-grad)"/>
-              <!-- n -->
-              <path d="M363.012 119.055C339.227 119.055 319.879 138.407 319.879 162.197V235H349.305V162.197C349.305 154.636 355.453 148.487 363.012 148.487C370.57 148.487 376.718 154.636 376.718 162.197V235H406.145V162.197C406.145 138.407 386.796 119.055 363.012 119.055Z" fill="url(#hdr-grad)"/>
-            </svg>
-          </div>
-          <h1 class="hero__title">
+          <h1 class="hero__title" id="hero-heading">
             บริหารงานขาย ดูแลลูกค้า<br>
             ครบจบในแพลตฟอร์มเดียว
           </h1>
@@ -845,424 +695,407 @@ a,button,[tabindex]{outline:none;}
             ที่ช่วยให้ธุรกิจบริหารงาน ติดตามดีล ดูแลลูกค้า<br>
             และเปิดการขายได้อย่างมีประสิทธิภาพ
           </p>
-          <a href="#" class="hero__cta">
+          <a href="register/uob.html" class="hero__cta">
             เริ่มใช้งานฟรี 14 วัน
             <span class="hero__cta-arrow" aria-hidden="true">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             </span>
           </a>
         </div>
-        <!-- Right: App mockup -->
-        <div class="app-mockup" role="img" aria-label="Venio CRM dashboard preview">
-          <!-- Top bar -->
-          <div class="mock-topbar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-            </svg>
-            <span class="mock-topbar__title">Venio CRM</span>
-            <div class="mock-topbar__spacer"></div>
-            <div class="mock-topbar__bell" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-linecap="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-            </div>
-            <div class="mock-topbar__avatar" aria-hidden="true"></div>
-          </div>
-          <!-- Body -->
-          <div class="mock-body">
-            <!-- Sidebar -->
-            <div class="mock-sidebar" aria-hidden="true">
-              <div class="mock-sidebar__item mock-sidebar__item--active"></div>
-              <div class="mock-sidebar__item"></div>
-              <div class="mock-sidebar__item"></div>
-              <div class="mock-sidebar__item"></div>
-              <div class="mock-sidebar__item"></div>
-            </div>
-            <!-- Content -->
-            <div class="mock-content" aria-hidden="true">
-              <!-- Stat cards row -->
-              <div class="mock-content__row">
-                <div class="mock-card">
-                  <div class="mock-card__label">ยอดขายรวม</div>
-                  <div class="mock-card__value">฿1.2M</div>
-                  <div class="mock-card__sub">+12% จากเดือนก่อน</div>
-                </div>
-                <div class="mock-card">
-                  <div class="mock-card__label">ดีลใหม่</div>
-                  <div class="mock-card__value">฿356K</div>
-                  <div class="mock-card__sub">24 รายการ</div>
-                </div>
-                <div class="mock-card">
-                  <div class="mock-card__label">Pipeline</div>
-                  <div class="mock-card__value">฿459M</div>
-                  <div class="mock-card__sub">Q2 forecast</div>
-                </div>
-              </div>
-              <!-- Second row: pipeline + chart -->
-              <div class="mock-row2">
-                <div class="mock-pipeline">
-                  <div class="mock-pipeline__title">Pipeline Progress</div>
-                  <div class="mock-bar-track"><div class="mock-bar-fill" style="width:68%"></div></div>
-                  <div class="mock-pipeline__row"><span>68% of target</span><span>฿312K</span></div>
-                </div>
-                <div class="mock-chart">
-                  <div class="mock-chart__title">Monthly Sales</div>
-                  <div class="mock-chart__bars">
-                    <div class="mock-bar" style="height:55%"></div>
-                    <div class="mock-bar" style="height:70%"></div>
-                    <div class="mock-bar" style="height:45%"></div>
-                    <div class="mock-bar mock-bar--hi" style="height:88%"></div>
-                    <div class="mock-bar" style="height:65%"></div>
-                    <div class="mock-bar" style="height:78%"></div>
-                    <div class="mock-bar mock-bar--hi" style="height:100%"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <!-- Right: phone visual -->
+        <div class="hero__visual reveal">
+          <img src="asset/hero-visual.png" alt="Venio CRM บนมือถือ — ดูแลลูกค้าและบริหารงานขายได้ทุกที่" width="560" height="560">
         </div>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-       5. TAB NAVIGATION
+       BENEFITS CAROUSEL
        ============================================================ -->
-  <div class="tab-nav" role="tablist" aria-label="เนื้อหาผลิตภัณฑ์">
+  <section class="cs-section" aria-labelledby="benefits-heading">
     <div class="container">
-      <div class="tab-nav__inner">
-        <button
-          class="tab-btn tab-btn--active"
-          id="tab-benefits"
-          role="tab"
-          aria-selected="true"
-          aria-controls="panel-benefits"
-          tabindex="0"
-        >สิทธิประโยชน์</button>
-        <button
-          class="tab-btn"
-          id="tab-features"
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-features"
-          tabindex="-1"
-        >ลักษณะผลิตภัณฑ์</button>
+      <div class="cs-header reveal">
+        <div class="cs-header__text">
+          <h2 class="cs-title" id="benefits-heading">สิทธิประโยชน์ที่มอบให้กับ<br>ลูกค้า UOB</h2>
+        </div>
       </div>
     </div>
-  </div>
+
+    <div class="container">
+        <div class="cs-track cs-track--static" id="ben-track" role="list" aria-label="สิทธิประโยชน์">
+
+          <!-- B1 -->
+          <div class="cs-item reveal" role="listitem">
+            <article class="ben-card">
+              <div class="ben-card__img" aria-hidden="true"></div>
+              <div>
+                <h3 class="ben-card__title">จัดการงานขายอย่างมีประสิทธิภาพ</h3>
+                <p class="ben-card__desc">บริหารจัด ติดตามดีล และมองเห็นภาพรวม Pipeline เพื่อเพิ่มประสิทธิภาพในการปิดการขาย</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- B2 -->
+          <div class="cs-item reveal" role="listitem">
+            <article class="ben-card">
+              <div class="ben-card__img" aria-hidden="true"></div>
+              <div>
+                <h3 class="ben-card__title">ยกระดับการทำงานของทีมขาย</h3>
+                <p class="ben-card__desc">ติดตามผลงาน ตั้งเป้าหมาย และพัฒนาศักยภาพของทีมขายได้อย่างเป็นระบบ</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- B3 -->
+          <div class="cs-item reveal" role="listitem">
+            <article class="ben-card">
+              <div class="ben-card__img" aria-hidden="true"></div>
+              <div>
+                <h3 class="ben-card__title">สร้างสัมพันธ์ที่ดีในทุกการดูแลลูกค้า</h3>
+                <p class="ben-card__desc">เก็บครบทุกข้อมูลสำคัญของลูกค้า เพื่อการดูแลที่เข้าใจ ใส่ใจ และต่อเนื่อง</p>
+              </div>
+            </article>
+          </div>
+
+        </div>
+    </div>
+  </section>
 
   <!-- ============================================================
-       6. BENEFITS PANEL
+       FEATURES CAROUSEL
        ============================================================ -->
-  <div
-    id="panel-benefits"
-    class="tab-panel tab-panel--active"
-    role="tabpanel"
-    aria-labelledby="tab-benefits"
-  >
-    <section class="section" aria-labelledby="benefits-heading">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title" id="benefits-heading">สิทธิประโยชน์</h2>
-        </div>
-        <div class="benefits-grid">
-
-          <!-- Card 1: Sales efficiency -->
-          <div class="card-shell reveal reveal--d1">
-            <article class="benefit-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M8 10h28l-10 12v10l-8-4V22L8 10z"/>
-                  <line x1="34" y1="30" x2="34" y2="36"/>
-                  <line x1="38" y1="26" x2="38" y2="36"/>
-                  <line x1="30" y1="28" x2="30" y2="36"/>
-                </svg>
-              </div>
-              <div class="card__text">
-                <h3 class="card__title">จัดการงานขายอย่างมีประสิทธิภาพ</h3>
-                <p class="card__desc">บริหารจัด ติดตามดีล และมองเห็นภาพรวม Pipeline เพื่อเพิ่มประสิทธิภาพในการปิดการขาย</p>
-              </div>
-            </article>
-          </div>
-
-          <!-- Card 2: Team performance -->
-          <div class="card-shell reveal reveal--d2">
-            <article class="benefit-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="22" cy="15" r="4"/>
-                  <path d="M14 34c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-                  <circle cx="11" cy="17" r="3"/>
-                  <path d="M5 34c0-3.3 2.7-6 6-6"/>
-                  <circle cx="33" cy="17" r="3"/>
-                  <path d="M39 34c0-3.3-2.7-6-6-6"/>
-                  <circle cx="34" cy="10" r="4"/>
-                  <circle cx="34" cy="10" r="1.5"/>
-                </svg>
-              </div>
-              <div class="card__text">
-                <h3 class="card__title">ยกระดับการทำงานของทีมขาย</h3>
-                <p class="card__desc">ติดตามผลงาน ตั้งเป้าหมาย และพัฒนาศักยภาพของทีมขายได้อย่างเป็นระบบ</p>
-              </div>
-            </article>
-          </div>
-
-          <!-- Card 3: Customer relationship -->
-          <div class="card-shell reveal reveal--d3">
-            <article class="benefit-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 34s-12-7.5-12-15a7 7 0 0 1 12-5 7 7 0 0 1 12 5c0 7.5-12 15-12 15z"/>
-                  <path d="M30 12h6a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1l-2 2v-2h-3a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z"/>
-                </svg>
-              </div>
-              <div class="card__text">
-                <h3 class="card__title">สร้างสัมพันธ์ที่ดีในทุกการดูแลลูกค้า</h3>
-                <p class="card__desc">เก็บครบทุกข้อมูลสำคัญของลูกค้า เพื่อการดูแลที่เข้าใจ ใส่ใจ และต่อเนื่อง</p>
-              </div>
-            </article>
-          </div>
-
+  <section class="cs-section" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="cs-header reveal">
+        <h2 class="cs-title" id="features-heading">ลักษณะผลิตภัณฑ์</h2>
+        <div class="cs-arrows">
+          <button class="c-arrow" id="feat-prev" aria-label="Previous">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="c-arrow" id="feat-next" aria-label="Next">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
 
-  <!-- ============================================================
-       7. FEATURES PANEL
-       ============================================================ -->
-  <div
-    id="panel-features"
-    class="tab-panel"
-    role="tabpanel"
-    aria-labelledby="tab-features"
-    hidden
-  >
-    <section class="section section--alt" aria-labelledby="features-heading">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title" id="features-heading">ลักษณะผลิตภัณฑ์</h2>
+    <div class="cs-track-wrap">
+      <div class="cs-track cs-track--feat" id="feat-track" role="list" aria-label="ลักษณะผลิตภัณฑ์">
+
+        <div class="cs-item" role="listitem">
+        <article class="fmc" tabindex="0">
+          <span class="fmc__label">Customers Management</span>
+          <h3 class="fmc__title">การจัดการข้อมูลลูกค้า</h3>
+          <div class="fmc__expand"><div class="fmc__expand-inner">
+            <p class="fmc__desc">ช่วยในการจัดการข้อมูลลูกค้า ตั้งแต่เรื่องการเก็บรวบรวมข้อมูลไปถึงการมอบหมายรายชื่อลูกค้าให้กับทีมขายเพื่อดำเนินต่อลูกค้าต่อไป</p>
+            <div class="fmc__img" aria-hidden="true">
+              <div class="fmc__mock">
+                <div class="fmk-bar"><div class="fmk-dot fmk-dot--r"></div><div class="fmk-dot fmk-dot--y"></div><div class="fmk-dot fmk-dot--g"></div></div>
+                <div class="fmk-head"><span class="fmk-head__title">Customer List</span><span class="fmk-head__badge">245 contacts</span></div>
+                <div class="fmk-rows">
+                  <div class="fmk-row"><div class="fmk-av">GC</div><div class="fmk-info"><div class="fmk-name" style="width:90px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Active</span></div>
+                  <div class="fmk-row"><div class="fmk-av">TH</div><div class="fmk-info"><div class="fmk-name" style="width:70px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--blue">Lead</span></div>
+                  <div class="fmk-row"><div class="fmk-av">PP</div><div class="fmk-info"><div class="fmk-name" style="width:100px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--amber">Follow</span></div>
+                  <div class="fmk-row"><div class="fmk-av">SK</div><div class="fmk-info"><div class="fmk-name" style="width:80px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Active</span></div>
+                  <div class="fmk-row"><div class="fmk-av">NA</div><div class="fmk-info"><div class="fmk-name" style="width:85px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--gray">Inactive</span></div>
+                  <div class="fmk-row"><div class="fmk-av">WR</div><div class="fmk-info"><div class="fmk-name" style="width:95px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--blue">Lead</span></div>
+                  <div class="fmk-row"><div class="fmk-av">BT</div><div class="fmk-info"><div class="fmk-name" style="width:75px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Active</span></div>
+                  <div class="fmk-row"><div class="fmk-av">CM</div><div class="fmk-info"><div class="fmk-name" style="width:60px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--amber">Follow</span></div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </article>
         </div>
-        <div class="features-grid">
 
-          <!-- Feature 1 -->
-          <div class="feature-shell reveal reveal--d1">
-            <article class="feature-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="17" cy="14" r="4"/>
-                  <path d="M9 32c0-4.4 3.6-8 8-8h4"/>
-                  <ellipse cx="32" cy="22" rx="6" ry="2.5"/>
-                  <path d="M26 22v8c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-8"/>
-                  <path d="M26 26c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5"/>
-                </svg>
+        <div class="cs-item" role="listitem">
+        <article class="fmc" tabindex="0">
+          <span class="fmc__label">Activity Management</span>
+          <h3 class="fmc__title">วางแผนและติดตามการเข้าพบลูกค้า</h3>
+          <div class="fmc__expand"><div class="fmc__expand-inner">
+            <p class="fmc__desc">จัดการวางแผนเข้าพบลูกค้า พร้อมการเช็คอินที่หน้างาน ทำให้มองเห็นภาพรวมการเข้าพบลูกค้าของทีมงานได้ทั้งหมด</p>
+            <div class="fmc__img" aria-hidden="true">
+              <div class="fmc__mock">
+                <div class="fmk-bar"><div class="fmk-dot fmk-dot--r"></div><div class="fmk-dot fmk-dot--y"></div><div class="fmk-dot fmk-dot--g"></div></div>
+                <div class="fmk-head"><span class="fmk-head__title">Activity Schedule</span><span class="fmk-head__badge">Today 8 tasks</span></div>
+                <div class="fmk-rows">
+                  <div class="fmk-row"><div class="fmk-av" style="background:#FFF3E0;color:#B35900">AM</div><div class="fmk-info"><div class="fmk-name" style="width:100px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Done</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#E6F9F0;color:#1A8A4A">PJ</div><div class="fmk-info"><div class="fmk-name" style="width:80px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--blue">Today</span></div>
+                  <div class="fmk-row"><div class="fmk-av">KN</div><div class="fmk-info"><div class="fmk-name" style="width:90px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--blue">Today</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#FFF3E0;color:#B35900">WT</div><div class="fmk-info"><div class="fmk-name" style="width:70px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--amber">Pending</span></div>
+                  <div class="fmk-row"><div class="fmk-av">SR</div><div class="fmk-info"><div class="fmk-name" style="width:95px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Done</span></div>
+                  <div class="fmk-row"><div class="fmk-av">LP</div><div class="fmk-info"><div class="fmk-name" style="width:85px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--gray">Scheduled</span></div>
+                  <div class="fmk-row"><div class="fmk-av">TK</div><div class="fmk-info"><div class="fmk-name" style="width:75px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--gray">Scheduled</span></div>
+                </div>
               </div>
-              <h3 class="card__title">การจัดการข้อมูลลูกค้า</h3>
-              <p class="card__desc">ช่วยในการจัดการข้อมูลลูกค้า ตั้งแต่เรื่องการเก็บรวบรวมข้อมูลไปถึงการมอบหมายรายชื่อลูกค้าให้กับทีมขายเพื่อดำเนินต่อลูกค้าต่อไป</p>
-            </article>
-          </div>
-
-          <!-- Feature 2 -->
-          <div class="feature-shell reveal reveal--d2">
-            <article class="feature-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="8" y="12" width="22" height="20" rx="3"/>
-                  <line x1="8" y1="18" x2="30" y2="18"/>
-                  <line x1="15" y1="8" x2="15" y2="14"/>
-                  <line x1="23" y1="8" x2="23" y2="14"/>
-                  <path d="M34 10c0 5-5 9-5 9s-5-4-5-9a5 5 0 0 1 10 0z"/>
-                  <circle cx="29" cy="10" r="1.5"/>
-                </svg>
-              </div>
-              <h3 class="card__title">วางแผนและติดตามการเข้าพบลูกค้า</h3>
-              <p class="card__desc">จัดการวางแผนเข้าพบลูกค้า พร้อมการเช็คอินที่หน้างาน ทำให้มองเห็นภาพรวมการเข้าพบลูกค้าของทีมงานได้ทั้งหมด</p>
-            </article>
-          </div>
-
-          <!-- Feature 3 -->
-          <div class="feature-shell reveal reveal--d3">
-            <article class="feature-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 22l6-6h8l4 4h8l6-6"/>
-                  <path d="M6 22l4 6h5l5 4 5-4h5l4-6"/>
-                  <path d="M18 16l-4 4"/>
-                  <path d="M24 20l4 4"/>
-                </svg>
-              </div>
-              <h3 class="card__title">มองเห็นภาพรวมดีลและโอกาสทางการขาย</h3>
-              <p class="card__desc">เห็นภาพรวมดีลและโอกาสทางการขายที่เกิดขึ้นได้อย่างชัดเจน ผ่าน deal stage และ pipeline</p>
-            </article>
-          </div>
-
-          <!-- Feature 4 -->
-          <div class="feature-shell reveal reveal--d1">
-            <article class="feature-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="10" y1="34" x2="10" y2="24"/>
-                  <line x1="16" y1="34" x2="16" y2="18"/>
-                  <line x1="22" y1="34" x2="22" y2="22"/>
-                  <line x1="8" y1="34" x2="24" y2="34"/>
-                  <circle cx="33" cy="17" r="7"/>
-                  <line x1="38.5" y1="22.5" x2="42" y2="26"/>
-                </svg>
-              </div>
-              <h3 class="card__title">วิเคราะห์ข้อมูลการขายและการดูแลลูกค้า</h3>
-              <p class="card__desc">วิเคราะห์ข้อมูลการขายและลูกค้า ผ่าน report และ dashboard หลากหลายมุมมอง เสริมความแม่นยำในการตัดสินใจทางธุรกิจ</p>
-            </article>
-          </div>
-
-          <!-- Feature 5 -->
-          <div class="feature-shell reveal reveal--d2">
-            <article class="feature-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M10 8h16l6 6v22a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z"/>
-                  <polyline points="26,8 26,14 32,14"/>
-                  <line x1="14" y1="20" x2="28" y2="20"/>
-                  <line x1="14" y1="25" x2="22" y2="25"/>
-                  <path d="M30 20h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-1l-2 2.5V30h-5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z"/>
-                </svg>
-              </div>
-              <h3 class="card__title">จัดการเคสและข้อเสนอแนะจากลูกค้า</h3>
-              <p class="card__desc">จัดการเคสและข้อเสนอแนะอย่างเป็นระบบ ติดตามและปิดเคสได้ในระบบ เพื่อตรงตามความพึงพอใจของลูกค้า</p>
-            </article>
-          </div>
-
-          <!-- Feature 6 -->
-          <div class="feature-shell reveal reveal--d3">
-            <article class="feature-card">
-              <div class="icon-wrap" aria-hidden="true">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M8 18v8h4l8 6V12l-8 6H8z"/>
-                  <path d="M28 16s3 2 3 6-3 6-3 6"/>
-                  <path d="M32 12s5 3 5 10-5 10-5 10"/>
-                  <rect x="7" y="30" width="8" height="6" rx="1"/>
-                </svg>
-              </div>
-              <h3 class="card__title">เพิ่มช่องทางการขาย</h3>
-              <p class="card__desc">คัดกรองลูกค้าเข้าหมาย สร้างแคมเปญการตลาด และเปิดร้านค้าออนไลน์เฉพาะแบรนด์กับระบบ เพื่อโอกาสในการเข้าถึงลูกค้า</p>
-            </article>
-          </div>
-
-          <!-- Feature 7: AI — last card, centered -->
-          <div class="feature-shell reveal reveal--d2" style="grid-column:2">
-            <article class="feature-card">
-              <div class="icon-wrap" aria-hidden="true" style="background:linear-gradient(135deg,#EEF4FF,#D8EAFF);">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="#116DFC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="13" y="13" width="18" height="18" rx="4" fill="#E7F0FF" stroke="#116DFC"/>
-                  <rect x="17" y="17" width="10" height="10" rx="2" fill="#116DFC" stroke="none"/>
-                  <line x1="8" y1="18" x2="13" y2="18"/><line x1="8" y1="22" x2="13" y2="22"/><line x1="8" y1="26" x2="13" y2="26"/>
-                  <line x1="31" y1="18" x2="36" y2="18"/><line x1="31" y1="22" x2="36" y2="22"/><line x1="31" y1="26" x2="36" y2="26"/>
-                  <line x1="18" y1="8" x2="18" y2="13"/><line x1="22" y1="8" x2="22" y2="13"/><line x1="26" y1="8" x2="26" y2="13"/>
-                  <line x1="36" y1="8" x2="36" y2="12"/><line x1="34" y1="10" x2="38" y2="10"/>
-                  <line x1="6" y1="34" x2="6" y2="38"/><line x1="4" y1="36" x2="8" y2="36"/>
-                </svg>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
-                <h3 class="card__title" style="margin:0;">ยกระดับงานขายด้วย AI</h3>
-                <span class="badge-new">New!</span>
-              </div>
-              <p class="card__desc">ตัวช่วย AI สำหรับรองบอยลูกค้า สรุปงาน และคาดการณ์โอกาสการปิดดีลและยอดขาย เพื่อให้ทีมขายไม่พลาดโอกาสในการขายได้อย่างเต็มที่</p>
-            </article>
-          </div>
+            </div>
+          </div></div>
+        </article>
 
         </div>
+
+        <div class="cs-item" role="listitem">
+        <article class="fmc" tabindex="0">
+          <span class="fmc__label">Deal & Pipeline</span>
+          <h3 class="fmc__title">มองเห็นภาพรวมดีลและโอกาสทางการขาย</h3>
+          <div class="fmc__expand"><div class="fmc__expand-inner">
+            <p class="fmc__desc">เห็นภาพรวมดีลและโอกาสทางการขายที่เกิดขึ้นได้อย่างชัดเจน ผ่าน deal stage และ pipeline</p>
+            <div class="fmc__img" aria-hidden="true">
+              <div class="fmc__mock">
+                <div class="fmk-bar"><div class="fmk-dot fmk-dot--r"></div><div class="fmk-dot fmk-dot--y"></div><div class="fmk-dot fmk-dot--g"></div></div>
+                <div class="fmk-head"><span class="fmk-head__title">Sales Pipeline</span><span class="fmk-head__badge">฿2.4M pipeline</span></div>
+                <div class="fmk-pipe">
+                  <div class="fmk-stage">
+                    <div class="fmk-stage__head" style="background:#E7F0FF"></div>
+                    <div class="fmk-card"><div class="fmk-card__line"></div><div class="fmk-card__line2"></div><div class="fmk-card__tag"></div></div>
+                    <div class="fmk-card"><div class="fmk-card__line" style="width:60%"></div><div class="fmk-card__line2"></div></div>
+                    <div class="fmk-card"><div class="fmk-card__line" style="width:75%"></div><div class="fmk-card__line2"></div></div>
+                  </div>
+                  <div class="fmk-stage">
+                    <div class="fmk-stage__head" style="background:#FFF3E0"></div>
+                    <div class="fmk-card"><div class="fmk-card__line"></div><div class="fmk-card__line2"></div><div class="fmk-card__tag" style="background:#FFF3E0"></div></div>
+                    <div class="fmk-card"><div class="fmk-card__line" style="width:70%"></div><div class="fmk-card__line2"></div></div>
+                  </div>
+                  <div class="fmk-stage">
+                    <div class="fmk-stage__head" style="background:#E6F9F0"></div>
+                    <div class="fmk-card"><div class="fmk-card__line"></div><div class="fmk-card__line2"></div><div class="fmk-card__tag" style="background:#E6F9F0"></div></div>
+                    <div class="fmk-card"><div class="fmk-card__line" style="width:55%"></div><div class="fmk-card__line2"></div></div>
+                    <div class="fmk-card"><div class="fmk-card__line" style="width:80%"></div><div class="fmk-card__line2"></div></div>
+                  </div>
+                  <div class="fmk-stage">
+                    <div class="fmk-stage__head" style="background:#F5E6FF"></div>
+                    <div class="fmk-card"><div class="fmk-card__line"></div><div class="fmk-card__line2"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        </div>
+
+        <div class="cs-item" role="listitem">
+        <article class="fmc" tabindex="0">
+          <span class="fmc__label">Analytics & Reports</span>
+          <h3 class="fmc__title">วิเคราะห์ข้อมูลการขายและการดูแลลูกค้า</h3>
+          <div class="fmc__expand"><div class="fmc__expand-inner">
+            <p class="fmc__desc">วิเคราะห์ข้อมูลการขายและลูกค้า ผ่าน report และ dashboard หลากหลายมุมมอง เสริมความแม่นยำในการตัดสินใจทางธุรกิจ</p>
+            <div class="fmc__img" aria-hidden="true">
+              <div class="fmc__mock">
+                <div class="fmk-bar"><div class="fmk-dot fmk-dot--r"></div><div class="fmk-dot fmk-dot--y"></div><div class="fmk-dot fmk-dot--g"></div></div>
+                <div class="fmk-head"><span class="fmk-head__title">Sales Report</span><span class="fmk-head__badge">Q2 2026</span></div>
+                <div class="fmk-chart">
+                  <div class="fmk-chart__title">Monthly Revenue</div>
+                  <div class="fmk-bars">
+                    <div class="fmk-bar-item"></div>
+                    <div class="fmk-bar-item"></div>
+                    <div class="fmk-bar-item"></div>
+                    <div class="fmk-bar-item"></div>
+                    <div class="fmk-bar-item"></div>
+                    <div class="fmk-bar-item"></div>
+                  </div>
+                  <div class="fmk-metrics">
+                    <div class="fmk-metric"><div class="fmk-metric__val">฿4.2M</div><div class="fmk-metric__lbl">Revenue</div></div>
+                    <div class="fmk-metric"><div class="fmk-metric__val">138</div><div class="fmk-metric__lbl">Deals Won</div></div>
+                    <div class="fmk-metric"><div class="fmk-metric__val">92%</div><div class="fmk-metric__lbl">Target</div></div>
+                  </div>
+                  <div class="fmk-rows" style="margin-top:6px">
+                    <div class="fmk-row"><div class="fmk-av" style="width:8px;height:8px;border-radius:2px;background:var(--brand)"></div><div class="fmk-info"><div class="fmk-name" style="width:80px"></div></div><span class="fmk-status fmk-status--blue">+12%</span></div>
+                    <div class="fmk-row"><div class="fmk-av" style="width:8px;height:8px;border-radius:2px;background:#34c759"></div><div class="fmk-info"><div class="fmk-name" style="width:70px"></div></div><span class="fmk-status fmk-status--green">+8%</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        </div>
+
+        <div class="cs-item" role="listitem">
+        <article class="fmc" tabindex="0">
+          <span class="fmc__label">Case Management</span>
+          <h3 class="fmc__title">จัดการเคสและข้อเสนอแนะจากลูกค้า</h3>
+          <div class="fmc__expand"><div class="fmc__expand-inner">
+            <p class="fmc__desc">จัดการเคสและข้อเสนอแนะอย่างเป็นระบบ ติดตามและปิดเคสได้ในระบบ เพื่อตรงตามความพึงพอใจของลูกค้า</p>
+            <div class="fmc__img" aria-hidden="true">
+              <div class="fmc__mock">
+                <div class="fmk-bar"><div class="fmk-dot fmk-dot--r"></div><div class="fmk-dot fmk-dot--y"></div><div class="fmk-dot fmk-dot--g"></div></div>
+                <div class="fmk-head"><span class="fmk-head__title">Case Inbox</span><span class="fmk-head__badge">12 open</span></div>
+                <div class="fmk-rows">
+                  <div class="fmk-row"><div class="fmk-av" style="background:#FFE8E8;color:#f02848">!</div><div class="fmk-info"><div class="fmk-name" style="width:95px"></div><div class="fmk-sub"></div></div><span class="fmk-status" style="background:#FFE8E8;color:#f02848">Urgent</span></div>
+                  <div class="fmk-row"><div class="fmk-av">KP</div><div class="fmk-info"><div class="fmk-name" style="width:80px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--amber">Pending</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#E6F9F0;color:#1A8A4A">✓</div><div class="fmk-info"><div class="fmk-name" style="width:100px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Resolved</span></div>
+                  <div class="fmk-row"><div class="fmk-av">MT</div><div class="fmk-info"><div class="fmk-name" style="width:75px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--blue">Open</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#E6F9F0;color:#1A8A4A">✓</div><div class="fmk-info"><div class="fmk-name" style="width:85px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Resolved</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#FFE8E8;color:#f02848">!</div><div class="fmk-info"><div class="fmk-name" style="width:90px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--amber">Pending</span></div>
+                  <div class="fmk-row"><div class="fmk-av">NS</div><div class="fmk-info"><div class="fmk-name" style="width:70px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--blue">Open</span></div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        </div>
+
+        <div class="cs-item" role="listitem">
+        <article class="fmc" tabindex="0">
+          <span class="fmc__label">Sales Channels</span>
+          <h3 class="fmc__title">เพิ่มช่องทางการขาย</h3>
+          <div class="fmc__expand"><div class="fmc__expand-inner">
+            <p class="fmc__desc">คัดกรองลูกค้าเข้าหมาย สร้างแคมเปญการตลาด และเปิดร้านค้าออนไลน์เฉพาะแบรนด์กับระบบ เพื่อโอกาสในการเข้าถึงลูกค้า</p>
+            <div class="fmc__img" aria-hidden="true">
+              <div class="fmc__mock">
+                <div class="fmk-bar"><div class="fmk-dot fmk-dot--r"></div><div class="fmk-dot fmk-dot--y"></div><div class="fmk-dot fmk-dot--g"></div></div>
+                <div class="fmk-head"><span class="fmk-head__title">Campaigns</span><span class="fmk-head__badge">5 active</span></div>
+                <div class="fmk-rows">
+                  <div class="fmk-row"><div class="fmk-av" style="background:#E7F0FF;border-radius:4px">📧</div><div class="fmk-info"><div class="fmk-name" style="width:90px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Live</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#FFF3E0;border-radius:4px">📱</div><div class="fmk-info"><div class="fmk-name" style="width:75px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Live</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#E6F9F0;border-radius:4px">🏪</div><div class="fmk-info"><div class="fmk-name" style="width:100px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--blue">Setup</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#E7F0FF;border-radius:4px">📣</div><div class="fmk-info"><div class="fmk-name" style="width:80px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--amber">Draft</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#FFF3E0;border-radius:4px">🎯</div><div class="fmk-info"><div class="fmk-name" style="width:85px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--green">Live</span></div>
+                  <div class="fmk-row"><div class="fmk-av" style="background:#F5E6FF;border-radius:4px">💬</div><div class="fmk-info"><div class="fmk-name" style="width:70px"></div><div class="fmk-sub"></div></div><span class="fmk-status fmk-status--gray">Ended</span></div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </article>
+
+        </div>
+
+        <div class="cs-item" role="listitem">
+        <article class="fmc fmc--dark" tabindex="0">
+          <span class="fmc__label">AI Assistant <span class="badge-new">New!</span></span>
+          <h3 class="fmc__title">ยกระดับงานขายด้วย AI</h3>
+          <div class="fmc__expand"><div class="fmc__expand-inner">
+            <p class="fmc__desc">ตัวช่วย AI สำหรับรองบอยลูกค้า สรุปงาน และคาดการณ์โอกาสการปิดดีลและยอดขาย เพื่อให้ทีมขายไม่พลาดโอกาสในการขายได้อย่างเต็มที่</p>
+            <div class="fmc__img" aria-hidden="true">
+              <div class="fmc__mock">
+                <div class="fmk-bar"><div class="fmk-dot fmk-dot--r"></div><div class="fmk-dot fmk-dot--y"></div><div class="fmk-dot fmk-dot--g"></div></div>
+                <div class="fmk-head"><span class="fmk-head__title">Venio AI</span><span class="fmk-head__badge" style="background:rgba(17,109,252,.2);color:#7ab4fd">Beta</span></div>
+                <div class="fmk-chat">
+                  <div class="fmk-bubble fmk-bubble--user"><div class="fmk-bubble__line" style="width:80px"></div><div class="fmk-bubble__line2"></div></div>
+                  <div class="fmk-bubble fmk-bubble--ai"><div class="fmk-bubble__line" style="width:110px"></div><div class="fmk-bubble__line2"></div><div class="fmk-bubble__line" style="width:90px;margin-top:2px"></div></div>
+                  <div class="fmk-bubble fmk-bubble--user"><div class="fmk-bubble__line" style="width:60px"></div></div>
+                  <div class="fmk-bubble fmk-bubble--ai"><div class="fmk-bubble__line" style="width:100px"></div><div class="fmk-bubble__line2" style="width:70px"></div><div class="fmk-bubble__line" style="width:85px;margin-top:2px"></div><div class="fmk-bubble__line2" style="width:50px"></div></div>
+                  <div class="fmk-bubble fmk-bubble--user"><div class="fmk-bubble__line" style="width:75px"></div><div class="fmk-bubble__line2"></div></div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </article>
+        </div>
+
       </div>
-    </section>
-  </div>
+    </div>
+
+    <div class="container">
+      <div class="cs-dots" id="feat-dots" role="tablist" aria-label="ลักษณะผลิตภัณฑ์">
+        <button class="dot dot--active" role="tab" aria-selected="true" aria-label="1"></button>
+        <button class="dot" role="tab" aria-selected="false" aria-label="2"></button>
+        <button class="dot" role="tab" aria-selected="false" aria-label="3"></button>
+        <button class="dot" role="tab" aria-selected="false" aria-label="4"></button>
+        <button class="dot" role="tab" aria-selected="false" aria-label="5"></button>
+        <button class="dot" role="tab" aria-selected="false" aria-label="6"></button>
+        <button class="dot" role="tab" aria-selected="false" aria-label="7"></button>
+      </div>
+    </div>
+  </section>
 
 </main>
-
-<!-- ============================================================
-     TAB SWITCHING — Vanilla JS
-     ============================================================ -->
-<script>
-(function () {
-  var tabs = document.querySelectorAll('[role="tab"]');
-  var panels = document.querySelectorAll('[role="tabpanel"]');
-
-  function activateTab(selectedTab) {
-    tabs.forEach(function (tab) {
-      var isSelected = tab === selectedTab;
-      tab.setAttribute('aria-selected', String(isSelected));
-      tab.classList.toggle('tab-btn--active', isSelected);
-      tab.setAttribute('tabindex', isSelected ? '0' : '-1');
-    });
-
-    var targetId = selectedTab.getAttribute('aria-controls');
-    panels.forEach(function (panel) {
-      var isActive = panel.id === targetId;
-      panel.classList.toggle('tab-panel--active', isActive);
-      if (isActive) {
-        panel.removeAttribute('hidden');
-      } else {
-        panel.setAttribute('hidden', '');
-      }
-    });
-  }
-
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      activateTab(tab);
-    });
-
-    // Keyboard: arrow keys for tab switching (ARIA pattern)
-    tab.addEventListener('keydown', function (e) {
-      var idx = Array.from(tabs).indexOf(tab);
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        var next = tabs[(idx + 1) % tabs.length];
-        next.focus();
-        activateTab(next);
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        var prev = tabs[(idx - 1 + tabs.length) % tabs.length];
-        prev.focus();
-        activateTab(prev);
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        tabs[0].focus();
-        activateTab(tabs[0]);
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        tabs[tabs.length - 1].focus();
-        activateTab(tabs[tabs.length - 1]);
-      }
-    });
-  });
-}());
-</script>
-
-<!-- ============================================================
-     SCROLL REVEAL — IntersectionObserver
-     ============================================================ -->
-<script>
-(function () {
-  var els = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) {
-    els.forEach(function(el){ el.classList.add('is-visible'); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        e.target.classList.add('is-visible');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  els.forEach(function (el) { io.observe(el); });
-}());
-</script>
 
 <!-- ============================================================
      FOOTER
      ============================================================ -->
 <footer class="site-footer">Copyright &copy; 2026 Gofive Co.,Ltd. All rights reserved.</footer>
+
+<!-- ============================================================
+     CAROUSEL JS
+     ============================================================ -->
+<script>
+(function(){
+  function initCarousel(trackId, dotsId, prevId, nextId){
+    var track = document.getElementById(trackId);
+    if(!track) return;
+    var items = track.querySelectorAll('.cs-item');
+    var n = items.length;
+    var dots = document.getElementById(dotsId);
+    var dotBtns = dots ? dots.querySelectorAll('.dot') : [];
+    var prevBtn = document.getElementById(prevId);
+    var nextBtn = document.getElementById(nextId);
+
+    function getItemWidth(){
+      if(!items[0]) return 0;
+      var gap = parseFloat(getComputedStyle(track).gap) || 16;
+      return items[0].offsetWidth + gap;
+    }
+
+    function getActiveIdx(){
+      var iw = getItemWidth();
+      return iw ? Math.round(track.scrollLeft / iw) : 0;
+    }
+
+    function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+    function updateState(){
+      var idx = clamp(getActiveIdx(), 0, n - 1);
+      dotBtns.forEach(function(d, i){
+        var active = i === idx;
+        d.classList.toggle('dot--active', active);
+        d.setAttribute('aria-selected', String(active));
+      });
+      if(prevBtn) prevBtn.disabled = idx === 0;
+      if(nextBtn) nextBtn.disabled = idx >= n - 1;
+    }
+
+    var scrollTimer;
+    track.addEventListener('scroll', function(){
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(updateState, 80);
+    }, {passive:true});
+
+    if(prevBtn) prevBtn.addEventListener('click', function(){
+      track.scrollBy({left:-getItemWidth(), behavior:'smooth'});
+    });
+    if(nextBtn) nextBtn.addEventListener('click', function(){
+      track.scrollBy({left:getItemWidth(), behavior:'smooth'});
+    });
+
+    dotBtns.forEach(function(d, i){
+      d.addEventListener('click', function(){
+        track.scrollTo({left:i * getItemWidth(), behavior:'smooth'});
+      });
+    });
+
+    updateState();
+  }
+
+  initCarousel('ben-track', 'ben-dots', 'ben-prev', 'ben-next');
+  initCarousel('feat-track', 'feat-dots', 'feat-prev', 'feat-next');
+}());
+</script>
+
+<!-- ============================================================
+     SCROLL REVEAL
+     ============================================================ -->
+<script>
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(function(el){el.classList.add('is-visible');});
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('is-visible');
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.08});
+  els.forEach(function(el){io.observe(el);});
+}());
+</script>
 
 </body>
 </html>

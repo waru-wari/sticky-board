@@ -46,7 +46,7 @@
     /* ── Main ── */
     .reg-main{
       flex:1;
-      background:linear-gradient(145deg,#D6E9FF 0%,#E8F3FF 35%,#EFF6FF 65%,#F5F9FF 100%);
+      background:linear-gradient(160deg,#F2F8FF 0%,#fff 50%);
       padding:60px 40px;
       display:flex;justify-content:center;
     }
@@ -139,7 +139,7 @@
     .field{
       display:flex;align-items:center;gap:8px;
       height:48px;box-sizing:border-box;min-width:0;
-      background:#fff;border:1.5px solid var(--line-strong);
+      background:#fff;border:1px solid var(--line-strong);
       border-radius:var(--r-field);padding:0 14px;
       transition:border-color .15s ease,box-shadow .15s ease;
     }
@@ -158,7 +158,7 @@
     /* Phone country dropdown — Gofive DS style */
     .phone-prefix{
       display:flex;align-items:center;gap:5px;
-      padding-right:10px;border-right:1.5px solid var(--line);
+      padding-right:10px;border-right:1px solid var(--line);
       margin-right:2px;flex-shrink:0;
       position:relative;cursor:pointer;user-select:none;
     }
@@ -295,8 +295,8 @@
 
       <div class="reg-headline">
         <h1>ยกระดับทีมขายด้วย</h1>
-        <h1><span class="accent">Venio CRM ✦</span></h1>
-        <h1>ในยุคของ AI</h1>
+        <h1><span class="accent">Venio CRM</span></h1>
+        <h1><span class="accent">ในยุคของ AI ✦</span></h1>
       </div>
 
       <p class="reg-sub">ระบบ Sales CRM สำหรับธุรกิจ B2B ที่จะช่วยคุณ</p>
@@ -368,7 +368,7 @@
                 <input type="email" placeholder="อีเมล *" required>
               </div>
               <div class="field">
-                <div class="phone-prefix" onclick="togglePhoneDropdown(event,this)">
+                <div class="phone-prefix">
                   <span class="phone-flag">🇹🇭</span>
                   <span class="phone-code">+66</span>
                   <svg class="phone-chevron" viewBox="0 0 10 10" fill="none"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -422,26 +422,39 @@
                 <input type="text" placeholder="นามสกุล *" required>
               </div>
             </div>
-            <div class="field">
-              <input type="email" placeholder="อีเมล *" required>
-            </div>
-            <div class="field">
-              <div class="phone-prefix">
-                <span class="phone-flag">🇹🇭</span>
-                <span class="phone-code">+66</span>
-                <svg viewBox="0 0 10 10" fill="none" width="10" height="10" style="margin-left:2px;color:#838395"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="field-row">
+              <div class="field">
+                <input type="email" placeholder="อีเมล *" required>
               </div>
-              <input type="tel" placeholder="เบอร์โทร *" required>
+              <div class="field">
+                <div class="phone-prefix">
+                  <span class="phone-flag">🇹🇭</span>
+                  <span class="phone-code">+66</span>
+                  <svg class="phone-chevron" viewBox="0 0 10 10" fill="none"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div class="phone-dropdown">
+                    <div class="phone-dropdown-option selected" data-code="+66" data-flag="🇹🇭">🇹🇭 &nbsp;ไทย +66</div>
+                    <div class="phone-dropdown-option" data-code="+65" data-flag="🇸🇬">🇸🇬 &nbsp;สิงคโปร์ +65</div>
+                    <div class="phone-dropdown-option" data-code="+60" data-flag="🇲🇾">🇲🇾 &nbsp;มาเลเซีย +60</div>
+                    <div class="phone-dropdown-option" data-code="+1" data-flag="🇺🇸">🇺🇸 &nbsp;USA +1</div>
+                  </div>
+                </div>
+                <input type="tel" placeholder="เบอร์โทร *" required>
+              </div>
             </div>
-            <div class="field">
-              <select required>
-                <option value="" disabled selected hidden></option>
-                <option>เจ้าของกิจการ</option>
-                <option>พนักงานขาย</option>
-                <option>ผู้บริหาร</option>
-                <option>อื่นๆ</option>
-              </select>
-              <svg class="field-icon" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div class="field">
+                <select required>
+                  <option value="" disabled selected hidden>จำนวนผู้ใช้ *</option>
+                  <option>1–5 คน</option>
+                  <option>6–10 คน</option>
+                  <option>11–15 คน</option>
+                  <option>16–20 คน</option>
+                  <option>21–50 คน</option>
+                  <option>มากกว่า 50 คน</option>
+                </select>
+                <svg class="field-icon" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div></div>
             </div>
           </div>
 
@@ -451,7 +464,7 @@
           </div>
 
           <p class="consent-detail">
-            เนื่องจากใช้ข้อมูลสร้างขึ้นโดยไฟฟ้า อำเภอ "บริษัท" ท่านรับรองว่าตนเองเป็นลูกค้าที่ต้องการ และเป็นปัจจุบัน ทุกประการ โปรดอ่านเพิ่มเติมเกี่ยวกับประกาศนโยบายความเป็นส่วนตัวของบริษัทได้ที่ <a href="https://www.veniocrm.com/privacy-policy" target="_blank">https://www.veniocrm.com/privacy-policy</a>
+            เนื่องจากใช้ข้อมูลสร้างขึ้นโดยไฟฟ้า อำเภอ "บริษัท" ท่านรับรองว่าตนเองเป็นลูกค้าที่ต้องการ และเป็นปัจจุบัน ทุกประการ และมาเราแมปให้กับบริวาร ไม่ยอมรับ ข้อมูลดังกล่าวไว้ในกลยุทธ์ดูไลย์ อำเภอ (นายหน้า) ("ธนาคาร") เพื่อการดำเนินการขอรับสิทธิพิเศษการใช้งานโปรแกรมจัดการรายงานขาย (แผนฟอร์ม Venio) ให้แก่ท่าน โปรดอ่านเพิ่มเติมเกี่ยวกับประกาศนโยบายความเป็นส่วนตัวของบริษัทและธนาคารอย่างละเอียด เพื่อทำให้เข้าใจเกี่ยวกับการรับรวบรวม ใช้ และเปิดเผยข้อมูลส่วนตัวของท่านและผลสิทธิตามท่านได้ที่ <a href="https://www.veniocrm.com/privacy-policy" target="_blank">https://www.veniocrm.com/privacy-policy</a> และ <a href="https://www.uob.co.th/investor/privacy-notice.page" target="_blank">https://www.uob.co.th/investor/privacy-notice.page</a> และหากท่านให้ข้อมูลส่วนบุคคลของท่านแก่เรา จะถือว่าท่านได้ให้ความยินยอมกับเราตามนโยบายความเป็นส่วนตัวด้วย
           </p>
 
           <button type="submit" class="btn btn--block">ยืนยันลงทะเบียนรับสิทธิ</button>
@@ -468,17 +481,29 @@
 </footer>
 
 <script>
-// Phone country dropdown
-function togglePhoneDropdown(e, el) {
-  e.stopPropagation();
-  var isOpen = el.classList.contains('open');
-  document.querySelectorAll('.phone-prefix.open').forEach(function(p){ p.classList.remove('open'); });
-  if(!isOpen) el.classList.add('open');
-}
-document.addEventListener('click', function(){
-  document.querySelectorAll('.phone-prefix.open').forEach(function(p){ p.classList.remove('open'); });
-});
-document.addEventListener('DOMContentLoaded', function(){
+(function(){
+  // Tab switching
+  var tabs = document.querySelectorAll('.type-tab');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('.form-panel').forEach(function(p){ p.classList.remove('active'); });
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Phone prefix toggle
+  document.querySelectorAll('.phone-prefix').forEach(function(prefix){
+    prefix.addEventListener('click', function(e){
+      e.stopPropagation();
+      var isOpen = prefix.classList.contains('open');
+      document.querySelectorAll('.phone-prefix.open').forEach(function(p){ p.classList.remove('open'); });
+      if(!isOpen) prefix.classList.add('open');
+    });
+  });
+
+  // Phone option selection
   document.querySelectorAll('.phone-dropdown-option').forEach(function(opt){
     opt.addEventListener('click', function(e){
       e.stopPropagation();
@@ -490,21 +515,11 @@ document.addEventListener('DOMContentLoaded', function(){
       prefix.classList.remove('open');
     });
   });
-});
 
-(function(){
-  // Tab switching
-  var tabs = document.querySelectorAll('.type-tab');
-  tabs.forEach(function(tab){
-    tab.addEventListener('click', function(){
-      tabs.forEach(function(t){ t.classList.remove('active'); });
-      tab.classList.add('active');
-      var target = tab.dataset.tab;
-      document.querySelectorAll('.form-panel').forEach(function(p){ p.classList.remove('active'); });
-      document.getElementById('panel-' + target).classList.add('active');
-    });
+  // Close dropdown on outside click
+  document.addEventListener('click', function(){
+    document.querySelectorAll('.phone-prefix.open').forEach(function(p){ p.classList.remove('open'); });
   });
-
 })();
 </script>
 
